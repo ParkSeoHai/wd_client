@@ -2,11 +2,11 @@
     <section class="product-detail">
         <!-- Detail -->
         <div class="row">
-            <div class="col-9 product-info-detail">
+            <div class="col-12 product-info-detail">
                 <div class="bg-color-white">
                     <div class="row">
                         <!-- Left -->
-                        <div class="col-6">
+                        <div class="col-8">
                             <div class="img-active">
                                 <button
                                     v-if="activeThumbnail > 0"
@@ -15,14 +15,13 @@
                                 >
                                     <i class="bi bi-chevron-compact-left"></i>
                                 </button>
-                                <a href="#">
-                                    <img
-                                        :src="product.info[activeThumbnail].src"
-                                        :alt="product.name"
-                                    >
-                                </a>
+                                <img
+                                    draggable="false"
+                                    :src="product.images[activeThumbnail].src"
+                                    :alt="product.name"
+                                >
                                 <button
-                                    v-if="activeThumbnail < product.info.length - 1"
+                                    v-if="activeThumbnail < product.images.length - 1"
                                     class="btn-arrow btn-arrow-right"
                                     @click.prevent="handleImageActive(-1)"
                                 >
@@ -34,18 +33,23 @@
                                     class="list"
                                     :style="[
                                         `width: ${widthThumbnail}px`,
-                                        `grid-template-columns: repeat(${product.info.length}, 1fr)`,
+                                        `grid-template-columns: repeat(${product.images.length}, 1fr)`,
                                         `margin-left: ${marginLeftThumbnail}px`
                                     ]"
+                                    @mousemove.prevent="thumbMousemove"
+                                    @mousedown.prevent="thumbMousedown"
+                                    @mouseup.prevent="thumbMouseup"
+                                    @mouseleave.prevent="thumbMouseleave"
                                 >
                                     <div
-                                        v-for="(item, index) in product.info"
+                                        v-for="(item, index) in product.images"
                                         :key="index"
                                         class="item"
                                         :class="index === activeThumbnail ? 'active' : ''"
                                         @click.prevent="activeThumbnail = index"
                                     >
                                         <img
+                                            draggable="false"
                                             :src="item.src"
                                             :alt="product.name"
                                         >
@@ -54,86 +58,94 @@
                             </div>
                         </div>
                         <!-- Right -->
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="product-content-info">
+                                <!-- Title -->
                                 <div class="title">
                                     <h1>
-                                        <span class="text">{{ product.name }}</span>
+                                        <span class="text">{{ product.name }} {{ product.colors[activeColor].options[activeOption].value }}</span>
                                         <span
                                             class="subtext"
                                             :class="[
-                                                productQuantity > 0 ? 'green' : 'red'
+                                                product.colors[activeColor].options[activeOption].quantity > 0 ? 'green' : 'red'
                                             ]"
                                         >
-                                            {{ productQuantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
+                                            {{ product.colors[activeColor].options[activeOption].quantity > 0 ? 'Còn hàng' : 'Hết hàng' }}
                                         </span>
                                     </h1>
                                 </div>
+                                <!-- Brand -->
                                 <div class="product-info d-flex">
                                     <div class="pro-brand">
                                         <span>
                                             Thương hiệu:
-                                            <a :href="product.brand.url">{{ product.brand.text }}</a>
+                                            <a :href="product.brand.name">{{ product.brand.name }}</a>
                                         </span>
                                     </div>
                                     <span class="line-info"></span>
                                     <div class="pro-type">
                                         <span>
                                             Loại:
-                                            <a :href="product.kind.url">{{ product.kind.text }}</a>
+                                            <a :href="product.brand.name">{{ product.brand.name }}</a>
                                         </span>
                                     </div>
                                 </div>
+                                <!-- Price -->
                                 <div class="product-price">
-                                    <span class="price-now">{{ priceSaleString }}</span>
+                                    <span class="price-now">{{ formatter.format(product.priceSale) }}</span>
                                     <span class="price-compare">
-                                        <del>{{ priceString }}</del>
+                                        <del>{{ formatter.format(product.price) }}</del>
                                     </span>
                                 </div>
                                 <!-- Color -->
                                 <div class="select-wrap">
                                     <div class="header">
                                         <div class="pro-color">
-                                            <span>Màu sắc: <b class="fw-bold">{{ product.info[activeThumbnail].color }}</b></span>
+                                            <span>Màu sắc: <b class="fw-bold">{{ product.colors[activeColor].name }}</b></span>
                                         </div>
                                     </div>
-                                    <div class="select-list py-2">
+                                    <div class="select-list py-3">
                                         <div
-                                            v-for="(item, index) in product.info"
+                                            v-for="(color, index) in product.colors"
                                             :key="index"
                                             class="item"
                                             :class="[
-                                                index === activeThumbnail ? 'active' : '',
-                                                item.quantity > 0 ? '' : 'disabled'
+                                                index === activeColor && color.quantity > 0 ? 'active' : '',
+                                                color.quantity > 0 ? '' : 'disabled'
                                             ]"
-                                            @click.prevent="activeThumbnail = index"
+                                            @click.prevent="activeColor = index"
                                         >
                                             <img
-                                                :src="item.src"
+                                                :src="color.image"
                                                 :alt="product.name">
-                                            <span>{{ item.color }}</span>
+                                            <div>
+                                                <p>{{ color.name }}</p>
+                                                <p class="mt-2">{{ formatter.format(color.priceSale) }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Memory -->
+                                <!-- Option -->
                                 <div class="select-wrap">
                                     <div class="header">
                                         <div class="pro-color">
-                                            <span>Kích thước: <b class="fw-bold">{{ product.memory[activeMemory].total }}Gb</b></span>
+                                            <span>Kích thước: <b class="fw-bold">{{ product.colors[activeColor].options[activeOption].value }}</b></span>
                                         </div>
                                     </div>
-                                    <div class="select-list py-2">
+                                    <div class="select-list py-3">
                                         <div
-                                            class="item"
-                                            :class="index === activeMemory ? 'active' : ''"
-                                            v-for="(memory, index) in product.memory"
+                                            class="item d-block"
+                                            v-for="(option, index) in product.colors[activeColor].options"
                                             :key="index"
-                                            @click="activeMemory = index"
+                                            :class="index === activeOption ? 'active' : ''"
+                                            @click="activeOption = index"
                                         >
-                                            <span>{{ memory.total }}Gb</span>
+                                            <p class="text-center">{{ option.value }}</p>
+                                            <p class="text-center mt-2">{{ formatter.format(option.priceSale) }}</p>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Quantity add cart -->
                                 <div class="selector-actions">
                                     <div class="quantity-area d-flex align-items-center justify-content-between">
                                         <button
@@ -151,23 +163,25 @@
                                         >+</button>
                                     </div>
                                 </div>
+                                <!-- Button add cart -->
                                 <div class="wrap-addcart pt-3">
                                     <button
                                         class="btn btn-primary w-100"
-                                        :class="productQuantity > 0 ? '' : 'disabled'"
+                                        :class="product.quantity > 0 ? '' : 'disabled'"
                                         @click.prevent="addCart"
                                     >
                                         <span class="fw-bold">THÊM VÀO GIỎ</span>
                                         <span class="d-block">Giao Tận Nơi Hoặc Nhận Tại Cửa Hàng</span>
                                     </button>
                                 </div>
+                                <!-- Product shop -->
                                 <div class="location-store">
                                     <div
-                                        v-if="product.locationStore.length > 0"
+                                        v-if="product.colors[activeColor].options[activeOption].productShops.length > 0"
                                         class="location-store__main"
                                     >
                                         <img class="location-store__img" src="../../assets/images/location_store.webp" alt="">
-                                        <p class="location-store__text">Có {{ product.locationStore.length }} cửa hàng còn sản phẩm</p>
+                                        <p class="location-store__text">Có {{ product.colors[activeColor].options[activeOption].productShops.length }} cửa hàng còn sản phẩm</p>
                                         <button
                                             class="location-store__btn"
                                             @click.prevent="showDropdownLocationStore = !showDropdownLocationStore"
@@ -179,46 +193,45 @@
                                     >
                                         <div
                                             class="item"
-                                            v-for="(location, index) in product.locationStore"
-                                            :key="index"
+                                            v-for="address in product.colors[activeColor].options[activeOption].productShops"
+                                            :key="address.id"
                                         >
                                             <div class="location-store__dropdown--title">
                                                 <i class="bi bi-geo-alt-fill"></i>
-                                                {{ location.city }}:
+                                                {{ address.district }}, {{ address.city }}:
                                             </div>
-                                            <p>{{ location.detail }}</p>
-                                            <p>{{ location.description }}</p>
+                                            <p>Số điện thoại: {{ address.phoneNumber }}</p>
+                                            <p>{{ address.address }}</p>
+                                            <p>{{ address.note }}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Service -->
+                            <!-- <div class="bg-color-white">
+                                <div class="service-product">
+                                    <div class="head-title">Cam kết bán hàng</div>
+                                    <ul>
+                                        <li>
+                                            <i class="bi bi-tencent-qq"></i>
+                                            <span class="content">Hàng chính hãng. Nguồn gốc rõ ràng</span>
+                                        </li>
+                                        <li>
+                                            <i class="bi bi-piggy-bank"></i>
+                                            <span class="content">Tặng máy nếu phát hiện máy sửa chữa</span>
+                                        </li>
+                                        <li>
+                                            <i class="bi bi-truck"></i>
+                                            <span class="content">Giao hàng ngay (nội thành TPHCM)</span>
+                                        </li>
+                                        <li>
+                                            <i class="bi bi-gear"></i>
+                                            <span class="content">Dùng thử 7 ngày miễn phí</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> -->
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Service -->
-            <div class="col-3">
-                <div class="bg-color-white">
-                    <div class="service-product">
-                        <div class="head-title">Cam kết bán hàng</div>
-                        <ul>
-                            <li>
-                                <i class="bi bi-tencent-qq"></i>
-                                <span class="content">Hàng chính hãng. Nguồn gốc rõ ràng</span>
-                            </li>
-                            <li>
-                                <i class="bi bi-piggy-bank"></i>
-                                <span class="content">Tặng máy nếu phát hiện máy sửa chữa</span>
-                            </li>
-                            <li>
-                                <i class="bi bi-truck"></i>
-                                <span class="content">Giao hàng ngay (nội thành TPHCM)</span>
-                            </li>
-                            <li>
-                                <i class="bi bi-gear"></i>
-                                <span class="content">Dùng thử 7 ngày miễn phí</span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -226,180 +239,68 @@
         <!-- Description -->
         <div class="row pt-4">
             <div class="col-9">
-                <ProductDescription />
+                <ProductDescription
+                    :description="product.description"
+                />
             </div>
+            <!-- Property -->
             <div class="col-3">
-                <ProductSpecifications />
+                <ProductSpecifications
+                    :productSpectifications="product.properties"
+                />
             </div>
         </div>
     </section>
 </template>
 
 <script setup>
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch } from "vue";
 // Components
 import ProductDescription from './ProductDescription.vue';
-import ProductSpecifications from './ProductSpecifications.vue'
+import ProductSpecifications from './ProductSpecifications.vue';
 
-const product = {
-    id: 1,
-    name: 'IPhone 7 Plus - Thu Cũ IPhone 7 Plus - Thu Cũ',
-    brand: {
-        text: 'Apple',
-        url: '/apple'
-    },
-    kind: {
-        text: 'Apple',
-        url: '/apple'
-    },
-    totalSale: 10,
-    price: 32850000,
-    info: [
-        {
-            quantity: 10,
-            src: 'http://localhost:5173/src/assets/images/flashsale-product-3.webp',
-            color: 'Đen bóng'
-        },
-        {
-            quantity: 5,
-            src: 'http://localhost:5173/src/assets/images/applewatch-4.jpg',
-            color: 'Xanh'
-        },
-        {
-            quantity: 1,
-            src: 'http://localhost:5173/src/assets/images/flashsale-product-5.webp',
-            color: 'Vàng'
-        },
-        {
-            quantity: 0,
-            src: 'http://localhost:5173/src/assets/images/applewatch-4.jpg',
-            color: 'Đỏ'
-        },
-        {
-            quantity: 5,
-            src: 'http://localhost:5173/src/assets/images/flashsale-product-5.webp',
-            color: 'Xanh than'
-        },
-        {
-            quantity: 0,
-            src: 'http://localhost:5173/src/assets/images/flashsale-product-3.webp',
-            color: 'Trắng'
-        }
-    ],
-    memory: [
-        {
-            total: 64,
-            priceBonus: 0
-        },
-        {
-            total: 128,
-            priceBonus: 2300000
-        }
-    ],
-    description: 'Mô tả IPhone 7 Plus - Thu Cũ IPhone 7 Plus - Thu Cũ',
-    locationStore: [
-        {
-            city: 'Hồ Chí Minh',
-            detail: '59A âu cơ, Phường 14, Quận 11',
-            description: 'Mở cửa: 9 giờ 00 - 22 giờ (Các ngày trong tuần)'
-        },
-        {
-            city: 'Hà Nội',
-            detail: 'Nguyễn Cơ Thạch, Mỹ Đình, Nam Từ Liêm',
-            description: 'Mở cửa: 9 giờ 00 - 22 giờ (Các ngày trong tuần)'
-        }
-    ]
-};
-
-// Calc width block thumbnail - 1 item: 95px
-const widthThumbnail = product.info.length * 95;
-
-// Variable storage value active thumbnail
-let activeThumbnail = ref(0);
-// Variable storage value active memory
-let activeMemory = ref(0);
-
+// Props
+const props = defineProps(['product']);
+// Product data
+const product = ref(props.product);
 // Count add to cart
 let count = ref(1);
-
-// Price product
-let price = ref(product.price);
-// Price sale
-let priceSale = ref(price.value - (product.totalSale / 100) * product.price);
-
-// Format price to vnd
-const formatterPrice = new Intl.NumberFormat("vi-VN", {
-  style: "currency",
-  currency: "VND",
-});
-
-// Price display
-let priceString = formatterPrice.format(price.value);
-// Price sale display
-let priceSaleString = formatterPrice.format(priceSale.value);
-
-// Calc quantity product
-let productQuantity = 0;
-product.info.map((item) => {
-    productQuantity += item.quantity;
-});
-
+// Variable storage value active thumbnail
+const activeThumbnail = ref(0);
+// Color
+const activeColor = ref(0);
+// Option
+const activeOption = ref(0);
+// Is show dropdown location store
+let showDropdownLocationStore = ref(false);
 // Variable value margin-left style
 let marginLeftThumbnail = ref(0);
 
-// Is show dropdown location store
-let showDropdownLocationStore = ref(false);
+// Calc width block thumbnail - 1 item: 95px
+const widthThumbnail = product.value.images.length * 95;
 
 // Handle click button next/prev image active
 function handleImageActive(n) {
     activeThumbnail.value -= n;
 }
 
-// Handle add product to cart
-function addCart() {
-    const cartItem = {
-        name: product.name,
-        imageSrc: product.info[activeThumbnail.value],
-        memory: product.memory[activeMemory.value],
-        price: priceSale.value,
-        quantity: count.value
-    }
+// Watch active color
+watch(activeColor, () => {
+    // Set value count
+    count.value = 1;
+    // Set value active option
+    activeOption.value = 0;
+    // Change product price
+    setPrice();
+});
 
-    console.log(cartItem);
-}
-
-// Watch activeThumbnail -> Calc value margin-left
-watchEffect(() => {
-    // Handle style value margin-left thumbnail
-    if(product.info.length < 5) {
-        marginLeftThumbnail.value = 0;
-    } else if(activeThumbnail.value + 5 >= product.info.length) {
-        marginLeftThumbnail.value = -(product.info.length - 5) * 95;
-    } else {
-        marginLeftThumbnail.value = -(activeThumbnail.value * 95);
-    }
-
-    if(product.info.length - activeThumbnail.value >= 5 && activeThumbnail.value > 0) {
-        marginLeftThumbnail.value += 95;
-    }
-})
-
-// Watch activeMemory -> Calc value price product
-watch(activeMemory, () => {
-    // Handle calculator price
-    let priceBonus = product.memory[activeMemory.value].priceBonus;
-    if(priceBonus === 0) {
-        price.value = product.price;
-    } else {
-        price.value += priceBonus;
-    }
-    // Calc price sale
-    priceSale.value = price.value - (product.totalSale / 100) * price.value;
-
-    // Update price and price sale string display
-    priceString = formatterPrice.format(price.value)
-    priceSaleString = formatterPrice.format(priceSale.value);
-})
+// Watch active option
+watch(activeOption, () => {
+    // Set value count
+    count.value = 1;
+    // Change product price
+    setPrice();
+});
 
 // Watch handle count add cart
 watch(count, () => {
@@ -408,9 +309,82 @@ watch(count, () => {
         count.value = 1;
     } else if(count.value < 1) {
         count.value = 1;
-    } else if(count.value > product.quantity) {
-        count.value = product.quantity;
+    } else if(count.value > product.value.colors[activeColor.value].options[activeOption.value].quantity) {
+        alert('Số lượng sản phẩm không đủ');
+        count.value = product.value.colors[activeColor.value].options[activeOption.value].quantity;
     }
-})
+});
 
+// Format price to vnd
+const formatter = new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND',
+});
+
+// Handle product thumbnail mouse event
+let isStartThumbEvent = false;
+let offsetXArray = [];
+let widthX = 0;
+let marginLeftOld = 0;
+
+function thumbMousemove(event) {
+    if(!isStartThumbEvent) return;
+    // Check if offsetX already exists in the array
+    if (!offsetXArray.includes(event.pageX)) {
+        offsetXArray.push(event.pageX);
+        let startValueArr = offsetXArray[0];
+        let endValueArr = offsetXArray[offsetXArray.length - 1];
+        // Giá trị cuối mảng - giá trị đầu mảng
+        widthX = endValueArr - startValueArr;
+        // Tính giá trị margin left
+        marginLeftThumbnail.value = widthX + marginLeftOld;
+    }
+}
+
+function thumbMousedown() {
+    isStartThumbEvent = true;
+    offsetXArray = [];
+    widthX = 0;
+}
+
+function thumbMouseup() {
+    isStartThumbEvent = false;
+    marginLeftOld += widthX;
+    if(marginLeftThumbnail.value > 0) {
+        marginLeftOld = 0;
+    } else if(marginLeftThumbnail.value < -(product.value.images.length - 9) * 95) {
+        marginLeftOld = -(product.value.images.length - 9) * 95;
+    }
+    marginLeftThumbnail.value = marginLeftOld;
+}
+
+function thumbMouseleave() {
+    isStartThumbEvent = false;
+    // Handle margin left
+    if(marginLeftThumbnail.value > 0) {
+        marginLeftOld = 0;
+    } else if(marginLeftThumbnail.value < -(product.value.images.length - 9) * 95) {
+        marginLeftOld = -(product.value.images.length - 9) * 95;
+    }
+    marginLeftThumbnail.value = marginLeftOld;
+}
+
+// Handle price product
+function setPrice() {
+    // Get price
+    let priceColor = product.value.colors[activeColor.value].price;
+    let priceSaleColor = product.value.colors[activeColor.value].priceSale;
+    let priceOption = product.value.colors[activeColor.value].options[activeOption.value].price;
+    let priceSaleOption = product.value.colors[activeColor.value].options[activeOption.value].priceSale;
+    // Check price get price large
+    if(priceColor > priceOption) {
+        product.value.price = priceColor;
+        product.value.priceSale = priceSaleColor;
+    } else {
+        product.value.price = priceOption;
+        product.value.priceSale = priceSaleOption;
+    }
+}
+
+setPrice();
 </script>

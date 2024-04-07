@@ -101,7 +101,7 @@
     }
     .address-link {
       max-height: 300px;
-      overflow-y: scroll;
+      overflow-y: auto;
       .item {
         margin-top: 4px;
         padding: 8px 0 8px 14px;

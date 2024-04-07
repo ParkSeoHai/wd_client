@@ -1,9 +1,16 @@
 <template>
     <div class="item">
         <div class="img">
-            <a href="#">
-                <img :src="productObj.imageUrl" :alt="productObj.productName">
-            </a>
+            <router-link
+                :to="{
+                    name: 'product',
+                    params: {
+                        name: `${productObj.name}`
+                    }
+                }"
+            >
+                <img :src="productObj.defaultImage" :alt="productObj.name">
+            </router-link>
             <!-- Hiện icon khi hover item -->
             <div class="icon-hover">
                 <i class="bi bi-search"></i>
@@ -11,7 +18,16 @@
         </div>
         <div class="content">
             <h3 class="title">
-                <a href="#">{{ productObj.productName }}</a>
+                <router-link
+                    :to="{
+                    name: 'product',
+                    params: {
+                        name: `${productObj.name}`
+                    }
+                }"
+                >
+                    {{ productObj.name }}
+                </router-link>
             </h3>
             <div>
                 <ul class="list-variants pt-2">
@@ -19,8 +35,8 @@
                 </ul>
             </div>
             <div class="box-pro-prices pt-1 d-flex align-items-center">
-                <span>{{ productObj.productSale }}</span>
-                <del class="compare-price ps-3">{{ productObj.productPrice }}</del>
+                <span>{{ formatter.format(productObj.priceSale) }}</span>
+                <del class="compare-price ps-3">{{ formatter.format(productObj.price) }}</del>
             </div>
             <ul class="hash-tag-loop">
                 <li>Nhập tag hashtag_nội dung hiển thị để show nội dung này</li>
@@ -29,12 +45,12 @@
                 <div class="icon d-flex align-items-center">
                     <i class="bi bi-fire"></i>
                 </div>
-                <span v-if="productObj.quantity >= 90">Sắp cháy hàng</span>
-                <span v-else>Đã bán <strong>{{ productObj.quantity }}</strong> sản phẩm</span>
+                <span v-if="percentSale >= 90">Sắp cháy hàng</span>
+                <span v-else>Đã bán <strong>{{ productObj.quantitySold }}</strong> sản phẩm</span>
             </div>
 
             <div class="fl_progressbar">
-                <div class="fl_percent" :style="{width: productObj.percent}"></div>
+                <div class="fl_percent" :style="{width: percentSale + '%'}"></div>
             </div>
        </div>
    </div>
@@ -44,4 +60,11 @@
 
 // Props import from Home/HomeFlashSaleBody.vue
 const { productObj } = defineProps(['productObj']);
+// Format to VND
+const formatter = new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND',
+});
+
+const percentSale = productObj.quantitySold / productObj.quantitySale * 100;
 </script>

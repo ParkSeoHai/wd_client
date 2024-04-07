@@ -59,49 +59,21 @@
                                         <div class="address-count mt-4">
                                             <div class="address-detail">
                                                 <ul class="address-link">
-                                                    <li class="item">
+                                                    <li
+                                                        class="item"
+                                                        v-for="addressShop of addressShops"
+                                                        :key="addressShop.id"
+                                                    >
                                                         <a href="#" class="infor">
-                                                            <b>Hồ Chí Minh - Wanda CN Thủ Đức</b>
-                                                            <span>47 Thống Nhất, Phường Bình Thọ, Quận Thủ Đức</span>
+                                                            <b>{{ addressShop.city }} - {{ addressShop.nameShop }}</b>
+                                                            <span>{{ addressShop.address }}</span>
                                                             <span class="phoneNumber d-flex align-items-baseline">
                                                                 <i class="bi bi-phone"></i>
-                                                                <span class="ms-1">0123456789</span>
+                                                                <span class="ms-1">{{ addressShop.phoneNumber }}</span>
                                                             </span>
-                                                            <span>Thời gian hoạt động: 9:00 - 21:00</span>
+                                                            <span>{{ addressShop.note }}</span>
                                                         </a>
-                                                        <a href="#" class="infoLocation d-flex align-items-baseline gap-1">
-                                                            <i class="bi bi-arrow-bar-right"></i>
-                                                            <span>Chỉ đường</span>
-                                                        </a>
-                                                    </li>
-
-                                                    <li class="item">
-                                                        <a href="#" class="infor">
-                                                            <b>Hồ Chí Minh - Wanda CN Thủ Đức</b>
-                                                            <span>47 Thống Nhất, Phường Bình Thọ, Quận Thủ Đức</span>
-                                                            <span class="phoneNumber d-flex align-items-baseline">
-                                                                <i class="bi bi-phone"></i>
-                                                                <span class="ms-1">0123456789</span>
-                                                            </span>
-                                                            <span>Thời gian hoạt động: 9:00 - 21:00</span>
-                                                        </a>
-                                                        <a href="#" class="infoLocation d-flex align-items-baseline gap-1">
-                                                            <i class="bi bi-arrow-bar-right"></i>
-                                                            <span>Chỉ đường</span>
-                                                        </a>
-                                                    </li>
-
-                                                    <li class="item">
-                                                        <a href="#" class="infor">
-                                                            <b>Hồ Chí Minh - Wanda CN Thủ Đức</b>
-                                                            <span>47 Thống Nhất, Phường Bình Thọ, Quận Thủ Đức</span>
-                                                            <span class="phoneNumber d-flex align-items-baseline">
-                                                                <i class="bi bi-phone"></i>
-                                                                <span class="ms-1">0123456789</span>
-                                                            </span>
-                                                            <span>Thời gian hoạt động: 9:00 - 21:00</span>
-                                                        </a>
-                                                        <a href="#" class="infoLocation d-flex align-items-baseline gap-1">
+                                                        <a :href="addressShop.urlMap" class="infoLocation d-flex align-items-baseline gap-1">
                                                             <i class="bi bi-arrow-bar-right"></i>
                                                             <span>Chỉ đường</span>
                                                         </a>
@@ -189,11 +161,23 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 // Component
 import Logo from './Logo.vue';
+// Api
+import getAddressShops from '@/api/AddressShopService';
 
 const $emits = defineEmits(['handle-modal']);
+const $route = inject('$route');    // Route call api
+const addressShops = ref([]);
+
+const fetchAddressShops = async () => {
+    try {
+        addressShops.value = await getAddressShops($route);
+    } catch(error) {
+        throw error.message;
+    }
+};
 
 // List dropdown header
 let listDropDown = ref({
@@ -221,5 +205,7 @@ function closeDropdown(dropDownName) {
     // Handle emit event to components/Header.vue
     $emits('handle-modal', false);
 }
+
+onMounted(fetchAddressShops);
 
 </script>

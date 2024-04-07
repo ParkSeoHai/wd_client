@@ -34,22 +34,26 @@
         <div class="countdown-deal">
             <ul class="list d-flex gap-2">
                 <li class="item">
-                    <strong class="days"></strong>
+                    <strong class="days">{{ props.flashSaleObj.day }}</strong>
                     <small>Ngày</small>
                 </li>
                 <li class="item">
-                    <strong class="hours"></strong>
+                    <strong class="hours">{{ props.flashSaleObj.hour }}</strong>
                     <small>Giờ</small>
                 </li>
                 <li class="item">
-                    <strong class="minutes"></strong>
+                    <strong class="minutes">{{ props.flashSaleObj.minute }}</strong>
                     <small>Phút</small>
                 </li>
                 <li class="item">
-                    <strong class="seconds"></strong>
+                    <strong class="seconds">{{ props.flashSaleObj.second }}</strong>
                     <small>Giây</small>
                 </li>
             </ul>
         </div>
     </div>
 </template>
+
+<script setup>
+const props = defineProps(['flashSaleObj'])
+</script>

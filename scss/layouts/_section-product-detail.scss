@@ -2,7 +2,6 @@
 
 .product-detail {
   img {
-    width: 100%;
     height: 100%;
   }
   .img-active {
@@ -15,7 +14,7 @@
     }
 
     img {
-      object-fit: cover;
+      width: auto;
     }
 
     .btn-arrow {
@@ -39,12 +38,14 @@
     .list {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
-      transition: margin-left 0.4s linear;
     }
     .item {
       width: 85px;
       height: 85px;
       margin-right: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      overflow: hidden;
       cursor: pointer;
 
       &:last-child {
@@ -52,8 +53,12 @@
       }
 
       &.active {
-        border: 1px solid #333;
+        border: 2px solid variables.$txt-primary;
       }
+    }
+    img {
+      width: 100%;
+      object-fit: cover;
     }
   }
 
@@ -101,11 +106,11 @@
     }
     .product-price {
       margin-bottom: 10px;
+      font-weight: 700;
       .price-now {
-        font-size: 2.2rem;
-        font-weight: 700;
+        font-size: 2rem;
         color: red;
-        margin-right: 12px;
+        margin-right: 15px;
       }
       .price-compare {
         font-size: 1.6rem;
@@ -224,6 +229,7 @@
       padding: 6px 16px;
     }
     input {
+      outline: none;
       text-align: center;
       border: none;
       width: 40px;
@@ -272,10 +278,30 @@
   }
 }
 
+/* Product specifications */
+.product-property-tab {
+  &__content {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    height: 400px;
+    margin-bottom: 15px;
+    overflow: hidden;
+  }
+  &__table {
+    td {
+      width: 50%;
+      padding: 8px;
+      vertical-align: middle;
+    }
+  }
+}
+
 /* Product description */
+.product-property-tab,
 .product-desc-tab {
   color: #000;
   margin-top: 5px;
+  line-height: 22px;
 
   &__title {
     text-transform: uppercase;

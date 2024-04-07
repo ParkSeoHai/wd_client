@@ -12,7 +12,7 @@
 <script setup>
 import { ref } from 'vue';
 // Component
-import Header from '@/components/Header.vue';
+import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 import Modal from './components/Modal.vue';
 
@@ -22,4 +22,5 @@ let isShowModal = ref(false);
 function handleModal(value) {
   isShowModal.value = value;
 }
+
 </script>

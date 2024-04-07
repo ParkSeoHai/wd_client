@@ -47,10 +47,16 @@
     }
   }
 
+  .block-list-product {
+    .box-pro-prices {
+      display: block;
+    }
+  }
+
   .block-collection-group {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+    gap: 20px;
 
     .item {
       padding-bottom: 8px;

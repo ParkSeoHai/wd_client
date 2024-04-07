@@ -1,9 +1,16 @@
 <template>
     <div class="item">
         <div class="img">
-            <a href="#">
-                <img :src="props.productObj.image" :alt="props.productObj.name">
-            </a>
+            <router-link
+                :to="{
+                    name: 'product',
+                    params: {
+                        name: `${props.productObj.name}`
+                    }
+                }"
+            >
+                <img :src="props.productObj.defaultImage" :alt="props.productObj.name">
+            </router-link>
             <!-- Hiện icon khi hover item -->
             <div class="icon-hover">
                 <i class="bi bi-search"></i>
@@ -11,7 +18,16 @@
         </div>
         <div class="content">
             <h3 class="title">
-                <a :href="props.productObj.id">{{ props.productObj.name }}</a>
+                <router-link
+                    :to="{
+                        name: 'product',
+                        params: {
+                            name: `${props.productObj.name}`
+                        }
+                    }"
+                >
+                    {{ props.productObj.name }}
+                </router-link>
             </h3>
             <div>
                 <ul class="list-variants pt-2">
@@ -19,8 +35,8 @@
                 </ul>
             </div>
             <div class="box-pro-prices pt-1">
-                <span>{{ props.productObj.sale }}</span>
-                <del class="compare-price d-block pt-2">{{ props.productObj.price }}</del>
+                <span>{{ formatter.format(props.productObj.priceSale) }}</span>
+                <del class="compare-price d-block pt-2">{{ formatter.format(props.productObj.price) }}</del>
             </div>
             <ul class="hash-tag-loop">
                 <li>Nhập tag hashtag_nội dung hiển thị để show nội dung này</li>
@@ -31,4 +47,9 @@
 
 <script setup>
 const props = defineProps(['productObj']);
+
+const formatter = new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND',
+});
 </script>

@@ -1,15 +1,25 @@
 <template>
     <div class="bg-color-white">
-        <div class="product-desc-tab">
-            <div class="product-desc-tab__title">
+        <div class="product-property-tab">
+            <div class="product-property-tab__title">
                 Thông số kĩ thuật
             </div>
             
             <div
-                class="product-desc-tab__content"
+                class="product-property-tab__content"
                 :class="showViewAll ? 'show' : ''"
             >
-                <p>Thông số kĩ thuật</p>
+                <table class="table table-striped product-property-tab__table fs-4">
+                    <tbody>
+                        <tr 
+                            v-for="property in props.productSpectifications"
+                            :key="property.id"
+                        >
+                            <td>{{ property.name }}</td>
+                            <td>{{ property.value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="view-all-tab">
@@ -32,4 +42,6 @@
 import { ref } from "vue";
 
 let showViewAll = ref(false);
+
+const props = defineProps(['productSpectifications']);
 </script>

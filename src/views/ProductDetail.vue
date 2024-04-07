@@ -7,33 +7,48 @@
     <!-- Product detail info -->
     <div id="product-template" class="product-page">
         <!-- Section product detail -->
-        <ProductDetailInfo />
+        <ProductDetailInfo
+            :product="product"
+        />
     </div>
 </template>
 
 <script setup>
-import Breadcrumb from '@/components/Breadcrumb.vue';
-import ProductDetailInfo from '@/components/ProductDetail/ProductDetailInfo.vue';
+import { defineAsyncComponent, inject, onMounted, ref } from 'vue';
+const Breadcrumb = ref();
+const ProductDetailInfo = ref();
+// Service
+import { getProductByName } from '@/api/ProductService';
 
-// List breadcrumbs
-let breadcrumbs = [
-    {
-        linkText: 'Trang chủ',
-        linkUrl: '/home'
-    },
-    {
-        linkText: 'Điện thoại',
-        linkUrl: '/dienthoai'
-    },
-    {
-        linkText: 'iPhone',
-        linkUrl: '/iphone'
-    },
-    {
-        linkText: 'iPhone 12 Series',
-        linkUrl: '/iphone-12-series'
+// Props from route
+const props = defineProps(['name']);
+
+const $route = inject('$route');
+const product = ref();
+
+let breadcrumbs = [], breadcrumbActive;
+// Fetch data from server
+const fetchData = async () => {
+    try {
+        product.value = await getProductByName($route, props.name);
+        // Asycn component
+        ProductDetailInfo.value = defineAsyncComponent(() =>
+            import('@/components/ProductDetail/ProductDetailInfo.vue')
+        );
+        // Handle breadcrumbs
+        product.value.categories.map(item => {
+            breadcrumbs.push({
+                linkText: item.name,
+                linkUrl: item.name
+            });
+        });
+        breadcrumbActive = product.value.name;
+        Breadcrumb.value = defineAsyncComponent(() =>
+            import('@/components/Breadcrumb.vue')
+        );
+    } catch(error) {
+        console.error(error);
     }
-];
-
-let breadcrumbActive = 'iPhone 12 Chính hãng VN/A';
+}
+onMounted(fetchData);
 </script>

@@ -1,44 +1,43 @@
 <template>
     <li class="item">
         <router-link 
-            :to="`/`"
+            :to="`/danh-muc${categoryObj.linkUrl}`"
             class="nav-link"
-            :title="`${navLinkObj.linkText}`"
+            :title="`${categoryObj.name}`"
         >
             <span class="content">
-                <i 
-                    class="icon"
-                    :class="navLinkObj.icon"
-                ></i>
-                <span>{{ navLinkObj.linkText }}</span>
+                <span class="icon" v-html="categoryObj.icon"></span>
+                <span>{{ categoryObj.name }}</span>
             </span>
-            <i v-if="navLinkObj.subnav" class="bi bi-chevron-right icon"></i>
+            <i v-if="categoryObj.subnav.length > 0" class="bi bi-chevron-right icon-arrow"></i>
         </router-link>
         <!-- Sub nav -->
         <ul
-            v-if="navLinkObj.subnav"
+            v-if="categoryObj.subnav.length > 0"
             class="nav-dropdown"
         >
             <!-- Item -->
             <li
                 class="nav-dropdown__item--lv1"
-                v-for="subnav in navLinkObj.subnav"
-                :key="subnav.subid"
+                v-for="subnav in categoryObj.subnav"
+                :key="subnav.id"
             >
                 <router-link
-                    :to="`/${subnav.linkUrl}`"
+                    :to="`/danh-muc${subnav.linkUrl}`"
                     class="nav-dropdown__link lv1"
-                >{{ subnav.title }}</router-link>
+                >
+                    {{ subnav.name }}
+                </router-link>
                 <ul class="subnav-dropdown">
                     <li
                         class="nav-dropdown__item--lv2"
-                        v-for="subnavItem in subnav.item"
+                        v-for="subnavItem in subnav.subnav"
                         :key="subnavItem.id"
                     >
                         <router-link
-                            :to="`/${subnav.linkUrl}/${subnavItem.linkUrl}`"
+                            :to="`/danh-muc${subnavItem.linkUrl}`"
                             class="nav-dropdown__link"
-                        >{{ subnavItem.linkText }}</router-link>
+                        >{{ subnavItem.name }}</router-link>
                     </li>
                 </ul>
             </li>
@@ -49,5 +48,5 @@
 <script setup>
 
 // Props import from components/NavbarLink.vue
-const { navLinkObj } = defineProps(['navLinkObj']);
+const { categoryObj } = defineProps(['categoryObj']);
 </script>

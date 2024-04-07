@@ -8,17 +8,20 @@
                     <div class="bg-color-white">
                         <!-- Top -->
                         <div class="top-head d-flex justify-content-between align-items-center">
-                            <h2>Điện thoại / {{ products.category.title }}</h2>
+                            <h2>
+                                {{ props.category }}
+                                <span v-if="categoryActive !== ''">/ {{ categoryActive }}</span>
+                            </h2>
                             <ul class="menu-col d-flex">
                                 <!-- Item link -->
                                 <li
-                                    v-for="menu in listMenu"
-                                    :key="menu.subid"
+                                    v-for="category in categories"
+                                    :key="category.id"
                                     class="menu-item"
-                                    :class="menu.subid === products.category.subid ? 'active' : ''"
-                                    @click.prevent="$emit('change-product', menu)"
+                                    :class="category.name == categoryActive ? 'active' : ''"
+                                    @click="changeProducts(category.name)"
                                 >
-                                    {{ menu.title }}
+                                    {{ category.name }}
                                 </li>
                             </ul>
                         </div>
@@ -26,7 +29,7 @@
                         <div class="block-collection-group product-primary list-product">
                             <!-- Item -->
                             <ProductItem
-                                v-for="product in products.item"
+                                v-for="product in products"
                                 :key="product.id"
                                 :productObj="product"
                             />
@@ -34,10 +37,12 @@
                         <!-- Bottom -->
                         <div class="collection-bottom">
                             <div class="link">
-                                <a :href="products.category.linkUrl">
+                                <router-link
+                                    :to="categoryActive === '' ? `/danh-muc/${category}` : `/danh-muc/${categoryActive}`"
+                                >
                                     <span>Xem tất cả</span>
                                     <i class="bi bi-chevron-double-right"></i>
-                                </a>
+                                </router-link>
                             </div>
                         </div>
                     </div>
@@ -48,29 +53,42 @@
 </template>
 
 <script setup>
+import { inject, onMounted, ref } from 'vue';
 // Component
 import ProductItem from '../ProductItem.vue';
+// Service
+import { getCategoriesLevel2 } from '@/api/CategoryService';
+import { getProductsByCategory } from '@/api/ProductService';
 
-// Props import from views/Index.vue
-const { products } = defineProps(['products']);
+const $route = inject('$route');
 
-// Menu
-const listMenu = [
-    {
-        subid: 1,
-        title: 'iPhone',
-        linkUrl: 'iPhone',
-    },
-    {
-        subid: 2,
-        title: 'Samsung',
-        linkUrl: 'Samsung',
-    },
-    {
-        subid: 3,
-        title: 'Oppo',
-        linkUrl: 'Oppo',
-    }
-];
+// Props
+const props = defineProps(['category']);
+const categoryActive = ref('');
+
+// List product
+const products = ref([]);
+// Categories
+const categories = ref([]);
+
+// Async function to fetch data
+const fetchData = async () => {
+  try {
+    // Asign value
+    products.value = await getProductsByCategory($route, props.category, 10);
+    categories.value = await getCategoriesLevel2($route, props.category);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+// Change product when click category item in HomeCollectionListProduct.vue
+async function changeProducts(categoryName) {
+    categoryActive.value = categoryName;
+    products.value = await getProductsByCategory($route, categoryName, 10);
+}
+
+// Call function when component is mounted
+onMounted(fetchData);
 
 </script>

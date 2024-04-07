@@ -2,130 +2,78 @@
     <nav class="nav-group">
         <ul class="list-menu-nav">
             <NavbarLink
-                v-for="navLink in listNavLinks"
-                :key="navLink.id"
-                :navLinkObj="navLink"
+                v-for="category in categories"
+                :key="category.id"
+                :categoryObj="category"
             />
         </ul>
     </nav>
 </template>
 
 <script setup>
-import NavbarLink from './NavbarLink.vue';
 
-const listNavLinks = [
-    {
-        id: 1,
-        linkText: 'Khuyến Mãi',
-        linkUrl: 'khuyen-mai',
-        icon: 'bi bi-gift',
-    },
-    {
-        id: 2,
-        linkText: 'Điện thoại',
-        linkUrl: 'dien-thoai',
-        icon: 'bi bi-phone',
-        subnav: [
-            {
-                subid: 1,
-                title: 'iPhone',
-                linkUrl: 'iPhone',
-                item: [
-                    {
-                        id: 1,
-                        linkText: 'iPhone 14 Series',
-                        linkUrl: 'iPhone-14-Series'
-                    },
-                    {
-                        id: 2,
-                        linkText: 'iPhone 13 Series',
-                        linkUrl: 'iPhone-13-Series'
-                    },
-                    {
-                        id: 3,
-                        linkText: 'iPhone 12 Series',
-                        linkUrl: 'iPhone-12-Series'
-                    },
-                    {
-                        id: 4,
-                        linkText: 'iPhone 11 Series',
-                        linkUrl: 'iPhone-11-Series'
-                    },
-                    {
-                        id: 5,
-                        linkText: 'iPhone 15 Series',
-                        linkUrl: 'iPhone-15-Series'
-                    }
-                ]
-            },
-            {
-                subid: 1,
-                title: 'Samsung',
-                linkUrl: 'samsung',
-                item: [
-                    {
-                        id: 1,
-                        linkText: 'S23 Series',
-                        linkUrl: 's23-series'
-                    },
-                    {
-                        id: 2,
-                        linkText: 'S24 Series',
-                        linkUrl: 's24-series'
-                    }
-                ]
+import { inject, onMounted, ref } from 'vue';
+import NavbarLink from './NavbarLink.vue';
+// Api
+import { getCategoriesByLevel } from '@/api/CategoryService';
+
+// Route api
+const $route = inject('$route');
+
+// Define your reactive data properties here
+const categoriesLv1 = ref([]);
+const categoriesLv2 = ref([]);
+const categoriesLv3 = ref([]);
+const categories = ref([]);
+
+// Get subnav by category id
+function getSubNav(categoryId, categories) {
+    let subnav = [];
+    categories.forEach(category => {
+        if(category.categoryId === categoryId) {
+            let subnavObj = {
+                id: category.id,
+                name: category.name,
+                linkUrl: `/${category.name}`,
+                subnav: []
             }
-        ]
-    },
-    {
-        id: 3,
-        linkText: 'Apple Chính Hãng',
-        icon: 'bi bi-apple',
-    },
-    {
-        id: 4,
-        linkText: 'Apple Watch',
-        icon: 'bi bi-smartwatch',
-    },
-    {
-        id: 5,
-        linkText: 'Khuyến Mãi',
-        icon: 'bi bi-gift',
-    },
-    {
-        id: 6,
-        linkText: 'Điện thoại',
-        icon: 'bi bi-phone',
-    },
-    {
-        id: 7,
-        linkText: 'Apple Chính Hãng',
-        icon: 'bi bi-apple',
-    },
-    {
-        id: 8,
-        linkText: 'Apple Watch',
-        icon: 'bi bi-smartwatch',
-    },
-    {
-        id: 9,
-        linkText: 'Khuyến Mãi',
-        icon: 'bi bi-gift',
-    },
-    {
-        id: 10,
-        linkText: 'Điện thoại',
-        icon: 'bi bi-phone',
-    },
-    {
-        id: 11,
-        linkText: 'Apple Chính Hãng',
-        icon: 'bi bi-apple',
-    },
-    {
-        id: 12,
-        linkText: 'Apple Watch',
-        icon: 'bi bi-smartwatch',
-    }
-];
+            subnav.push(subnavObj);
+        }
+    })
+    return subnav;
+}
+
+// Async function to fetch categories
+const fetchCategories = async () => {
+  try {
+    // Asign value
+    categoriesLv1.value = await getCategoriesByLevel($route, 1);
+    categoriesLv2.value = await getCategoriesByLevel($route, 2);
+    categoriesLv3.value = await getCategoriesByLevel($route, 3);
+    // Get value categories
+    categoriesLv1.value.forEach(category => {
+        const subnav = getSubNav(category.id, categoriesLv2.value);
+        const navItem = {
+            id: category.id,
+            name: category.name,
+            linkUrl: `/${category.name}`,
+            icon: category.icon,
+            subnav: subnav
+        };
+
+        subnav.forEach(item => {
+            const subnav = getSubNav(item.id, categoriesLv3.value);
+            item.subnav = subnav;
+        })
+
+        categories.value.push(navItem)
+    });
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+// Call the fetchCategories function when component is mounted
+onMounted(fetchCategories);
+
 </script>
