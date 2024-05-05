@@ -6,19 +6,10 @@
     <!-- Content -->
     <div class="filter-sort-block">
         <!-- Sort -->
-        <div class="filter-sort-block__row">
-            <div class="filter-sort__title">Sắp xếp theo</div>
-            <div class="filter-sort__list-filter">
-                <button class="btn filter-sort__btn">
-                    <i class="bi bi-sort-down filter-sort__btn--icon"></i>
-                    <span>Giá Cao - Thấp</span>
-                </button>
-                <button class="btn filter-sort__btn">
-                    <i class="bi bi-sort-down-alt filter-sort__btn--icon"></i>
-                    <span>Giá Thấp - Cao</span>
-                </button>
-            </div>
-        </div>
+        <Sort
+            :productLength="productLength"
+            @sort-product="sortProductByPrice"
+        />
         <!-- Filter block product -->
         <div class="filter-sort-block__product">
             <div class="filter-sort__list--product list-product">
@@ -43,10 +34,12 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref, watch } from 'vue';
+import { defineAsyncComponent, inject, onMounted, ref, watch } from 'vue';
 import { getProductsByCategory } from '@/api/ProductService';
 import ProductItem from '@/components/ProductItem.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
+// Component
+const Sort = ref();
 // Inject global variable from main.js
 const $route = inject('$route');
 // Props name from params route
@@ -79,12 +72,35 @@ watch(quantityDisplay, () => {
 const breadcrumbActive = props.name;
 // Fetch async api
 const fetchData = async () => {
-    // Get products data
-    products.value = await getProductsByCategory($route, props.name, 20);
-    productLength.value = products.value.length;
-    // Show 20 item
-    quantityDisplay.value = productLength.value < 20 ? productLength.value : 20;
-    getProductDisplay(quantityDisplay.value);
+    try {
+        // Get products data
+        products.value = await getProductsByCategory($route, props.name, 20);
+        productLength.value = products.value.length;
+        if(productLength.value > 0) {
+            // Async components
+            Sort.value = defineAsyncComponent(() =>
+                import('@/components/ProductFilter/Sort.vue')
+            );
+            // Show 20 item
+            quantityDisplay.value = productLength.value < 20 ? productLength.value : 20;
+            getProductDisplay(quantityDisplay.value);
+        }
+    } catch(error) {
+        console.error(error);
+    }
+}
+
+// Handle when click sort product by price
+const sortProductByPrice = (value) => {
+    products.value.sort(function (a, b) {
+        if(value == 1) {
+            return b.priceSale - a.priceSale;
+        } else if(value == 2) {
+            return a.priceSale - b.priceSale;
+        }
+    });
+    productsDisplay.value = [];
+    productsDisplay.value = products.value;
 }
 
 onMounted(fetchData);

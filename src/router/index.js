@@ -22,6 +22,16 @@ const router = createRouter({
       name: 'product-filter',
       component: () => import('@/views/ProductFilter.vue'),
       props: true
+    },
+    {
+      path: '/user/register',
+      name: 'Register',
+      component: () => import('@/views/Register.vue')
+    },
+    {
+      path: '/user/login',
+      name: 'Login',
+      component: () => import('@/views/Login.vue')
     }
   ]
 })

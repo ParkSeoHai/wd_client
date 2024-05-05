@@ -75,6 +75,18 @@ a {
   font-size: 2.4rem;
 }
 
+.btn-base {
+  color: #fff;
+  padding: 10px;
+  font-size: 1.6rem;
+  text-align: center;
+  border: none;
+}
+
+.btn-base:hover {
+  opacity: 0.8;
+}
+
 .bg-color-white {
   padding: 15px;
   background-color: #fff;
@@ -1455,6 +1467,176 @@ body {
   background-color: rgba(24, 119, 242, 0.1);
 }
 
+.background {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  background-color: rgb(214, 227, 238);
+  z-index: 1;
+}
+
+.template-account {
+  position: relative;
+  padding-top: 40px;
+  overflow: hidden;
+}
+.template-account__block {
+  position: absolute;
+  background-color: #fff;
+  margin-top: 30px;
+  padding: 15px;
+  width: 650px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  z-index: 2;
+}
+.template-account__heading {
+  font-size: 2.6rem;
+  text-align: center;
+}
+.template-account__form {
+  margin-top: 15px;
+}
+.template-account__form input {
+  width: 100%;
+  font-size: 1.5rem;
+  padding: 8px 10px;
+  outline: none;
+  border: 1px solid #e5e5e5;
+}
+.template-account__form input.error {
+  border: 1px solid rgb(182, 0, 0);
+}
+.template-account__form--errors li {
+  color: rgb(182, 0, 0);
+  font-weight: 700;
+}
+.template-account__form--button {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1.5rem;
+  background-color: #000;
+}
+.template-account__form--buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+.template-account__form--buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  min-width: 150px;
+}
+.template-account__form--buttons button i {
+  color: #333;
+  font-size: 2rem;
+}
+.template-account__form--buttons button span {
+  margin-left: 6px;
+  color: #333;
+}
+.template-account__form--link {
+  font-size: 1.4rem;
+}
+.template-account__form--message {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.3rem;
+  color: rgb(182, 0, 0);
+}
+.template-account__question {
+  text-align: center;
+  font-size: 1.5rem;
+}
+.template-account__question a {
+  font-weight: 700;
+  color: #1877f2;
+}
+
+.cloud {
+  width: 200px;
+  height: 60px;
+  background: #fff;
+  border-radius: 200px;
+  -moz-border-radius: 200px;
+  -webkit-border-radius: 200px;
+  position: absolute;
+  z-index: 1;
+}
+.cloud::before, .cloud::after {
+  content: "";
+  position: absolute;
+  background: #fff;
+  width: 200px;
+  height: 80px;
+  position: absolute;
+  top: -15px;
+  left: 10px;
+  border-radius: 100px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  -webkit-transform: rotate(30deg);
+  transform: rotate(30deg);
+  -moz-transform: rotate(30deg);
+  z-index: 1;
+}
+.cloud::after {
+  width: 120px;
+  height: 120px;
+  top: -55px;
+  left: auto;
+  right: 15px;
+}
+.cloud.x1, .cloud.x2, .cloud.x3 {
+  -webkit-animation: moveclouds 15s linear infinite;
+  -moz-animation: moveclouds 15s linear infinite;
+  -o-animation: moveclouds 15s linear infinite;
+}
+.cloud.x1 {
+  top: 100px;
+}
+.cloud.x2, .cloud.x5 {
+  top: 150px;
+  left: 200px;
+  -webkit-transform: scale(0.6);
+  -moz-transform: scale(0.6);
+  transform: scale(0.6);
+  opacity: 0.6;
+}
+.cloud.x3 {
+  top: 250px;
+  left: 100px;
+  -webkit-transform: scale(0.5);
+  -moz-transform: scale(0.5);
+  transform: scale(0.5);
+  opacity: 0.5;
+}
+.cloud.x4 {
+  -webkit-animation: moveclouds 25s linear infinite;
+  -moz-animation: moveclouds 25s linear infinite;
+  -o-animation: moveclouds 25s linear infinite;
+  top: 250px;
+}
+.cloud.x5 {
+  -webkit-animation: moveclouds 25s linear infinite;
+  -moz-animation: moveclouds 25s linear infinite;
+  -o-animation: moveclouds 25s linear infinite;
+  top: 250px;
+}
+
+@keyframes moveclouds {
+  0% {
+    margin-left: 1000px;
+  }
+  100% {
+    margin-left: -1000px;
+  }
+}
 #footer {
   position: absolute;
   bottom: 0;

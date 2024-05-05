@@ -19,7 +19,7 @@
                 :key="index"
             >
                 <a
-                    :href="`/danh-muc/${breadcrumb.linkUrl}`"
+                    :href="`/${breadcrumb.linkUrl}`"
                     class="breadcrumb__link"
                 >
                     {{ breadcrumb.linkText }}

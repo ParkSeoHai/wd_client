@@ -24,6 +24,18 @@ a {
   };
 }
 
+.btn-base {
+  color: #fff;
+  padding: 10px;
+  font-size: 1.6rem;
+  text-align: center;
+  border: none;
+}
+
+.btn-base:hover {
+  opacity: 0.8;
+}
+
 .bg-color-white {
   padding: 15px;
   background-color: #fff;

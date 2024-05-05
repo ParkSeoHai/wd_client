@@ -1,0 +1,177 @@
+@use "../base/variables";
+
+.background {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    background-color: rgb(214,227,238);
+    z-index: 1;
+}
+
+.template-account {
+    position: relative;
+    padding-top: 40px;
+    overflow: hidden;
+    &__block {
+        position: absolute;
+        background-color: #fff;
+        margin-top: 30px;
+        padding: 15px;
+        width: 650px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        z-index: 2;
+    }
+    &__heading {
+        font-size: 2.6rem;
+        text-align: center;
+    }
+    &__form {
+        margin-top: 15px;
+        input {
+            width: 100%;
+            font-size: 1.5rem;
+            padding: 8px 10px;
+            outline: none;
+            border: 1px solid #e5e5e5;
+        }
+        input.error {
+            border: 1px solid rgb(182, 0, 0);
+        }
+        &--errors {
+            li {
+                color: rgb(182, 0, 0);
+                font-weight: 700;
+            }
+        }
+        &--button {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1.5rem;
+            background-color: #000;
+        }
+        &--buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px 20px;
+                min-width: 150px;
+                i {
+                    color: #333;
+                    font-size: 2rem;
+                }
+                span {
+                    margin-left: 6px;
+                    color: #333;
+                }
+            }
+        }
+        &--link {
+            font-size: 1.4rem;
+        }
+        &--message {
+            display: block;
+            margin-top: 4px;
+            font-size: 1.3rem;
+            color: rgb(182, 0, 0);
+        }
+    }
+    &__question {
+        text-align: center;
+        font-size: 1.5rem;
+        a {
+            font-weight: 700;
+            color: variables.$txt-primary;
+        }
+    }
+}
+
+.cloud {
+    width: 200px;
+    height: 60px;
+    background: #fff;
+    border-radius: 200px;
+    -moz-border-radius: 200px;
+    -webkit-border-radius: 200px;
+    position: absolute;
+    z-index: 1;
+
+    &::before, &::after {
+        content: '';
+        position: absolute;
+        background: #fff;
+        width: 200px;
+        height: 80px;
+        position: absolute;
+        top: -15px;
+        left: 10px;
+        border-radius: 100px;
+        -moz-border-radius: 100px;
+        -webkit-border-radius: 100px;
+        -webkit-transform: rotate(30deg);
+        transform: rotate(30deg);
+        -moz-transform: rotate(30deg);
+        z-index: 1;
+    }
+
+    &::after {
+        width: 120px;
+        height: 120px;
+        top: -55px;
+        left: auto;
+        right: 15px;
+    }
+
+    &.x1, &.x2, &.x3 {
+        -webkit-animation: moveclouds 15s linear infinite;
+        -moz-animation: moveclouds 15s linear infinite;
+        -o-animation: moveclouds 15s linear infinite;
+    }
+    &.x1 {
+        top: 100px;
+    }
+    &.x2, &.x5 {
+        top: 150px;
+        left: 200px;
+        -webkit-transform: scale(0.6);
+        -moz-transform: scale(0.6);
+        transform: scale(0.6);
+        opacity: 0.6;
+    }
+    &.x3 {
+        top: 250px;
+        left: 100px;
+        -webkit-transform: scale(0.5);
+        -moz-transform: scale(0.5);
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+    &.x4 {
+        -webkit-animation: moveclouds 25s linear infinite;
+        -moz-animation: moveclouds 25s linear infinite;
+        -o-animation: moveclouds 25s linear infinite;
+        top: 250px;
+    }
+    &.x5 {
+        -webkit-animation: moveclouds 25s linear infinite;
+        -moz-animation: moveclouds 25s linear infinite;
+        -o-animation: moveclouds 25s linear infinite;
+        top: 250px;
+    }
+}
+
+@keyframes moveclouds {
+    0% {
+        margin-left: 1000px;
+    }
+    100% {
+        margin-left: -1000px;
+    }
+}

@@ -114,7 +114,7 @@
                                         </form>
                                         <span class="create-account d-block">
                                             Khách hàng mới?
-                                            <a href="#">Tạo tài khoản</a>
+                                            <a href="/user/register">Tạo tài khoản</a>
                                         </span>
                                         <span class="forgot-account d-block">
                                             Quên mật khẩu?
