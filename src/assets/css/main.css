@@ -402,6 +402,15 @@ body {
 .header .header-dropdown_login a {
   font-weight: 700;
 }
+.header .header-dropdown_login .actions {
+  margin-top: 20px;
+}
+.header .header-dropdown_login .actions a {
+  border-radius: 0;
+  padding: 12px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
 .header .header-form_login input {
   font-size: 1.4rem;
   border-radius: 0;
@@ -498,7 +507,7 @@ body {
   padding: 12px;
   font-size: 1.3rem;
   font-weight: 600;
-  min-width: 170px;
+  min-width: 180px;
 }
 .header .group-icon-header .item .cart-btn {
   padding: 2px 12px;
@@ -1637,6 +1646,262 @@ body {
     margin-left: -1000px;
   }
 }
+.user-account__block {
+  position: relative;
+  padding-top: 60px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.user-account__block--left {
+  width: 25%;
+}
+.user-account__block--left .block__left--header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.user-account__block--left .block__left--header .user__avatar {
+  width: 50px;
+  height: 50px;
+  font-size: 1.6rem;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px;
+  background-color: rgb(171, 67, 29);
+}
+.user-account__block--left .user__infor {
+  margin-left: 10px;
+}
+.user-account__block--left .user__infor--email {
+  margin-top: 5px;
+  font-size: 1.2rem;
+}
+.user-account__block--left .block__left--body {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eaeaea;
+}
+.user-account__block--left .block__left--item.active .block__left--link {
+  color: #fff;
+  background-color: #1877f2;
+}
+.user-account__block--left .block__left--item.active .block__left--link .block__left--icon {
+  color: #1877f2;
+}
+.user-account__block--left .block__left--link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 12px;
+  border-radius: 25px;
+  font-size: 1.6rem;
+  color: #333;
+  background-color: #eaeaea;
+}
+.user-account__block--left .block__left--link:hover {
+  color: #fff;
+  background-color: #1877f2;
+}
+.user-account__block--left .block__left--link:hover .block__left--icon {
+  color: #1877f2;
+}
+.user-account__block--left .block__left--icon {
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 2rem;
+  color: #b4b4b4;
+  background-color: #fff;
+}
+.user-account__block--right {
+  width: 75%;
+  margin-left: 30px;
+}
+.user-account__block--right .block-right__header {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+.user-account__block--right .block-right__item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+.user-account__block--right .block-right__input {
+  width: 75%;
+  padding: 6px 15px;
+  font-size: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid #c8c6c6;
+}
+.user-account__block--right .block-right__label {
+  width: 25%;
+  font-size: 1.5rem;
+}
+.user-account__block--right .block-right__radio {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 20px;
+}
+.user-account__block--right .block-right__btn {
+  padding: 10px 20px;
+  font-size: 1.6rem;
+  border-radius: 20px;
+  margin-top: 15px;
+  min-width: 250px;
+  color: #fff;
+  background-color: #1877f2;
+  cursor: pointer;
+}
+.user-account__block--right .block-right__btn:hover {
+  background-color: #0b5fcc;
+}
+.user-account__block--right .block-right__table th {
+  font-weight: 700;
+}
+.user-account__block--right .block-right__address .address-item {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  border-bottom: 1px solid #eaeaea;
+}
+.user-account__block--right .block-right__address .address-item:last-child {
+  border-bottom: none;
+}
+.user-account__block--right .block-right__address .address-item .left {
+  width: 70%;
+}
+.user-account__block--right .block-right__address .address-item .right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 25%;
+  font-size: 1.5rem;
+  color: #1877f2;
+}
+.user-account__block--right .block-right__address .address-item .right p {
+  cursor: pointer;
+}
+.user-account__block--right .block-right__address .address-item__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.user-account__block--right .block-right__address .address-item__header .name {
+  position: relative;
+  font-size: 1.6rem;
+  padding-right: 10px;
+}
+.user-account__block--right .block-right__address .address-item__header .name::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.54);
+}
+.user-account__block--right .block-right__address .address-item__header .phone {
+  margin-left: 10px;
+  color: rgba(0, 0, 0, 0.54);
+}
+.user-account__block--right .block-right__address .address-item__body .address {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.7);
+}
+.user-account__block--right .block-right__address .address-item__body .address-default {
+  padding: 5px 10px;
+  width: 100px;
+  text-align: center;
+  font-size: 1.4rem;
+  border: 1px solid #1877f2;
+  color: #1877f2;
+}
+.user-account__block--right .block-right__address--header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eaeaea;
+}
+.user-account__block--right .block-right__address--btn {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  background-color: #1877f2;
+}
+.user-account__block--right .block-right__address--btn i {
+  font-size: 2rem;
+  margin-right: 4px;
+}
+
+.modal-address {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.54);
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  width: 500px;
+  background-color: #fff;
+  z-index: 100;
+}
+.modal-address .modal-new__address--header {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+.modal-address .modal-new__address--form {
+  padding-top: 15px;
+}
+.modal-address .modal-new__address--form input[type=text] {
+  background-color: initial;
+  border: 0;
+  color: #222;
+  font-size: 1.5rem;
+  height: 38px;
+  min-width: 0;
+  outline: none;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+.modal-address .modal-new__address--checkbox {
+  margin-top: 20px;
+}
+.modal-address .modal-new__address--checkbox label {
+  font-size: 1.4rem;
+  margin-left: 5px;
+  margin-top: 3px;
+}
+.modal-address__actions {
+  text-align: right;
+}
+.modal-address__actions .btn-left,
+.modal-address__actions .btn-right {
+  color: #333;
+  font-size: 1.4rem;
+  min-width: 140px;
+  padding: 10px;
+  outline: none;
+  background-color: #fff;
+}
+.modal-address__actions .btn-right {
+  color: #fff;
+  background-color: #1877f2;
+}
+
 #footer {
   position: absolute;
   bottom: 0;

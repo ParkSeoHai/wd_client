@@ -141,6 +141,15 @@
     a {
       font-weight: 700;
     }
+    .actions {
+      margin-top: 20px;
+      a {
+        border-radius: 0;
+        padding: 12px;
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+    }
   }
 
   .header-form_login {
@@ -259,7 +268,7 @@
             padding: 12px;
             font-size: 1.3rem;
             font-weight: 600;
-            min-width: 170px;
+            min-width: 180px;
           }
         }
       }
