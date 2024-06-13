@@ -18,14 +18,13 @@ async function fetchApi(url, method = "GET", data = null) {
     }
 }
 
-async function getProductsByCategory($route, categoryName, limit) {
-    const url = `${$route}/Product/GetProductsByCategory?name=${categoryName}&limit=${limit}`;
-    return await fetchApi(url);
+function formatter(price) {
+    // Format currency
+    const formatVND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    })
+    return formatVND.format(price);
 }
 
-async function getProductByTextUrl($route, productUrl) {
-    const url = `${$route}/Product/GetProductByTextUrl?textUrl=${productUrl}`;
-    return await fetchApi(url);
-}
-
-export { getProductsByCategory, getProductByTextUrl };
+export { fetchApi, formatter };

@@ -34,7 +34,7 @@ function getSubNav(categoryId, categories) {
             let subnavObj = {
                 id: category.id,
                 name: category.name,
-                linkUrl: `/${category.name}`,
+                linkUrl: `/${category.textUrl}`,
                 subnav: []
             }
             subnav.push(subnavObj);
@@ -56,7 +56,7 @@ const fetchCategories = async () => {
         const navItem = {
             id: category.id,
             name: category.name,
-            linkUrl: `/${category.name}`,
+            linkUrl: `/${category.textUrl}`,
             icon: category.icon,
             subnav: subnav
         };

@@ -92,9 +92,9 @@
                                 </div>
                                 <!-- Price -->
                                 <div class="product-price">
-                                    <span class="price-now">{{ formatter.format(product.priceSale) }}</span>
+                                    <span class="price-now">{{ formatter(product.priceSale) }}</span>
                                     <span class="price-compare">
-                                        <del>{{ formatter.format(product.price) }}</del>
+                                        <del>{{ formatter(product.price) }}</del>
                                     </span>
                                 </div>
                                 <!-- Color -->
@@ -120,7 +120,7 @@
                                                 :alt="product.name">
                                             <div>
                                                 <p>{{ color.name }}</p>
-                                                <p class="mt-2">{{ formatter.format(color.priceSale) }}</p>
+                                                <p class="mt-2">{{ formatter(color.priceSale) }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +141,7 @@
                                             @click="activeOption = index"
                                         >
                                             <p class="text-center">{{ option.value }}</p>
-                                            <p class="text-center mt-2">{{ formatter.format(option.priceSale) }}</p>
+                                            <p class="text-center mt-2">{{ formatter(option.priceSale) }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -254,13 +254,20 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { inject, ref, watch } from "vue";
 // Components
 import ProductDescription from './ProductDescription.vue';
 import ProductSpecifications from './ProductSpecifications.vue';
 
+import { fetchApi, formatter } from '@/api/Common.js';
+
 // Props
 const props = defineProps(['product']);
+// Emits event
+const $emits = defineEmits(['update-cart']);
+// Route
+const $route = inject('$route');
+
 // Product data
 const product = ref(props.product);
 // Count add to cart
@@ -313,12 +320,6 @@ watch(count, () => {
         alert('Số lượng sản phẩm không đủ');
         count.value = product.value.colors[activeColor.value].options[activeOption.value].quantity;
     }
-});
-
-// Format price to vnd
-const formatter = new Intl.NumberFormat('vi-VN', {
-  style: 'currency',
-  currency: 'VND',
 });
 
 // Handle product thumbnail mouse event
@@ -384,6 +385,34 @@ function setPrice() {
         product.value.price = priceOption;
         product.value.priceSale = priceSaleOption;
     }
+}
+
+// Handle add product to cart
+function addCart() {
+    const cartId = localStorage.getItem('wdsmartcartid');
+    if (cartId === null) {
+        alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+        return;
+    }
+    // Create object cart item
+    const cartItem = {
+        cartId: cartId,
+        productUrl: product.value.textUrl,
+        option: product.value.colors[activeColor.value].name + " / " + product.value.colors[activeColor.value].options[activeOption.value].value,
+        quantity: count.value,
+    }
+
+    // Call api add cart
+    fetchApi(`${$route}/Customer/AddItemCart`, 'POST', cartItem)
+        .then((res) => {
+            if(res.success === true) {
+                // Emit event to App.vue to update cart
+                $emits('update-cart')
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 setPrice();

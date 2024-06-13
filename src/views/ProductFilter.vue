@@ -36,14 +36,19 @@
 <script setup>
 import { defineAsyncComponent, inject, onMounted, ref, watch } from 'vue';
 import { getProductsByCategory } from '@/api/ProductService';
+import { getCategoryByTextUrl } from '@/api/CategoryService';
 import ProductItem from '@/components/ProductItem.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 // Component
 const Sort = ref();
 // Inject global variable from main.js
 const $route = inject('$route');
-// Props name from params route
-const props = defineProps(['name']);
+// Props category url from params route
+const props = defineProps(['categoryUrl']);
+
+// Get category from categoryUrl
+const category = ref();
+
 const products = ref();
 const productLength = ref(0);
 // Get product display
@@ -69,13 +74,18 @@ watch(quantityDisplay, () => {
     getProductDisplay(quantityDisplay.value);
 });
 // Breadcrumb
-const breadcrumbActive = props.name;
+const breadcrumbActive = ref();
 // Fetch async api
 const fetchData = async () => {
     try {
+        // Get category data
+        category.value = await getCategoryByTextUrl($route, props.categoryUrl);
+        breadcrumbActive.value = category.value.name;
+
         // Get products data
-        products.value = await getProductsByCategory($route, props.name, 20);
+        products.value = await getProductsByCategory($route, category.value.name, 20);
         productLength.value = products.value.length;
+
         if(productLength.value > 0) {
             // Async components
             Sort.value = defineAsyncComponent(() =>
@@ -93,9 +103,9 @@ const fetchData = async () => {
 // Handle when click sort product by price
 const sortProductByPrice = (value) => {
     products.value.sort(function (a, b) {
-        if(value == 1) {
+        if(value == 1) {    // Sort price from high to low
             return b.priceSale - a.priceSale;
-        } else if(value == 2) {
+        } else if(value == 2) {     // Sort price from low to high
             return a.priceSale - b.priceSale;
         }
     });

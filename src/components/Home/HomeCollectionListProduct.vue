@@ -18,8 +18,8 @@
                                     v-for="category in categories"
                                     :key="category.id"
                                     class="menu-item"
-                                    :class="category.name == categoryActive ? 'active' : ''"
-                                    @click="changeProducts(category.name)"
+                                    :class="category.textUrl == categoryActive ? 'active' : ''"
+                                    @click="changeProducts(category)"
                                 >
                                     {{ category.name }}
                                 </li>
@@ -38,7 +38,7 @@
                         <div class="collection-bottom">
                             <div class="link">
                                 <router-link
-                                    :to="categoryActive === '' ? `/danh-muc/${category}` : `/danh-muc/${categoryActive}`"
+                                    :to="categoryActive === '' ? `/danh-muc/${props.textUrl}` : `/danh-muc/${categoryActive}`"
                                 >
                                     <span>Xem tất cả</span>
                                     <i class="bi bi-chevron-double-right"></i>
@@ -63,7 +63,7 @@ import { getProductsByCategory } from '@/api/ProductService';
 const $route = inject('$route');
 
 // Props
-const props = defineProps(['category']);
+const props = defineProps(['category', 'textUrl']);
 const categoryActive = ref('');
 
 // List product
@@ -83,9 +83,9 @@ const fetchData = async () => {
 };
 
 // Change product when click category item in HomeCollectionListProduct.vue
-async function changeProducts(categoryName) {
-    categoryActive.value = categoryName;
-    products.value = await getProductsByCategory($route, categoryName, 10);
+async function changeProducts(category) {
+    categoryActive.value = category.textUrl;
+    products.value = await getProductsByCategory($route, category.name, 10);
 }
 
 // Call function when component is mounted

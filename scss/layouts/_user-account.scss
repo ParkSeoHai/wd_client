@@ -22,6 +22,10 @@
                 text-align: center;
                 line-height: 50px;
                 background-color: rgb(171, 67, 29);
+                img {
+                    width: 100%;
+                    height: auto;
+                }
             }
         }
         .user__infor {
@@ -124,6 +128,15 @@
             th {
                 font-weight: 700;
             }
+            .order-empty {
+                margin-top: 20px;
+                font-size: 1.7rem;
+                text-align: center;
+                a {
+                    color: #1877f2;
+                    font-weight: 700;
+                }
+            }
         }
 
         .block-right__address {
@@ -188,6 +201,10 @@
                     border: 1px solid variables.$color-primary;
                     color: variables.$color-primary;
                 }
+            }
+
+            .address-empty {
+                font-size: 1.7rem;
             }
         }
 

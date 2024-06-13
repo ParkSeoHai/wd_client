@@ -11,7 +11,8 @@
     <HomeCollectionGroup />
     <!-- Section Product group 1 -->
     <HomeCollectionListProduct
-        :category = category
+        category = "Điện thoại"
+        textUrl = "dien-thoai"
     />
     <!-- Section home blog -->
     <HomeBlogNews />
@@ -26,6 +27,4 @@ import HomeFlashSale from '@/components/Home/HomeFlashSale.vue';
 import HomeCollectionGroup from '@/components/Home/HomeCollectionGroup.vue';
 import HomeCollectionListProduct from '@/components/Home/HomeCollectionListProduct.vue';
 import HomeBlogNews from '@/components/Home/HomeBlogNews.vue';
-// Get product by category
-const category = 'Điện thoại';
 </script>

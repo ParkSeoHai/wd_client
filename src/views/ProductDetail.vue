@@ -9,6 +9,7 @@
         <!-- Section product detail -->
         <ProductDetailInfo
             :product="product"
+            @update-cart="updateCart"
         />
     </div>
 </template>
@@ -18,10 +19,12 @@ import { defineAsyncComponent, inject, onMounted, ref } from 'vue';
 const Breadcrumb = ref();
 const ProductDetailInfo = ref();
 // Service
-import { getProductByName } from '@/api/ProductService';
+import { getProductByTextUrl } from '@/api/ProductService';
 
 // Props from route
 const props = defineProps(['name']);
+// Emit event to App.vue
+const $emits = defineEmits(['update-cart']);
 
 const $route = inject('$route');
 const product = ref();
@@ -30,7 +33,7 @@ let breadcrumbs = [], breadcrumbActive;
 // Fetch data from server
 const fetchData = async () => {
     try {
-        product.value = await getProductByName($route, props.name);
+        product.value = await getProductByTextUrl($route, props.name);
         // Asycn component
         ProductDetailInfo.value = defineAsyncComponent(() =>
             import('@/components/ProductDetail/ProductDetailInfo.vue')
@@ -39,7 +42,7 @@ const fetchData = async () => {
         product.value.categories.map(item => {
             breadcrumbs.push({
                 linkText: item.name,
-                linkUrl: item.name
+                linkUrl: `danh-muc/${item.textUrl}`
             });
         });
         breadcrumbActive = product.value.name;
@@ -50,5 +53,11 @@ const fetchData = async () => {
         console.error(error);
     }
 }
+
+// Update cart
+const updateCart = () => {
+    $emits('update-cart');
+}
+
 onMounted(fetchData);
 </script>

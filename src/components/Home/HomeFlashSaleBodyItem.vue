@@ -5,7 +5,7 @@
                 :to="{
                     name: 'product',
                     params: {
-                        name: `${productObj.name}`
+                        name: `${productObj.textUrl}`
                     }
                 }"
             >
@@ -22,7 +22,7 @@
                     :to="{
                     name: 'product',
                     params: {
-                        name: `${productObj.name}`
+                        name: `${productObj.textUrl}`
                     }
                 }"
                 >

@@ -1,3 +1,4 @@
+import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -18,7 +19,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
     },
     {
-      path: '/danh-muc/:name',
+      path: '/danh-muc/:categoryUrl',
       name: 'product-filter',
       component: () => import('@/views/ProductFilter.vue'),
       props: true
@@ -38,7 +39,12 @@ const router = createRouter({
       name: 'Account',
       component: () => import('@/views/Account.vue'),
       props: true
-    }
+    },
+    {
+      path: '/cart',
+      name: 'Cart',
+      component: () => import('@/views/Cart.vue'),
+    },
   ]
 })
 
