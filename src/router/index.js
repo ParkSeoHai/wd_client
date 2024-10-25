@@ -1,4 +1,3 @@
-import { defineAsyncComponent } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -10,7 +9,7 @@ const router = createRouter({
       component: () => import('@/views/Index.vue')
     },
     {
-      path: '/san-pham/:name',
+      path: '/san-pham/:textUrl',
       name: 'product',
       component: () => import('@/views/ProductDetail.vue'),
       props: true
@@ -20,7 +19,7 @@ const router = createRouter({
     },
     {
       path: '/danh-muc/:categoryUrl',
-      name: 'product-filter',
+      name: 'ProductByCategory',
       component: () => import('@/views/ProductFilter.vue'),
       props: true
     },

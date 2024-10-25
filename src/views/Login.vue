@@ -14,31 +14,21 @@
           <li v-for="(error, index) in responseErrors" :key="index">{{ error }}</li>
         </ul>
         <div class="mt-3">
-          <input
-            type="email"
-            v-model="email"
-            :class="emailMessage !== '' ? 'error' : ''"
-            placeholder="Nhập email (*)"
-          />
+          <input type="email" v-model="email" :class="emailMessage !== '' ? 'error' : ''"
+            placeholder="Nhập email (*)" />
           <span v-show="emailMessage !== ''" class="template-account__form--message">{{
             emailMessage
           }}</span>
         </div>
         <div class="mt-3">
-          <input
-            type="password"
-            v-model="password"
-            :class="passwordMessage !== '' ? 'error' : ''"
-            placeholder="Nhập mật khẩu (*)"
-          />
+          <input type="password" v-model="password" :class="passwordMessage !== '' ? 'error' : ''"
+            placeholder="Nhập mật khẩu (*)" />
           <span v-show="passwordMessage !== ''" class="template-account__form--message">{{
             passwordMessage
           }}</span>
         </div>
         <div class="text-end mt-3">
-          <router-link to="/user/forgot-password" class="template-account__form--link"
-            >Quên mật khẩu?</router-link
-          >
+          <router-link to="/user/forgot-password" class="template-account__form--link">Quên mật khẩu?</router-link>
         </div>
         <div class="text-center mt-4">
           <button type="submit" class="btn-base template-account__form--button">Đăng nhập</button>

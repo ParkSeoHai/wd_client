@@ -89,7 +89,10 @@
             </div> -->
           </div>
           <div class="cart-empty" v-else>
-            <p>Giỏ hàng của bạn đang trống. Mời bạn mua thêm sản phẩm <router-link to="/all">tại đây</router-link>.</p>
+            <p>
+              Giỏ hàng của bạn đang trống. Mời bạn mua thêm sản phẩm
+              <router-link to="/">tại đây</router-link>.
+            </p>
           </div>
         </div>
       </div>
@@ -131,6 +134,13 @@ const handleQuantity = (name, action) => {
   const product = props.cartItems.find(
     (item) => item.name.trim().toLowerCase() === name.trim().toLowerCase()
   )
+  // Product is not exist
+  if (product == null) {
+    alert('Product not found')
+    return
+  }
+
+  // Update quantity
   let qtyProduct = product.quantity
   if (action === 'decrease') {
     if (qtyProduct == 1) {
@@ -158,6 +168,8 @@ const handleQuantity = (name, action) => {
       if (res.success === true) {
         // Emit event to App.vue to update cart
         $emits('update-cart')
+      } else {
+        alert('Update cart item failed')
       }
     })
     .catch((err) => {
@@ -176,6 +188,8 @@ const removeItemCart = (productUrl) => {
       if (res.success === true) {
         // Emit event to App.vue to update cart
         $emits('update-cart')
+      } else {
+        alert('Delete cart item failed')
       }
     })
     .catch((err) => {

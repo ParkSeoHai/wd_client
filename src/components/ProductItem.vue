@@ -1,14 +1,12 @@
 <template>
     <div class="item">
         <div class="img">
-            <router-link
-                :to="{
-                    name: 'product',
-                    params: {
-                        name: `${props.productObj.textUrl}`
-                    }
-                }"
-            >
+            <router-link :to="{
+                name: 'product',
+                params: {
+                    textUrl: `${props.productObj.textUrl}`
+                }
+            }">
                 <img :src="props.productObj.defaultImage" :alt="props.productObj.name">
             </router-link>
             <!-- Hiện icon khi hover item -->
@@ -18,14 +16,12 @@
         </div>
         <div class="content">
             <h3 class="title">
-                <router-link
-                    :to="{
-                        name: 'product',
-                        params: {
-                            name: `${props.productObj.textUrl}`
-                        }
-                    }"
-                >
+                <router-link :to="{
+                    name: 'product',
+                    params: {
+                        textUrl: `${props.productObj.textUrl}`
+                    }
+                }">
                     {{ props.productObj.name }}
                 </router-link>
             </h3>
@@ -49,7 +45,7 @@
 const props = defineProps(['productObj']);
 
 const formatter = new Intl.NumberFormat('vi-VN', {
-  style: 'currency',
-  currency: 'VND',
+    style: 'currency',
+    currency: 'VND',
 });
 </script>

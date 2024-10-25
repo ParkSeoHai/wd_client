@@ -18,6 +18,7 @@ import Modal from './components/Modal.vue'
 // API
 import { fetchApi } from '@/api/Common.js'
 
+// Show background-modal
 let isShowModal = ref(false)
 const $route = inject('$route') // Route call api
 

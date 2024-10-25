@@ -158,7 +158,9 @@
                       <p class="desc">Nhập email và mật khẩu của bạn</p>
                       <form class="header-form_login" @submit.prevent="submitFormLogin">
                         <ul class="header-form_login--errors" v-show="responseLoginErrors">
-                          <li v-for="(error, index) in responseLoginErrors" :key="index">{{ error }}</li>
+                          <li v-for="(error, index) in responseLoginErrors" :key="index">
+                            {{ error }}
+                          </li>
                         </ul>
                         <div class="mb-2">
                           <input
@@ -217,7 +219,10 @@
                     </div>
                     <p class="title">Giỏ hàng</p>
                     <!-- Cart empty -->
-                    <div class="mini_cart_header text-center py-2" v-if="props.cartItems.length == 0">
+                    <div
+                      class="mini_cart_header text-center py-2"
+                      v-if="props.cartItems.length == 0"
+                    >
                       <i class="bi bi-cart2"></i>
                       <p>Hiện chưa có sản phẩm</p>
                       <hr class="text-dark mb-1" />
@@ -227,7 +232,9 @@
                       </div>
                       <div class="actions d-flex align-items-center justify-content-between py-2">
                         <router-link to="/cart" class="btn btn-primary">XEM GIỎ HÀNG</router-link>
-                        <router-link to="thanh-toan" class="btn btn-outline-primary">THANH TOÁN</router-link>
+                        <router-link to="thanh-toan" class="btn btn-outline-primary"
+                          >THANH TOÁN</router-link
+                        >
                       </div>
                     </div>
                     <!-- Cart have product -->
@@ -241,11 +248,7 @@
                         >
                           <div class="cart-product w-100 d-flex align-items-center">
                             <router-link :to="`/san-pham/${item.textUrl}`">
-                              <img
-                                :src="item.defaultImage"
-                                :alt="item.name"
-                                class="img-thumb"
-                              />
+                              <img :src="item.defaultImage" :alt="item.name" class="img-thumb" />
                             </router-link>
                             <div class="product-info w-100">
                               <p class="product-name">
@@ -297,7 +300,9 @@
                       </div>
                       <div class="actions d-flex align-items-center justify-content-between py-2">
                         <router-link to="/cart" class="btn btn-primary">XEM GIỎ HÀNG</router-link>
-                        <router-link to="thanh-toan" class="btn btn-outline-primary">THANH TOÁN</router-link>
+                        <router-link to="thanh-toan" class="btn btn-outline-primary"
+                          >THANH TOÁN</router-link
+                        >
                       </div>
                     </div>
                   </div>
@@ -352,7 +357,7 @@ function showDropdown(dropDownName) {
     if (dropDownItem === dropDownName) {
       listDropDown.value[dropDownName] = !listDropDown.value[dropDownName]
       // Handle emit event to components/Header.vue
-      $emits('handle-modal', listDropDown.value[dropDownName])
+      $emits('handle-modal', true)
     } else {
       listDropDown.value[dropDownItem] = false
     }
@@ -421,14 +426,14 @@ const removeItemCart = (productUrl) => {
   const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`
   fetchApi(url, 'DELETE')
     .then((res) => {
-        if(res.success === true) {
-          // Emit event to App.vue to update cart
-          $emits('update-cart')
-        }
+      if (res.success === true) {
+        // Emit event to App.vue to update cart
+        $emits('update-cart')
+      }
     })
     .catch((err) => {
-        console.log(err);
-    });
+      console.log(err)
+    })
 }
 
 onMounted(fetchData)

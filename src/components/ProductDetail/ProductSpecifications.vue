@@ -4,17 +4,11 @@
             <div class="product-property-tab__title">
                 Thông số kĩ thuật
             </div>
-            
-            <div
-                class="product-property-tab__content"
-                :class="showViewAll ? 'show' : ''"
-            >
+
+            <div class="product-property-tab__content" :class="showViewAll ? 'show' : ''">
                 <table class="table table-striped product-property-tab__table fs-4">
                     <tbody>
-                        <tr 
-                            v-for="property in props.productSpectifications"
-                            :key="property.id"
-                        >
+                        <tr v-for="property in props.productSpectifications" :key="property.id">
                             <td>{{ property.name }}</td>
                             <td>{{ property.value }}</td>
                         </tr>
@@ -23,14 +17,9 @@
             </div>
 
             <div class="view-all-tab">
-                <button
-                    class="view-all-tab__btn"
-                    @click.prevent="showViewAll = !showViewAll"
-                >
-                    <i
-                        class="bi view-all-tab__btn--icon"
-                        :class="showViewAll ? 'bi-dash-circle' : 'bi-plus-circle'"
-                    ></i>
+                <button class="view-all-tab__btn" @click.prevent="showViewAll = !showViewAll">
+                    <i class="bi view-all-tab__btn--icon"
+                        :class="showViewAll ? 'bi-dash-circle' : 'bi-plus-circle'"></i>
                     {{ showViewAll ? 'Rút gọn' : 'Xem thêm' }}
                 </button>
             </div>
