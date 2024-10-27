@@ -28,7 +28,11 @@
             <!-- Body -->
             <div class="block-collection-group product-primary list-product">
               <!-- Item -->
-              <ProductItem v-for="product in products" :key="product.id" :productObj="product" />
+              <ProductItem
+                v-for="product in products"
+                :key="product.id"
+                :productObj="product"
+              />
             </div>
             <!-- Bottom -->
             <div class="collection-bottom">
@@ -53,41 +57,40 @@
 </template>
 
 <script setup>
-import { inject, onMounted, ref } from 'vue'
+import { inject, onMounted, ref } from "vue";
 // Component
-import ProductItem from '../ProductItem.vue'
+import ProductItem from "../ProductItem.vue";
 // Service
-import { getCategoriesLevel2 } from '@/api/CategoryService'
-import { getProductsByCategory } from '@/api/ProductService'
+import { getCategoriesLevel2 } from "@/api/CategoryService";
+import { getProductsByCategory } from "@/api/ProductService";
 
-const $route = inject('$route')
+const $route = inject("$route");
 
 // Props
-const props = defineProps(['category', 'textUrl'])
-const categoryActive = ref('')
+const props = defineProps(["category", "textUrl"]);
+const categoryActive = ref("");
 
 // List product
-const products = ref([])
+const products = ref([]);
 // Categories
-const categories = ref([])
+const categories = ref([]);
 
 // Async function to fetch data
 const fetchData = async () => {
   try {
     // Asign value
-    products.value = await getProductsByCategory($route, props.category, 10)
-    categories.value = await getCategoriesLevel2($route, props.category)
+    products.value = await getProductsByCategory($route, props.category, 10);
+    categories.value = await getCategoriesLevel2($route, props.category);
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
-}
+};
 
 // Change product when click category item in HomeCollectionListProduct.vue
 async function changeProducts(category) {
-  categoryActive.value = category.textUrl
-  products.value = await getProductsByCategory($route, category.name, 10)
+  categoryActive.value = category.textUrl;
+  products.value = await getProductsByCategory($route, category.name, 10);
 }
 
 // Call function when component is mounted
-onMounted(fetchData)
 </script>

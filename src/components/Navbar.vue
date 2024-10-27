@@ -8,7 +8,7 @@ const categories = ref([]);
 
 const getCategories = async () => {
   try {
-    const response = await axios("http://localhost:3000/api/v1/category");
+    const response = await axios("https://wd-server.vercel.app/api/v1/category");
     return response.data.metadata.categories;
   } catch (error) {
     console.error(error);

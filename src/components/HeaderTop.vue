@@ -16,7 +16,11 @@
                 placeholder="Nhập tìm kiếm..."
               />
             </div>
-            <button type="button" class="btn btn-primary btn-search" onclick="searchProduct()">
+            <button
+              type="button"
+              class="btn btn-primary btn-search"
+              onclick="searchProduct()"
+            >
               <i class="bi bi-search"></i>
             </button>
           </form>
@@ -26,7 +30,10 @@
           <ul class="list-icon-header d-flex align-items-center justify-content-between">
             <!-- Phone number -->
             <li class="item">
-              <a href="tel:033301536" class="item-link text-white d-flex align-items-center">
+              <a
+                href="tel:033301536"
+                class="item-link text-white d-flex align-items-center"
+              >
                 <span class="icon"><i class="bi bi-telephone-forward"></i></span>
                 <span class="text">
                   Hotline
@@ -56,7 +63,9 @@
                       <i class="bi bi-x"></i>
                     </div>
                     <p class="title">Tìm cửa hàng gần bạn</p>
-                    <div class="d-flex align-items-center justify-content-between gap-2 mt-3">
+                    <div
+                      class="d-flex align-items-center justify-content-between gap-2 mt-3"
+                    >
                       <select class="form-select select">
                         <option selected>Chọn tỉnh/thành phố</option>
                         <option value="1">Hà Nội</option>
@@ -73,19 +82,21 @@
                           <li
                             class="item"
                             v-for="addressShop of addressShops"
-                            :key="addressShop.id"
+                            :key="addressShop._id"
                           >
                             <a href="#" class="infor">
-                              <b>{{ addressShop.city }} - {{ addressShop.nameShop }}</b>
-                              <span>{{ addressShop.address }}</span>
+                              <b>{{ addressShop.city }} - {{ addressShop.name_shop }}</b>
+                              <span>{{ addressShop.detail }}</span>
                               <span class="phoneNumber d-flex align-items-baseline">
                                 <i class="bi bi-phone"></i>
-                                <span class="ms-1">{{ addressShop.phoneNumber }}</span>
+                                <span class="ms-1"
+                                  >Số điện thoại: {{ addressShop.phone_number }}</span
+                                >
                               </span>
-                              <span>{{ addressShop.note }}</span>
+                              <span>Thời gian hoạt động: {{ addressShop.uptime }}</span>
                             </a>
                             <a
-                              :href="addressShop.urlMap"
+                              :href="addressShop.url_map"
                               class="infoLocation d-flex align-items-baseline gap-1"
                             >
                               <i class="bi bi-arrow-bar-right"></i>
@@ -133,18 +144,24 @@
                       <p class="title">Thông tin tài khoản</p>
                       <p class="desc mt-4">
                         Tên:
-                        <span class="d-inline-block fw-bold my-0" style="font-size: 1.5rem"
+                        <span
+                          class="d-inline-block fw-bold my-0"
+                          style="font-size: 1.5rem"
                           >{{ user.firstName }} {{ user.lastName }}</span
                         >
                       </p>
                       <p class="desc">
                         Email:
-                        <span class="d-inline-block fw-bold my-0" style="font-size: 1.5rem">{{
-                          user.email
-                        }}</span>
+                        <span
+                          class="d-inline-block fw-bold my-0"
+                          style="font-size: 1.5rem"
+                          >{{ user.email }}</span
+                        >
                       </p>
                       <div class="actions d-flex align-items-center gap-3">
-                        <a href="/user/account" class="btn btn-primary w-75">Xem chi tiết</a>
+                        <a href="/user/account" class="btn btn-primary w-75"
+                          >Xem chi tiết</a
+                        >
                         <a
                           href="/user/logout"
                           @click.prevent="logout"
@@ -157,7 +174,10 @@
                       <p class="title">Đăng nhập tài khoản</p>
                       <p class="desc">Nhập email và mật khẩu của bạn</p>
                       <form class="header-form_login" @submit.prevent="submitFormLogin">
-                        <ul class="header-form_login--errors" v-show="responseLoginErrors">
+                        <ul
+                          class="header-form_login--errors"
+                          v-show="responseLoginErrors"
+                        >
                           <li v-for="(error, index) in responseLoginErrors" :key="index">
                             {{ error }}
                           </li>
@@ -200,7 +220,10 @@
             <!-- Cart -->
             <li class="item item-dropdown" @click="showDropdown('ddownCart')">
               <div class="cart">
-                <button type="button" class="btn btn-primary d-flex align-items-center cart-btn">
+                <button
+                  type="button"
+                  class="btn btn-primary d-flex align-items-center cart-btn"
+                >
                   <span class="icon">
                     <i class="bi bi-cart"></i>
                     <span class="quantity">{{ props.cartItems.length }}</span>
@@ -226,12 +249,18 @@
                       <i class="bi bi-cart2"></i>
                       <p>Hiện chưa có sản phẩm</p>
                       <hr class="text-dark mb-1" />
-                      <div class="cart-total d-flex align-items-baseline justify-content-between">
+                      <div
+                        class="cart-total d-flex align-items-baseline justify-content-between"
+                      >
                         <span class="text">TỔNG TIỀN:</span>
                         <span class="prices">0₫</span>
                       </div>
-                      <div class="actions d-flex align-items-center justify-content-between py-2">
-                        <router-link to="/cart" class="btn btn-primary">XEM GIỎ HÀNG</router-link>
+                      <div
+                        class="actions d-flex align-items-center justify-content-between py-2"
+                      >
+                        <router-link to="/cart" class="btn btn-primary"
+                          >XEM GIỎ HÀNG</router-link
+                        >
                         <router-link to="thanh-toan" class="btn btn-outline-primary"
                           >THANH TOÁN</router-link
                         >
@@ -248,7 +277,11 @@
                         >
                           <div class="cart-product w-100 d-flex align-items-center">
                             <router-link :to="`/san-pham/${item.textUrl}`">
-                              <img :src="item.defaultImage" :alt="item.name" class="img-thumb" />
+                              <img
+                                :src="item.defaultImage"
+                                :alt="item.name"
+                                class="img-thumb"
+                              />
                             </router-link>
                             <div class="product-info w-100">
                               <p class="product-name">
@@ -257,14 +290,23 @@
                                 </router-link>
                               </p>
                               <p class="product-option">{{ item.option }}</p>
-                              <div class="d-flex align-items-center justify-content-between">
+                              <div
+                                class="d-flex align-items-center justify-content-between"
+                              >
                                 <div class="d-flex align-items-center">
-                                  <span class="product-quantity">{{ item.quantity }}</span>
+                                  <span class="product-quantity">{{
+                                    item.quantity
+                                  }}</span>
                                   <p class="product-price">
                                     {{ formatter(item.price) }}
                                   </p>
                                 </div>
-                                <p class="product-del" @click="removeItemCart(item.textUrl)">Xóa</p>
+                                <p
+                                  class="product-del"
+                                  @click="removeItemCart(item.textUrl)"
+                                >
+                                  Xóa
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -294,12 +336,18 @@
                           </div>
                         </li> -->
                       </ul>
-                      <div class="cart-total d-flex align-items-baseline justify-content-between">
+                      <div
+                        class="cart-total d-flex align-items-baseline justify-content-between"
+                      >
                         <span class="text">TỔNG TIỀN:</span>
                         <span class="prices">{{ formatter(totalPrice) }}</span>
                       </div>
-                      <div class="actions d-flex align-items-center justify-content-between py-2">
-                        <router-link to="/cart" class="btn btn-primary">XEM GIỎ HÀNG</router-link>
+                      <div
+                        class="actions d-flex align-items-center justify-content-between py-2"
+                      >
+                        <router-link to="/cart" class="btn btn-primary"
+                          >XEM GIỎ HÀNG</router-link
+                        >
                         <router-link to="thanh-toan" class="btn btn-outline-primary"
                           >THANH TOÁN</router-link
                         >
@@ -316,125 +364,148 @@
   </div>
 </template>
 <script setup>
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, ref } from "vue";
 // Component
-import Logo from './Logo.vue'
+import Logo from "./Logo.vue";
 // Api
-import axios from 'axios'
-import getAddressShops from '@/api/AddressShopService'
-import { formatter, fetchApi } from '@/api/Common.js'
+import axios from "axios";
+import getAddressShops from "@/api/AddressShopService";
+import { formatter, fetchApi } from "@/api/Common.js";
 
-const $emits = defineEmits(['handle-modal', 'update-cart'])
+const $emits = defineEmits(["handle-modal", "update-cart"]);
 // Props from parent component Header.vue
-const props = defineProps(['cartItems'])
-const $route = inject('$route') // Route call api
+const props = defineProps(["cartItems"]);
+const $route = inject("$route"); // Route call api
 
 // Handle address shops
-const addressShops = ref([])
+const addressShops = ref([
+  {
+    _id: "282713",
+    name_shop: "Wanda",
+    country: "Việt Nam",
+    city: "Hà Nội",
+    quan_huyen: "Nam Từ Liêm",
+    xa_phuong: "Mỹ Đình",
+    detail: "Số 21 Nguyen Co Thach",
+    phone_number: "11234567",
+    uptime: "8:00 - 21:00",
+    url_map: "url_map",
+  },
+  {
+    _id: "282713",
+    name_shop: "Wanda",
+    country: "Việt Nam",
+    city: "Hà Nội",
+    quan_huyen: "Nam Từ Liêm",
+    xa_phuong: "Mỹ Đình",
+    detail: "Số 21 Nguyen Co Thach",
+    phone_number: "11234567",
+    uptime: "8:00 - 21:00",
+    url_map: "url_map",
+  },
+]);
 
 // Handle cart
 const totalPrice = computed(() => {
-  return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
-})
+  return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+});
 
 // List dropdown header
 let listDropDown = ref({
   ddownStoreAddress: false,
   ddownLogin: false,
-  ddownCart: false
-})
+  ddownCart: false,
+});
 
 // Handle user was login
-const userLogged = ref(false)
-const user = JSON.parse(localStorage.getItem('wdsmartuser'))
+const userLogged = ref(false);
+const user = JSON.parse(localStorage.getItem("wdsmartuser"));
 if (user) {
-  userLogged.value = true
+  userLogged.value = true;
 }
 
 // Handle show dropdown header
 function showDropdown(dropDownName) {
   for (let dropDownItem in listDropDown.value) {
     if (dropDownItem === dropDownName) {
-      listDropDown.value[dropDownName] = !listDropDown.value[dropDownName]
+      listDropDown.value[dropDownName] = !listDropDown.value[dropDownName];
       // Handle emit event to components/Header.vue
-      $emits('handle-modal', true)
+      $emits("handle-modal", true);
     } else {
-      listDropDown.value[dropDownItem] = false
+      listDropDown.value[dropDownItem] = false;
     }
   }
 }
 
 // Handle close dropdown
 function closeDropdown(dropDownName) {
-  listDropDown.value[dropDownName] = false
+  listDropDown.value[dropDownName] = false;
   // Handle emit event to components/Header.vue
-  $emits('handle-modal', false)
+  $emits("handle-modal", false);
 }
 
 // Handle login dropdown top header form
-const email = ref('')
-const password = ref('')
-const responseLoginErrors = ref([])
+const email = ref("");
+const password = ref("");
+const responseLoginErrors = ref([]);
 
 function submitFormLogin() {
-  responseLoginErrors.value = []
+  responseLoginErrors.value = [];
   // Call API login
   axios
     .post(`${$route}/Customer/Login`, {
       email: email.value,
-      password: password.value
+      password: password.value,
     })
     .then((response) => {
-      console.log(response.data)
+      console.log(response.data);
       if (response.data.success === true) {
         // Save user info to localStorage
-        localStorage.setItem('wdsmartuser', JSON.stringify(response.data.data))
-        localStorage.setItem('wdsmartcartid', response.data.data.cartId)
+        localStorage.setItem("wdsmartuser", JSON.stringify(response.data.data));
+        localStorage.setItem("wdsmartcartid", response.data.data.cartId);
         // Redirect to home page
-        window.location.href = '/'
+        window.location.href = "/";
       } else {
         // Show error messages
-        responseLoginErrors.value = response.data.errors
+        responseLoginErrors.value = response.data.errors;
       }
     })
     .catch((error) => {
-      console.log(error)
-    })
+      console.log(error);
+    });
 }
 
 // Handle logout
 function logout() {
-  localStorage.removeItem('wdsmartuser')
-  localStorage.removeItem('wdsmartcartid')
-  window.location.href = '/'
+  localStorage.removeItem("wdsmartuser");
+  localStorage.removeItem("wdsmartcartid");
+  window.location.href = "/";
 }
 
 // Handle get data address shops
 const fetchData = async () => {
   try {
-    addressShops.value = await getAddressShops($route)
+    addressShops.value = await getAddressShops($route);
   } catch (error) {
-    throw error.message
+    throw error.message;
   }
-}
+};
 
 // Handle remove item cart
 const removeItemCart = (productUrl) => {
   // get cart id from local storage
-  const cartId = localStorage.getItem('wdsmartcartid')
+  const cartId = localStorage.getItem("wdsmartcartid");
   // call api remove item cart
-  const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`
-  fetchApi(url, 'DELETE')
+  const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`;
+  fetchApi(url, "DELETE")
     .then((res) => {
       if (res.success === true) {
         // Emit event to App.vue to update cart
-        $emits('update-cart')
+        $emits("update-cart");
       }
     })
     .catch((err) => {
-      console.log(err)
-    })
-}
-
-onMounted(fetchData)
+      console.log(err);
+    });
+};
 </script>

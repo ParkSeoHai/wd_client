@@ -22,47 +22,45 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, inject, onMounted, ref } from 'vue'
+import { defineAsyncComponent, inject, onMounted, ref } from "vue";
 // Component
-let HomeFlashSaleBody
-import HomeFlashSaleTop from './HomeFlashSaleTop.vue'
+let HomeFlashSaleBody;
+import HomeFlashSaleTop from "./HomeFlashSaleTop.vue";
 // Service
-import { getFlashSale } from '@/api/FlashSaleService.js'
+import { getFlashSale } from "@/api/FlashSaleService.js";
 
-const $route = inject('$route')
+const $route = inject("$route");
 
 // Data fetch api
-const data = ref()
+const data = ref();
 // FlashSale object
 const flashSale = ref({
   day: 0,
   hour: 0,
   minute: 0,
-  second: 0
-})
+  second: 0,
+});
+
 // Products
-let products = []
+let products = [];
 
 // Async function to fetch categories
 const fetchFlashSale = async () => {
   try {
     // Asign value
-    data.value = await getFlashSale($route)
+    data.value = await getFlashSale($route);
     // FlashSale object
     flashSale.value = {
       day: data.value.day,
       hour: data.value.hour,
       minute: data.value.minute,
-      second: data.value.second
-    }
+      second: data.value.second,
+    };
     // Products
-    products = data.value.flashSaleItems
-    HomeFlashSaleBody = defineAsyncComponent(() => import('./HomeFlashSaleBody.vue'))
+    products = data.value.flashSaleItems;
+    HomeFlashSaleBody = defineAsyncComponent(() => import("./HomeFlashSaleBody.vue"));
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
   }
-}
-
-// Call the fetchCategories function when component is mounted
-onMounted(fetchFlashSale)
+};
 </script>
