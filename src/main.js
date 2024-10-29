@@ -10,4 +10,6 @@ const app = createApp(App);
 
 app.use(router);
 
+app.provide("url_api", "http://localhost:3000");
+
 app.mount('#app');
