@@ -10,6 +10,6 @@ const app = createApp(App);
 
 app.use(router);
 
-app.provide("url_api", "http://localhost:3000");
+app.provide("url_api", "https://wd-server.vercel.app");
 
 app.mount('#app');
