@@ -66,14 +66,22 @@
                     <div
                       class="d-flex align-items-center justify-content-between gap-2 mt-3"
                     >
-                      <select class="form-select select">
-                        <option selected>Chọn tỉnh/thành phố</option>
-                        <option value="1">Hà Nội</option>
-                        <option value="2">Hồ Chí Minh</option>
+                      <select class="form-select select" @change="changeSelectCity">
+                        <option value="" selected>Chọn tỉnh/thành phố</option>
+                        <option
+                          v-for="(city, index) in cities"
+                          :key="index"
+                          :value="city.name"
+                        >
+                          {{ city.name }}
+                        </option>
                       </select>
 
-                      <select class="form-select select">
-                        <option selected>Chọn Quận/huyện</option>
+                      <select class="form-select select" @change="changeSelectQuanHuyen">
+                        <option value="" selected>Chọn Quận/huyện</option>
+                        <option v-for="(quan_huyen, index) in quan_huyens" :key="index">
+                          {{ quan_huyen }}
+                        </option>
                       </select>
                     </div>
                     <div class="address-count mt-4">
@@ -84,9 +92,19 @@
                             v-for="addressShop of addressShops"
                             :key="addressShop._id"
                           >
-                            <a href="#" class="infor">
-                              <b>{{ addressShop.city }} - {{ addressShop.name_shop }}</b>
-                              <span>{{ addressShop.detail }}</span>
+                            <a
+                              :href="addressShop.url_map"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="infor"
+                            >
+                              <b
+                                >{{ addressShop.city }} - {{ addressShop.name_shop }} CN
+                                {{ addressShop.quan_huyen }}</b
+                              >
+                              <span>{{
+                                `${addressShop.detail}, ${addressShop.xa_phuong}, ${addressShop.quan_huyen}`
+                              }}</span>
                               <span class="phoneNumber d-flex align-items-baseline">
                                 <i class="bi bi-phone"></i>
                                 <span class="ms-1"
@@ -97,6 +115,8 @@
                             </a>
                             <a
                               :href="addressShop.url_map"
+                              target="_blank"
+                              rel="noopener noreferrer"
                               class="infoLocation d-flex align-items-baseline gap-1"
                             >
                               <i class="bi bi-arrow-bar-right"></i>
@@ -364,12 +384,11 @@
   </div>
 </template>
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 // Component
 import Logo from "./Logo.vue";
 // Api
 import axios from "axios";
-import getAddressShops from "@/api/AddressShopService";
 import { formatter, fetchApi } from "@/api/Common.js";
 
 const $emits = defineEmits(["handle-modal", "update-cart"]);
@@ -378,32 +397,39 @@ const props = defineProps(["cartItems"]);
 const $route = inject("$route"); // Route call api
 
 // Handle address shops
-const addressShops = ref([
-  {
-    _id: "282713",
-    name_shop: "Wanda",
-    country: "Việt Nam",
-    city: "Hà Nội",
-    quan_huyen: "Nam Từ Liêm",
-    xa_phuong: "Mỹ Đình",
-    detail: "Số 21 Nguyen Co Thach",
-    phone_number: "11234567",
-    uptime: "8:00 - 21:00",
-    url_map: "url_map",
-  },
-  {
-    _id: "282713",
-    name_shop: "Wanda",
-    country: "Việt Nam",
-    city: "Hà Nội",
-    quan_huyen: "Nam Từ Liêm",
-    xa_phuong: "Mỹ Đình",
-    detail: "Số 21 Nguyen Co Thach",
-    phone_number: "11234567",
-    uptime: "8:00 - 21:00",
-    url_map: "url_map",
-  },
-]);
+const addressShops = ref([]);
+const cities = ref([]);
+const quan_huyens = ref([]);
+let citySelect = "";
+
+// func get data address shops
+const getAddressShops = async (url) => {
+  const response = await axios.get(url);
+  addressShops.value = response.data.metadata.addressShops;
+  cities.value = response.data.metadata.cities;
+};
+
+// Handle change select option city address
+const changeSelectCity = async (event) => {
+  citySelect = event.target.value;
+  await getAddressShops(`http://localhost:3000/api/v1/address_shop?city=${citySelect}`);
+
+  // set quan_huyen default
+  quan_huyens.value = [];
+  cities.value.forEach((city) => {
+    if (city.name === citySelect) {
+      quan_huyens.value = city.quan_huyen;
+    }
+  });
+};
+
+// Handle change select option quan_huyen address
+const changeSelectQuanHuyen = async (event) => {
+  const valueOption = event.target.value;
+  await getAddressShops(
+    `http://localhost:3000/api/v1/address_shop?city=${citySelect}&quan_huyen=${valueOption}`
+  );
+};
 
 // Handle cart
 const totalPrice = computed(() => {
@@ -482,15 +508,6 @@ function logout() {
   window.location.href = "/";
 }
 
-// Handle get data address shops
-const fetchData = async () => {
-  try {
-    addressShops.value = await getAddressShops($route);
-  } catch (error) {
-    throw error.message;
-  }
-};
-
 // Handle remove item cart
 const removeItemCart = (productUrl) => {
   // get cart id from local storage
@@ -508,4 +525,8 @@ const removeItemCart = (productUrl) => {
       console.log(err);
     });
 };
+
+onMounted(() => {
+  getAddressShops("http://localhost:3000/api/v1/address_shop");
+});
 </script>
