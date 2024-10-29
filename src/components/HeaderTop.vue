@@ -391,6 +391,8 @@ import Logo from "./Logo.vue";
 import axios from "axios";
 import { formatter, fetchApi } from "@/api/Common.js";
 
+const url_api = inject("url_api");
+
 const $emits = defineEmits(["handle-modal", "update-cart"]);
 // Props from parent component Header.vue
 const props = defineProps(["cartItems"]);
@@ -412,7 +414,7 @@ const getAddressShops = async (url) => {
 // Handle change select option city address
 const changeSelectCity = async (event) => {
   citySelect = event.target.value;
-  await getAddressShops(`http://localhost:3000/api/v1/address_shop?city=${citySelect}`);
+  await getAddressShops(`${url_api}/api/v1/address_shop?city=${citySelect}`);
 
   // set quan_huyen default
   quan_huyens.value = [];
@@ -427,7 +429,7 @@ const changeSelectCity = async (event) => {
 const changeSelectQuanHuyen = async (event) => {
   const valueOption = event.target.value;
   await getAddressShops(
-    `http://localhost:3000/api/v1/address_shop?city=${citySelect}&quan_huyen=${valueOption}`
+    `${url_api}/api/v1/address_shop?city=${citySelect}&quan_huyen=${valueOption}`
   );
 };
 
@@ -527,6 +529,6 @@ const removeItemCart = (productUrl) => {
 };
 
 onMounted(() => {
-  getAddressShops("http://localhost:3000/api/v1/address_shop");
+  getAddressShops(`${url_api}/api/v1/address_shop`);
 });
 </script>

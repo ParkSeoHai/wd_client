@@ -1,14 +1,16 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import NavbarLink from "./NavbarLink.vue";
 import axios from "axios";
+
+const url_api = inject("url_api");
 
 // Define your reactive data properties here
 const categories = ref([]);
 
 const getCategories = async () => {
   try {
-    const response = await axios("https://wd-server.vercel.app/api/v1/category");
+    const response = await axios(`${url_api}/api/v1/category`);
     return response.data.metadata.categories;
   } catch (error) {
     console.error(error);
