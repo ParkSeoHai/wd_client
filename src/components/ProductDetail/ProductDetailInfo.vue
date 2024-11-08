@@ -1,6 +1,6 @@
 <script setup>
 import { computed, inject, ref, watch } from "vue";
-import { formatter, calcProductPriceSale } from "@/api/Common.js";
+import { formatter, calcProductPriceSale } from "@/service/Common.js";
 import axios from "axios";
 import ProductDescription from "./ProductDescription.vue";
 import ProductSpecifications from "./ProductSpecifications.vue";

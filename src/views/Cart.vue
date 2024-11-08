@@ -129,7 +129,7 @@
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { computed, inject } from "vue";
 
-import { formatter } from "@/api/Common.js";
+import { formatter } from "@/service/Common.js";
 
 const $route = inject("$route"); // Route call api
 

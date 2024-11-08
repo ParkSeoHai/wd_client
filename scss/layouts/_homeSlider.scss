@@ -12,15 +12,15 @@
       overflow-y: auto;
     }
 
-    .item::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 40px;
-      background-color: transparent;
-      top: 0;
-      left: calc(25% - 25px);
-    }
+    // .item::after {
+    //   content: "";
+    //   position: absolute;
+    //   width: 20px;
+    //   height: 40px;
+    //   background-color: transparent;
+    //   top: 0;
+    //   left: calc(25% - 25px);
+    // }
 
     .item:hover .nav-dropdown {
       display: grid;

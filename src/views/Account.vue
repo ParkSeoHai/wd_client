@@ -339,11 +339,9 @@
       </button>
     </div>
   </div>
-  <Modal v-if="showModal" @click="clickModal"></Modal>
 </template>
 
 <script setup>
-import Modal from "@/components/Modal.vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { inject, onMounted, ref } from "vue";
 

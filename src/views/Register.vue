@@ -3,7 +3,7 @@
   <Breadcrumb
     class="position-absolute z-3"
     :breadcrumbs="breadcrumbs"
-    :breadcrumb-active="breadcrumbActive"
+    :breadcrumb-active="'Đăng ký'"
   />
   <div class="template-account" style="height: 600px">
     <div class="cloud x1"></div>
@@ -20,7 +20,7 @@
         <div class="mt-3">
           <input
             type="text"
-            v-model="name"
+            v-model.trim.lazy="name"
             :class="nameMessage !== '' ? 'error' : ''"
             placeholder="Nhập họ và tên (*)"
           />
@@ -31,7 +31,7 @@
         <div class="mt-3">
           <input
             type="email"
-            v-model="email"
+            v-model.trim.lazy="email"
             :class="emailMessage !== '' ? 'error' : ''"
             placeholder="Nhập email (*)"
           />
@@ -42,18 +42,20 @@
         <div class="mt-3">
           <input
             type="text"
-            v-model="phoneNumber"
+            v-model.trim.lazy="phoneNumber"
             :class="phoneNumberMessage !== '' ? 'error' : ''"
             placeholder="Nhập số điện thoại (*)"
           />
-          <span v-show="phoneNumberMessage !== ''" class="template-account__form--message">{{
-            phoneNumberMessage
-          }}</span>
+          <span
+            v-show="phoneNumberMessage !== ''"
+            class="template-account__form--message"
+            >{{ phoneNumberMessage }}</span
+          >
         </div>
         <div class="mt-3">
           <input
             type="password"
-            v-model="password"
+            v-model.trim.lazy="password"
             :class="passwordMessage !== '' ? 'error' : ''"
             placeholder="Nhập mật khẩu (*)"
           />
@@ -64,16 +66,31 @@
         <div class="mt-3">
           <input
             type="password"
-            v-model="confirmPassword"
+            v-model.trim.lazy="confirmPassword"
             :class="confirmPasswordMessage !== '' ? 'error' : ''"
             placeholder="Nhập lại mật khẩu (*)"
           />
-          <span v-show="confirmPasswordMessage !== ''" class="template-account__form--message">{{
-            confirmPasswordMessage
-          }}</span>
+          <span
+            v-show="confirmPasswordMessage !== ''"
+            class="template-account__form--message"
+            >{{ confirmPasswordMessage }}</span
+          >
         </div>
         <div class="text-center mt-4">
-          <button type="submit" class="btn-base template-account__form--button">Đăng ký</button>
+          <button
+            type="submit"
+            :class="{ disabled: loading }"
+            class="btn-base template-account__form--button"
+          >
+            <v-progress-circular
+              v-if="loading"
+              class="me-4"
+              color="primary"
+              :size="25"
+              indeterminate
+            ></v-progress-circular>
+            <span>Đăng ký</span>
+          </button>
         </div>
       </form>
       <p class="template-account__question my-4">
@@ -84,160 +101,156 @@
 </template>
 
 <script setup>
-import { inject, ref, watch } from 'vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
-import axios from 'axios'
-import { useToast } from 'vue-toast-notification'
-import 'vue-toast-notification/dist/theme-sugar.css'
+import { inject, ref, watch } from "vue";
+import Breadcrumb from "@/components/Breadcrumb.vue";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+import { register } from "@/service/AuthService";
+
+const url_api = inject("url_api");
+
 // Breacrumbs
 const breadcrumbs = [
   {
-    linkUrl: 'user/login',
-    linkText: 'Đăng nhập'
-  }
-]
-const breadcrumbActive = 'Đăng ký'
+    _id: "login",
+    category_url: "user/login",
+    category_name: "Đăng nhập",
+  },
+];
 
-const $route = inject('$route')
-const $toast = useToast()
+const $toast = useToast();
 
-const responseErrors = ref([])
+const loading = ref(false);
+const responseErrors = ref([]);
 
-const message = '(*) Vui lòng không bỏ trống'
-const isSubmit = ref(true)
+const message = "(*) Vui lòng không bỏ trống";
+const isSubmit = ref(true);
 // Name
-const name = ref('')
-const nameMessage = ref('')
+const name = ref("");
+const nameMessage = ref("");
 watch(name, () => {
-  nameMessage.value = ''
-  if (name.value.trim() == '') {
-    nameMessage.value = message
-    isSubmit.value = false
+  nameMessage.value = "";
+  if (name.value.trim() == "") {
+    nameMessage.value = message;
+    isSubmit.value = false;
   } else {
-    isSubmit.value = true
+    isSubmit.value = true;
   }
-})
+});
 // Email
-const email = ref('')
-const emailMessage = ref('')
+const email = ref("");
+const emailMessage = ref("");
 watch(email, () => {
-  emailMessage.value = ''
-  if (email.value.trim() == '') {
-    emailMessage.value = message
-    isSubmit.value = false
+  emailMessage.value = "";
+  if (email.value.trim() == "") {
+    emailMessage.value = message;
+    isSubmit.value = false;
   } else if (!/^\S+@\S+\.\S+$/.test(email.value)) {
-    emailMessage.value = 'Email không hợp lệ'
-    isSubmit.value = false
+    emailMessage.value = "Email không hợp lệ";
+    isSubmit.value = false;
   } else {
-    isSubmit.value = true
+    isSubmit.value = true;
   }
-})
+});
 // Phone number
-const phoneNumber = ref('')
-const phoneNumberMessage = ref('')
+const phoneNumber = ref("");
+const phoneNumberMessage = ref("");
 watch(phoneNumber, () => {
-  phoneNumberMessage.value = ''
-  if (phoneNumber.value.trim() == '') {
-    phoneNumberMessage.value = message
-    isSubmit.value = false
+  phoneNumberMessage.value = "";
+  if (phoneNumber.value.trim() == "") {
+    phoneNumberMessage.value = message;
+    isSubmit.value = false;
   } else if (!/^\d{10,11}$/.test(phoneNumber.value)) {
-    phoneNumberMessage.value = 'Số điện thoại không hợp lệ'
-    isSubmit.value = false
+    phoneNumberMessage.value = "Số điện thoại không hợp lệ";
+    isSubmit.value = false;
   } else {
-    isSubmit.value = true
+    isSubmit.value = true;
   }
-})
+});
 // Password
-const password = ref('')
-const passwordMessage = ref('')
+const password = ref("");
+const passwordMessage = ref("");
 watch(password, () => {
-  passwordMessage.value = ''
-  if (password.value.trim() == '') {
-    passwordMessage.value = message
-    isSubmit.value = false
+  passwordMessage.value = "";
+  if (password.value.trim() == "") {
+    passwordMessage.value = message;
+    isSubmit.value = false;
   } else if (password.value.length < 6) {
-    passwordMessage.value = 'Mật khẩu phải có ít nhất 6 ký tự'
-    isSubmit.value = false
+    passwordMessage.value = "Mật khẩu phải có ít nhất 6 ký tự";
+    isSubmit.value = false;
   } else {
-    isSubmit.value = true
+    isSubmit.value = true;
   }
-})
+});
 // Confirm password
-const confirmPassword = ref('')
-const confirmPasswordMessage = ref('')
+const confirmPassword = ref("");
+const confirmPasswordMessage = ref("");
 watch(confirmPassword, () => {
-  confirmPasswordMessage.value = ''
-  if (confirmPassword.value.trim() == '') {
-    confirmPasswordMessage.value = message
-    isSubmit.value = false
+  confirmPasswordMessage.value = "";
+  if (confirmPassword.value.trim() == "") {
+    confirmPasswordMessage.value = message;
+    isSubmit.value = false;
   } else if (confirmPassword.value !== password.value) {
-    confirmPasswordMessage.value = 'Mật khẩu không khớp'
-    isSubmit.value = false
+    confirmPasswordMessage.value = "Mật khẩu không khớp";
+    isSubmit.value = false;
   } else {
-    isSubmit.value = true
+    isSubmit.value = true;
   }
-})
+});
 // Validate form
 const validateForm = () => {
-  if (name.value.trim() == '') {
-    nameMessage.value = message
-    isSubmit.value = false
+  if (name.value.trim() == "") {
+    nameMessage.value = message;
+    isSubmit.value = false;
   }
-  if (email.value.trim() == '') {
-    emailMessage.value = message
-    isSubmit.value = false
+  if (email.value.trim() == "") {
+    emailMessage.value = message;
+    isSubmit.value = false;
   }
-  if (phoneNumber.value.trim() == '') {
-    phoneNumberMessage.value = message
-    isSubmit.value = false
+  if (phoneNumber.value.trim() == "") {
+    phoneNumberMessage.value = message;
+    isSubmit.value = false;
   }
-  if (password.value.trim() == '') {
-    passwordMessage.value = message
-    isSubmit.value = false
+  if (password.value.trim() == "") {
+    passwordMessage.value = message;
+    isSubmit.value = false;
   }
-  if (confirmPassword.value.trim() == '') {
-    confirmPasswordMessage.value = message
-    isSubmit.value = false
+  if (confirmPassword.value.trim() == "") {
+    confirmPasswordMessage.value = message;
+    isSubmit.value = false;
   }
-  return isSubmit.value
-}
+  return isSubmit.value;
+};
 
-const submitForm = () => {
-  responseErrors.value = []
-  const isValid = validateForm()
+const submitForm = async () => {
+  responseErrors.value = [];
+  const isValid = validateForm();
   if (isValid) {
-    // Get firstName and lastName from name
-    let firstName = name.value.split(' ').slice(-1).join(' ')
-    let lastName = name.value.split(' ').slice(0, -1).join(' ')
-    // Send request to server
-    axios
-      .post(`${$route}/Customer/Register`, {
-        firstName: firstName,
-        lastName: lastName,
-        email: email.value,
-        phoneNumber: phoneNumber.value,
-        password: password.value
-      })
-      .then((response) => {
-        if (response.data.success) {
-          // Show success message
-          $toast.success(response.data.message, {
-            position: 'top-right'
-          })
-          setTimeout(() => {
-            window.location.href = '/user/login'
-          }, 3000)
-        } else {
-          responseErrors.value = response.data.errors
-        }
-      })
-      .catch((error) => {
+    // Call service register
+    loading.value = true;
+    setTimeout(async () => {
+      try {
+        const data = await register({
+          email: email.value,
+          password: password.value,
+          name: name.value,
+          phone_number: phoneNumber.value,
+          urlApi: `${url_api}/api/v1/user/register`,
+        });
+        // Show success message
+        $toast.success(data.message || "Đăng ký tài khoản thành công.", {
+          position: "top-right",
+        });
+        setTimeout(() => {
+          window.location.href = "/user/login";
+        }, 1000);
+      } catch (error) {
         // Show error message
-        $toast.error('Đã có lỗi xảy ra, vui lòng thử lại sau', {
-          position: 'top-right'
-        })
-        console.log(error)
-      })
+        responseErrors.value.push(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+      } finally {
+        loading.value = false;
+      }
+    }, 1000);
   }
-}
+};
 </script>

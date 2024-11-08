@@ -9,11 +9,9 @@
       </li>
 
       <li class="breadcrumb-item" v-for="breadcrumb in breadcrumbs" :key="breadcrumb._id">
-        <router-link
-          :to="`/danh-muc/${breadcrumb.category_url}`"
-          class="breadcrumb__link"
-          >{{ breadcrumb.category_name }}</router-link
-        >
+        <router-link :to="`/${breadcrumb.category_url}`" class="breadcrumb__link">{{
+          breadcrumb.category_name
+        }}</router-link>
       </li>
 
       <li class="breadcrumb-item active">

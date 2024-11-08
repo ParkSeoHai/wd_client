@@ -35,8 +35,8 @@
 
 <script setup>
 import { defineAsyncComponent, inject, onMounted, ref, watch } from 'vue';
-import { getProductsByCategory } from '@/api/ProductService';
-import { getCategoryByTextUrl } from '@/api/CategoryService';
+import { getProductsByCategory } from '@/service/ProductService';
+import { getCategoryByTextUrl } from '@/service/CategoryService';
 import ProductItem from '@/components/ProductItem.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 // Component

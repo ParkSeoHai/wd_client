@@ -57,7 +57,6 @@
                   v-show="listDropDown.ddownStoreAddress"
                   @click.stop=""
                   class="header-action_dropdown bg-grey-opacity header-store_dropdown"
-                  ref="headerStoreDropdown"
                 >
                   <div class="header-dropdown_content">
                     <div class="icon-close" @click="closeDropdown('ddownStoreAddress')">
@@ -136,10 +135,10 @@
               <div class="block header-login d-flex align-items-center">
                 <span class="icon"><i class="bi bi-person-fill"></i></span>
                 <!-- User logged -->
-                <span v-if="userLogged" class="text">
+                <span v-if="user" class="text">
                   Tài khoản
                   <span class="small-text d-flex align-items-center">
-                    của bạn
+                    của tôi
                     <i class="bi bi-chevron-down ms-1"></i>
                   </span>
                 </span>
@@ -161,14 +160,14 @@
                       <i class="bi bi-x"></i>
                     </div>
                     <!-- User logged -->
-                    <div v-if="userLogged">
+                    <div v-if="user">
                       <p class="title">Thông tin tài khoản</p>
                       <p class="desc mt-4">
                         Tên:
                         <span
                           class="d-inline-block fw-bold my-0"
                           style="font-size: 1.5rem"
-                          >{{ user.firstName }} {{ user.lastName }}</span
+                          >{{ user.name }}</span
                         >
                       </p>
                       <p class="desc">
@@ -183,12 +182,9 @@
                         <a href="/user/account" class="btn btn-primary w-75"
                           >Xem chi tiết</a
                         >
-                        <a
-                          href="/user/logout"
-                          @click.prevent="logout"
-                          class="btn btn-outline-primary w-25"
-                          >Đăng xuất</a
-                        >
+                        <button @click="logout" class="btn btn-outline-primary w-25">
+                          Đăng xuất
+                        </button>
                       </div>
                     </div>
                     <div v-else>
@@ -210,7 +206,7 @@
                             id="email-login"
                             required
                             placeholder="Email"
-                            v-model="email"
+                            v-model.trim="email"
                           />
                         </div>
                         <div class="mb-2">
@@ -220,18 +216,18 @@
                             id="password-login"
                             required
                             placeholder="Password"
-                            v-model="password"
+                            v-model.trim="password"
                           />
                         </div>
                         <button type="submit" class="btn btn-login">Đăng nhập</button>
                       </form>
                       <span class="create-account d-block">
                         Khách hàng mới?
-                        <a href="/user/register">Tạo tài khoản</a>
+                        <RouterLink to="/user/register">Tạo tài khoản</RouterLink>
                       </span>
                       <span class="forgot-account d-block">
                         Quên mật khẩu?
-                        <a href="#">Khôi phục mật khẩu</a>
+                        <RouterLink to="#">Khôi phục mật khẩu</RouterLink>
                       </span>
                     </div>
                   </div>
@@ -388,15 +384,16 @@ import { computed, inject, onMounted, ref } from "vue";
 import Logo from "./Logo.vue";
 // Api
 import axios from "axios";
-import { formatter } from "@/api/Common.js";
+import { formatter } from "@/service/Common.js";
+import { login } from "@/service/AuthService";
 
 const url_api = inject("url_api");
-// inject func from app.vue
-const handleModal = inject("handleModal");
+// inject from app.vue
+const setModalBackground = inject("setModalBackground");
+const listDropDown = inject("listDropDownHeader");
 
 // Props from parent component Header.vue
 const props = defineProps(["cartItems"]);
-const $route = inject("$route"); // Route call api
 
 // Handle address shops
 const addressShops = ref([]);
@@ -432,25 +429,12 @@ const changeSelectQuanHuyen = async (event) => {
     `${url_api}/api/v1/address_shop?city=${citySelect}&quan_huyen=${valueOption}`
   );
 };
+// End handle address shops
 
 // Handle cart
 const totalPrice = computed(() => {
   return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 });
-
-// List dropdown header
-let listDropDown = ref({
-  ddownStoreAddress: false,
-  ddownLogin: false,
-  ddownCart: false,
-});
-
-// Handle user was login
-const userLogged = ref(false);
-const user = JSON.parse(localStorage.getItem("wdsmartuser"));
-if (user) {
-  userLogged.value = true;
-}
 
 // Handle show dropdown header
 function showDropdown(dropDownName) {
@@ -458,9 +442,9 @@ function showDropdown(dropDownName) {
     if (dropDownItem === dropDownName) {
       // Handle emit event to App.vue
       if (listDropDown.value[dropDownItem] === true) {
-        handleModal(false);
+        setModalBackground(false);
       } else {
-        handleModal(true);
+        setModalBackground(true);
       }
       listDropDown.value[dropDownItem] = !listDropDown.value[dropDownItem];
     } else {
@@ -473,45 +457,40 @@ function showDropdown(dropDownName) {
 function closeDropdown(dropDownName) {
   listDropDown.value[dropDownName] = false;
   // Handle emit event to App.vue
-  handleModal(false);
+  setModalBackground(false);
 }
+
+// Handle user was login
+const user = ref(JSON.parse(localStorage.getItem("wdsmart_user")));
 
 // Handle login dropdown top header form
 const email = ref("");
 const password = ref("");
 const responseLoginErrors = ref([]);
 
-function submitFormLogin() {
+const submitFormLogin = async () => {
   responseLoginErrors.value = [];
-  // Call API login
-  axios
-    .post(`${$route}/Customer/Login`, {
+  // Call service login
+  try {
+    const data = await login({
       email: email.value,
       password: password.value,
-    })
-    .then((response) => {
-      console.log(response.data);
-      if (response.data.success === true) {
-        // Save user info to localStorage
-        localStorage.setItem("wdsmartuser", JSON.stringify(response.data.data));
-        localStorage.setItem("wdsmartcartid", response.data.data.cartId);
-        // Redirect to home page
-        window.location.href = "/";
-      } else {
-        // Show error messages
-        responseLoginErrors.value = response.data.errors;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
+      urlApi: `${url_api}/api/v1/user/login`,
     });
-}
+    // store localstorage
+    localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));
+    user.value = JSON.parse(localStorage.getItem("wdsmart_user"));
+  } catch (error) {
+    responseLoginErrors.value.push(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+  }
+};
 
 // Handle logout
 function logout() {
-  localStorage.removeItem("wdsmartuser");
-  localStorage.removeItem("wdsmartcartid");
-  window.location.href = "/";
+  localStorage.removeItem("wdsmart_user");
+  user.value = null;
+  email.value = "";
+  password.value = "";
 }
 
 // Handle remove item cart

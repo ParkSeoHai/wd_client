@@ -423,7 +423,7 @@ body {
 .header .header-dropdown_login .actions {
   margin-top: 20px;
 }
-.header .header-dropdown_login .actions a {
+.header .header-dropdown_login .actions button, .header .header-dropdown_login .actions a {
   border-radius: 0;
   padding: 12px;
   font-size: 1.3rem;
@@ -620,15 +620,6 @@ body {
   border: 1px solid #ccc;
   border-right: none;
   overflow-y: auto;
-}
-.home-slider .nav-group .item::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 40px;
-  background-color: transparent;
-  top: 0;
-  left: calc(25% - 25px);
 }
 .home-slider .nav-group .item:hover .nav-dropdown {
   display: grid;
@@ -2086,6 +2077,7 @@ body {
   font-size: 1.4rem;
   border: none;
   min-width: 400px;
+  background: #fff;
 }
 #footer .footer-top .form-send-mail input[type=email]:focus-visible {
   border: none;
