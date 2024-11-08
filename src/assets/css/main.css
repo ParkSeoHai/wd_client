@@ -153,9 +153,6 @@ a {
 .list-product .item:hover .icon-hover {
   display: block;
 }
-.list-product .item:hover img {
-  scale: 1;
-}
 .list-product .item .img {
   position: relative;
   border: 2px solid #1877f2;
@@ -901,87 +898,6 @@ body {
   font-size: 1rem;
 }
 
-.section_collection_new {
-  margin-top: 14px;
-}
-.section_collection_new .top-head {
-  margin-bottom: 15px;
-}
-.section_collection_new .top-head h2 {
-  position: relative;
-  font-size: 2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding-left: 12px;
-}
-.section_collection_new .top-head h2:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #000;
-}
-.section_collection_new .top-head a {
-  font-size: 1.4rem;
-  color: #828282;
-}
-.section_collection_new .top-head i {
-  font-size: 1rem;
-}
-.section_collection_new .block-group {
-  position: relative;
-  padding-bottom: 5px;
-}
-.section_collection_new .block-group .btn-arrow {
-  color: #000;
-  padding: 0;
-}
-.section_collection_new .block-group .btn-arrow:hover {
-  color: #555;
-}
-.section_collection_new .block-group .btn-arrow-left {
-  left: -8px;
-}
-.section_collection_new .block-group .btn-arrow-right {
-  right: -8px;
-}
-.section_collection_new .block-group:hover .btn-arrow {
-  display: block;
-}
-.section_collection_new .block-list-product {
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 20px;
-}
-.section_collection_new .block-list-product .list-product {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  transition: margin-left 0.3s linear;
-}
-.section_collection_new .block-list-product .list-product .item {
-  margin-right: 15px;
-  width: 195px;
-}
-.section_collection_new .block-list-product .list-product .item:last-child {
-  margin-right: 0;
-}
-.section_collection_new .block-list-product .list-product .item img {
-  height: 148px;
-}
-.section_collection_new .block-list-product .list-circle {
-  bottom: 0;
-}
-.section_collection_new .block-list-product .list-circle .item {
-  width: 10px;
-  height: 10px;
-  border-color: #1877f2;
-}
-.section_collection_new .block-list-product .list-circle .item.active {
-  background-color: #1877f2;
-}
-
 .section_collection_group {
   margin-top: 14px;
 }
@@ -1066,6 +982,83 @@ body {
 }
 .section_collection_group .collection-bottom .link a i {
   font-size: 1rem;
+}
+.section_collection_group .block-group {
+  margin-top: 14px;
+  position: relative;
+}
+.section_collection_group .block-group .top-head {
+  margin-bottom: 15px;
+}
+.section_collection_group .block-group .top-head h2 {
+  position: relative;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-left: 12px;
+}
+.section_collection_group .block-group .top-head h2:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #000;
+}
+.section_collection_group .block-group .top-head a {
+  font-size: 1.4rem;
+  color: #828282;
+}
+.section_collection_group .block-group .top-head i {
+  font-size: 1rem;
+}
+.section_collection_group .block-group .btn-arrow {
+  color: #000;
+  padding: 0;
+}
+.section_collection_group .block-group .btn-arrow:hover {
+  color: #555;
+}
+.section_collection_group .block-group .btn-arrow-left {
+  left: -8px;
+}
+.section_collection_group .block-group .btn-arrow-right {
+  right: -8px;
+}
+.section_collection_group .block-group:hover .btn-arrow {
+  display: block;
+}
+.section_collection_group .block-group .block-list-product {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+.section_collection_group .block-group .block-list-product .list-product {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  transition: margin-left 0.3s linear;
+}
+.section_collection_group .block-group .block-list-product .list-product .item {
+  margin-right: 15px;
+  width: 195px;
+}
+.section_collection_group .block-group .block-list-product .list-product .item:last-child {
+  margin-right: 0;
+}
+.section_collection_group .block-group .block-list-product .list-product .item img {
+  height: 148px;
+}
+.section_collection_group .block-group .block-list-product .list-circle {
+  bottom: 0;
+}
+.section_collection_group .block-group .block-list-product .list-circle .item {
+  width: 10px;
+  height: 10px;
+  border-color: #1877f2;
+}
+.section_collection_group .block-group .block-list-product .list-circle .item.active {
+  background-color: #1877f2;
 }
 
 .section-home-blog {
@@ -1821,7 +1814,7 @@ body {
   cursor: pointer;
 }
 .user-account__block--right .block-right__btn:hover {
-  background-color: #0b5fcc;
+  background-color: rgb(11.4549180328, 95.1639344262, 203.5450819672);
 }
 .user-account__block--right .block-right__table th {
   font-weight: 700;

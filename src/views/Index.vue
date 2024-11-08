@@ -1,30 +1,27 @@
 <template>
-    <!-- Home Slider -->
-    <HomeSlider />
-    <!-- Banner group -->
-    <HomeBannerGroup />
-    <!-- Section category -->
-    <HomeCategory />
-    <!-- Section flash sale -->
-    <HomeFlashSale />
-    <!-- Section collection -->
-    <HomeCollectionGroup />
-    <!-- Section Product group 1 -->
-    <HomeCollectionListProduct
-        category = "Điện thoại"
-        textUrl = "dien-thoai"
-    />
-    <!-- Section home blog -->
-    <HomeBlogNews />
+  <!-- Home Slider -->
+  <HomeSlider />
+  <!-- Banner group -->
+  <HomeBannerGroup />
+  <!-- Section category -->
+  <HomeCategory />
+  <!-- Section flash sale -->
+  <HomeFlashSale />
+  <!-- Section collection -->
+  <HomeCollectionGroup />
+  <!-- Section Product group 1 -->
+  <HomeCollectionListProduct category-name="Điện thoại" category-url="dien-thoai" />
+  <!-- Section home blog -->
+  <HomeBlogNews />
 </template>
 
 <script setup>
 // Component
-import HomeSlider from '@/components/Home/HomeSlider.vue';
-import HomeBannerGroup from '@/components/Home/HomeBannerGroup.vue';
-import HomeCategory from '@/components/Home/HomeCategory.vue';
-import HomeFlashSale from '@/components/Home/HomeFlashSale.vue';
-import HomeCollectionGroup from '@/components/Home/HomeCollectionGroup.vue';
-import HomeCollectionListProduct from '@/components/Home/HomeCollectionListProduct.vue';
-import HomeBlogNews from '@/components/Home/HomeBlogNews.vue';
+import HomeSlider from "@/components/Home/HomeSlider.vue";
+import HomeBannerGroup from "@/components/Home/HomeBannerGroup.vue";
+import HomeCategory from "@/components/Home/HomeCategory.vue";
+import HomeFlashSale from "@/components/Home/HomeFlashSale.vue";
+import HomeCollectionGroup from "@/components/Home/HomeCollectionGroup.vue";
+import HomeCollectionListProduct from "@/components/Home/HomeCollectionListProduct.vue";
+import HomeBlogNews from "@/components/Home/HomeBlogNews.vue";
 </script>

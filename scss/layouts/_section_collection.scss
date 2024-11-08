@@ -95,4 +95,85 @@
       }
     }
   }
+
+  // section group new, product hot sale
+  .block-group {
+    margin-top: 14px;
+    position: relative;
+
+    .top-head {
+      margin-bottom: 15px;
+      h2 {
+        position: relative;
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding-left: 12px;
+        &:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background: #000;
+        }
+      }
+      a {
+        font-size: 1.4rem;
+        color: #828282;
+      }
+      i {
+        font-size: 1rem;
+      }
+    }
+  
+    .btn-arrow {
+      color: variables.$color-dark;
+      padding: 0;
+      &:hover {
+        color: #555;
+      }
+    }
+    .btn-arrow-left {
+      left: -8px;
+    }
+    .btn-arrow-right {
+      right: -8px;
+    }
+    &:hover .btn-arrow {
+      display: block;
+    }
+    .block-list-product {
+      position: relative;
+      overflow: hidden;
+      padding-bottom: 20px;
+      .list-product {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        transition: margin-left 0.3s linear;
+        .item {
+          margin-right: 15px;
+          width: 195px;
+          &:last-child {
+            margin-right: 0;
+          }
+          img {
+            height: 148px;
+          }
+        }
+      }
+      .list-circle {
+        bottom: 0;
+        .item {
+          width: 10px;
+          height: 10px;
+          border-color: variables.$txt-primary;
+          &.active {
+            background-color: variables.$txt-primary;
+          }
+        }
+      }
+    }
+  }
 }

@@ -20,7 +20,9 @@
             <span v-else>{{ textPicture }}</span>
           </div>
           <div class="user__infor">
-            <p class="user__infor--name">{{ userInfo.firstName }} {{ userInfo.lastName }}</p>
+            <p class="user__infor--name">
+              {{ userInfo.firstName }} {{ userInfo.lastName }}
+            </p>
             <p class="user__infor--email">{{ userInfo.email }}</p>
           </div>
         </div>
@@ -233,7 +235,9 @@
               </div> -->
             </div>
             <div v-else class="address-empty">
-              <p class="text-center mt-5">Bạn chưa có địa chỉ nào. Mời bạn thêm địa chỉ mới.</p>
+              <p class="text-center mt-5">
+                Bạn chưa có địa chỉ nào. Mời bạn thêm địa chỉ mới.
+              </p>
             </div>
           </div>
         </div>
@@ -246,20 +250,63 @@
     <p v-else class="modal-new__address--header">Địa chỉ mới</p>
     <form @submit.prevent="addAddress" class="modal-new__address--form">
       <div class="d-flex align-items-center gap-4">
-        <input type="text" class="form-control" placeholder="Họ và tên" required v-model="addressName" />
-        <input type="text" class="form-control" placeholder="Số điện thoại" required v-model="addressPhone" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Họ và tên"
+          required
+          v-model="addressName"
+        />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Số điện thoại"
+          required
+          v-model="addressPhone"
+        />
       </div>
       <div class="d-flex align-items-center gap-4 mt-4">
-        <input type="text" class="form-control" placeholder="Tỉnh/ Thành phố" required v-model="addressCity" />
-        <input type="text" class="form-control" placeholder="Quận/Huyện" required v-model="addressDistrict" />
-        <input type="text" class="form-control" placeholder="Phường/Xã" required v-model="addressWard" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tỉnh/ Thành phố"
+          required
+          v-model="addressCity"
+        />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Quận/Huyện"
+          required
+          v-model="addressDistrict"
+        />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Phường/Xã"
+          required
+          v-model="addressWard"
+        />
       </div>
       <div class="d-flex align-items-center gap-4 mt-4">
-        <input type="text" class="form-control" placeholder="Địa chỉ cụ thể" required v-model="addressDetail" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Địa chỉ cụ thể"
+          required
+          v-model="addressDetail"
+        />
       </div>
       <div class="form-check d-flex align-items-center modal-new__address--checkbox">
-        <input class="form-check-input" type="checkbox" id="defaultAddress" v-model="addressDefault" />
-        <label class="form-check-label" for="defaultAddress">Đặt làm địa chỉ mặc định</label>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="defaultAddress"
+          v-model="addressDefault"
+        />
+        <label class="form-check-label" for="defaultAddress"
+          >Đặt làm địa chỉ mặc định</label
+        >
       </div>
       <div class="modal-address__actions mt-5">
         <button
@@ -275,7 +322,10 @@
     </form>
   </div>
   <!-- Modal confirm delete address -->
-  <div class="modal-address modal-del__address" v-if="showModalDelAddress && idAddressDel">
+  <div
+    class="modal-address modal-del__address"
+    v-if="showModalDelAddress && idAddressDel"
+  >
     <p class="modal-del__address">Bạn có chắc muốn xoá địa chỉ này?</p>
     <div class="modal-address__actions mt-5">
       <button
@@ -293,106 +343,105 @@
 </template>
 
 <script setup>
-import Modal from '@/components/Modal.vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
-import { inject, onMounted, ref } from 'vue'
-import { fetchApi } from '@/api/Common.js'
+import Modal from "@/components/Modal.vue";
+import Breadcrumb from "@/components/Breadcrumb.vue";
+import { inject, onMounted, ref } from "vue";
 
 // Breadcrumb
-const breadcrumbActive = 'Tài khoản'
+const breadcrumbActive = "Tài khoản";
 // Router web api
-const $route = inject('$route')
+const $route = inject("$route");
 // Get text picture if user info is not picture
-const textPicture = ref()
+const textPicture = ref();
 // Get email from local storage
-const email = JSON.parse(localStorage.getItem('wdsmartuser')).email
+const email = JSON.parse(localStorage.getItem("wdsmartuser")).email;
 
-const userInfo = ref({})
+const userInfo = ref({});
 // Handle tabs
-const tabActive = ref(0)
-const showModal = ref(false)
-const showModalAddAddress = ref(false)
-const showModalDelAddress = ref(false)
+const tabActive = ref(0);
+const showModal = ref(false);
+const showModalAddAddress = ref(false);
+const showModalDelAddress = ref(false);
 
 const clickModal = () => {
-  showModal.value = false
-  showModalAddAddress.value = false
-  showModalDelAddress.value = false
-}
+  showModal.value = false;
+  showModalAddAddress.value = false;
+  showModalDelAddress.value = false;
+};
 
 // Handle add new address
-const addressName = ref()
-const addressPhone = ref()
-const addressCity = ref()
-const addressDistrict = ref()
-const addressWard = ref()
-const addressDetail = ref()
-const addressDefault = ref(false)
+const addressName = ref();
+const addressPhone = ref();
+const addressCity = ref();
+const addressDistrict = ref();
+const addressWard = ref();
+const addressDetail = ref();
+const addressDefault = ref(false);
 
-const addAddress = async () => {
-  const router = `${$route}/Customer/AddCustomerAddress?email=${email}`
-  const data = {
-    customerName: addressName.value,
-    city: addressCity.value,
-    district: addressDistrict.value,
-    address: addressDetail.value + ', ' + addressWard.value + ', ' + addressDistrict.value + ', ' + addressCity.value,
-    phoneNumber: addressPhone.value,
-    isDefault: addressDefault.value
-  }
-  const response = await fetchApi(router, 'POST', data)
-  if (response.success) {
-    // If success, close modal, reset data form and fetch data
-    showModalAddAddress.value = false
-    showModal.value = false
-    addressName.value = null
-    addressPhone.value = null
-    addressCity.value = null
-    addressDistrict.value = null
-    addressWard.value = null
-    addressDetail.value = null
-    addressDefault.value = false
-    await fetchData()
-  } else {
-    alert(response.message)
-  }
-}
+// const addAddress = async () => {
+//   const router = `${$route}/Customer/AddCustomerAddress?email=${email}`
+//   const data = {
+//     customerName: addressName.value,
+//     city: addressCity.value,
+//     district: addressDistrict.value,
+//     address: addressDetail.value + ', ' + addressWard.value + ', ' + addressDistrict.value + ', ' + addressCity.value,
+//     phoneNumber: addressPhone.value,
+//     isDefault: addressDefault.value
+//   }
+//   const response = await fetchApi(router, 'POST', data)
+//   if (response.success) {
+//     // If success, close modal, reset data form and fetch data
+//     showModalAddAddress.value = false
+//     showModal.value = false
+//     addressName.value = null
+//     addressPhone.value = null
+//     addressCity.value = null
+//     addressDistrict.value = null
+//     addressWard.value = null
+//     addressDetail.value = null
+//     addressDefault.value = false
+//     await fetchData()
+//   } else {
+//     alert(response.message)
+//   }
+// }
 
 // Handle update user address
-const idAddressUpdate = ref()
+const idAddressUpdate = ref();
 const updateAddress = (addressId) => {
-  showModal.value = true
-  showModalAddAddress.value = true
-  idAddressUpdate.value = addressId
-}
+  showModal.value = true;
+  showModalAddAddress.value = true;
+  idAddressUpdate.value = addressId;
+};
 
 // Handle delete user address
-const idAddressDel = ref()
+const idAddressDel = ref();
 
 const delAddress = (addressId) => {
-  showModalDelAddress.value = true
-  showModal.value = true
-  idAddressDel.value = addressId
-}
+  showModalDelAddress.value = true;
+  showModal.value = true;
+  idAddressDel.value = addressId;
+};
 
-const confirmDel = async (addressId) => {
-  const router = `${$route}/Customer/DeleteCustomerAddress?addressId=${addressId}`
-  const response = await fetchApi(router, 'DELETE')
-  if (response.success) {
-    showModalDelAddress.value = false
-    showModal.value = false
-    idAddressDel.value = null
-    await fetchData()
-  } else {
-    alert(response.message)
-  }
-}
+// const confirmDel = async (addressId) => {
+//   const router = `${$route}/Customer/DeleteCustomerAddress?addressId=${addressId}`
+//   const response = await fetchApi(router, 'DELETE')
+//   if (response.success) {
+//     showModalDelAddress.value = false
+//     showModal.value = false
+//     idAddressDel.value = null
+//     await fetchData()
+//   } else {
+//     alert(response.message)
+//   }
+// }
 
-// Fetch data user info
-const fetchData = async () => {
-  const response = await fetchApi(`${$route}/Customer/GetInfo?email=${email}`)
-  userInfo.value = response.data
-  textPicture.value = userInfo.value.firstName.slice(0, 1) + userInfo.value.lastName.slice(0, 1)
-}
+// // Fetch data user info
+// const fetchData = async () => {
+//   const response = await fetchApi(`${$route}/Customer/GetInfo?email=${email}`)
+//   userInfo.value = response.data
+//   textPicture.value = userInfo.value.firstName.slice(0, 1) + userInfo.value.lastName.slice(0, 1)
+// }
 
-onMounted(fetchData)
+// onMounted(fetchData)
 </script>

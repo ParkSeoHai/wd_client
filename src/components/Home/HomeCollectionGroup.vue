@@ -5,21 +5,35 @@
       <div>
         <div class="row">
           <div class="col-6">
-            <!-- Sản phẩm mới -->
-            <HomeCollectionGroupItem
-              :title="'Sản phẩm mới'"
-              :linkHref="'/sanphammoi'"
-              :listProduct="listProductNews"
-            />
+            <Suspense>
+              <template #default>
+                <!-- Sản phẩm mới -->
+                <HomeCollectionGroupItem
+                  :title="'Sản phẩm mới'"
+                  :linkHref="'/san-pham-moi'"
+                  :urlApi="`${urlApi}/api/v1/product/new/all`"
+                />
+              </template>
+              <template #fallback>
+                <p>Loading ...</p>
+              </template>
+            </Suspense>
           </div>
 
           <div class="col-6">
-            <!-- Sản phẩm bán chạy -->
-            <HomeCollectionGroupItem
-              :title="'Sản phẩm bán chạy'"
-              :linkHref="'/sanphambanchay'"
-              :listProduct="listProductHots"
-            />
+            <Suspense>
+              <template #default>
+                <!-- Sản phẩm bán chạy -->
+                <HomeCollectionGroupItem
+                  :title="'Sản phẩm bán chạy'"
+                  :linkHref="'/san-pham-ban-chay'"
+                  :urlApi="`${urlApi}/api/v1/product/new/all?limit=10`"
+                />
+              </template>
+              <template #fallback>
+                <p>Loading ...</p>
+              </template>
+            </Suspense>
           </div>
         </div>
       </div>
@@ -28,30 +42,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import HomeCollectionGroupItem from './HomeCollectionGroupItem.vue'
+import { inject } from "vue";
+import HomeCollectionGroupItem from "./HomeCollectionGroupItem.vue";
 
-const listProductNews = ref([
-  {
-    id: 1,
-    name: 'Đồng hồ thông minh XTF',
-    discount: 10,
-    defaultImage: 'src/assets/images/applewatch-4.jpg',
-    colorCount: 5,
-    price: '19690000',
-    priceSale: '17690000'
-  }
-])
-
-const listProductHots = ref([
-  {
-    id: 1,
-    name: 'Đồng hồ thông minh XTF',
-    discount: 10,
-    defaultImage: 'src/assets/images/applewatch-4.jpg',
-    colorCount: 5,
-    price: '19690000',
-    priceSale: '17690000'
-  }
-])
+const urlApi = inject("url_api");
 </script>

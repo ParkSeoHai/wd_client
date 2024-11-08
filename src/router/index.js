@@ -9,7 +9,7 @@ const router = createRouter({
       component: () => import('@/views/Index.vue')
     },
     {
-      path: '/san-pham/:textUrl',
+      path: '/san-pham/:productUrl',
       name: 'product',
       component: () => import('@/views/ProductDetail.vue'),
       props: true
@@ -44,7 +44,14 @@ const router = createRouter({
       name: 'Cart',
       component: () => import('@/views/Cart.vue'),
     },
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    // return desired position
+    return {
+      top: 0,
+      behavior: "instant"
+    }
+  }
 })
 
 export default router;

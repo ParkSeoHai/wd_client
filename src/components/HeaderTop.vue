@@ -57,6 +57,7 @@
                   v-show="listDropDown.ddownStoreAddress"
                   @click.stop=""
                   class="header-action_dropdown bg-grey-opacity header-store_dropdown"
+                  ref="headerStoreDropdown"
                 >
                   <div class="header-dropdown_content">
                     <div class="icon-close" @click="closeDropdown('ddownStoreAddress')">
@@ -119,7 +120,7 @@
                               rel="noopener noreferrer"
                               class="infoLocation d-flex align-items-baseline gap-1"
                             >
-                              <i class="bi bi-arrow-bar-right"></i>
+                              <i class="bi bi-geo-alt-fill"></i>
                               <span>Chỉ đường</span>
                             </a>
                           </li>
@@ -246,7 +247,7 @@
                 >
                   <span class="icon">
                     <i class="bi bi-cart"></i>
-                    <span class="quantity">{{ props.cartItems.length }}</span>
+                    <span class="quantity">0</span>
                   </span>
                   <span class="text">Giỏ hàng</span>
                 </button>
@@ -262,10 +263,7 @@
                     </div>
                     <p class="title">Giỏ hàng</p>
                     <!-- Cart empty -->
-                    <div
-                      class="mini_cart_header text-center py-2"
-                      v-if="props.cartItems.length == 0"
-                    >
+                    <div class="mini_cart_header text-center py-2" v-if="true">
                       <i class="bi bi-cart2"></i>
                       <p>Hiện chưa có sản phẩm</p>
                       <hr class="text-dark mb-1" />
@@ -383,17 +381,19 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { computed, inject, onMounted, ref } from "vue";
 // Component
 import Logo from "./Logo.vue";
 // Api
 import axios from "axios";
-import { formatter, fetchApi } from "@/api/Common.js";
+import { formatter } from "@/api/Common.js";
 
 const url_api = inject("url_api");
+// inject func from app.vue
+const handleModal = inject("handleModal");
 
-const $emits = defineEmits(["handle-modal", "update-cart"]);
 // Props from parent component Header.vue
 const props = defineProps(["cartItems"]);
 const $route = inject("$route"); // Route call api
@@ -456,9 +456,13 @@ if (user) {
 function showDropdown(dropDownName) {
   for (let dropDownItem in listDropDown.value) {
     if (dropDownItem === dropDownName) {
-      listDropDown.value[dropDownName] = !listDropDown.value[dropDownName];
-      // Handle emit event to components/Header.vue
-      $emits("handle-modal", true);
+      // Handle emit event to App.vue
+      if (listDropDown.value[dropDownItem] === true) {
+        handleModal(false);
+      } else {
+        handleModal(true);
+      }
+      listDropDown.value[dropDownItem] = !listDropDown.value[dropDownItem];
     } else {
       listDropDown.value[dropDownItem] = false;
     }
@@ -468,8 +472,8 @@ function showDropdown(dropDownName) {
 // Handle close dropdown
 function closeDropdown(dropDownName) {
   listDropDown.value[dropDownName] = false;
-  // Handle emit event to components/Header.vue
-  $emits("handle-modal", false);
+  // Handle emit event to App.vue
+  handleModal(false);
 }
 
 // Handle login dropdown top header form
@@ -511,24 +515,24 @@ function logout() {
 }
 
 // Handle remove item cart
-const removeItemCart = (productUrl) => {
-  // get cart id from local storage
-  const cartId = localStorage.getItem("wdsmartcartid");
-  // call api remove item cart
-  const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`;
-  fetchApi(url, "DELETE")
-    .then((res) => {
-      if (res.success === true) {
-        // Emit event to App.vue to update cart
-        $emits("update-cart");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+// const removeItemCart = (productUrl) => {
+//   // get cart id from local storage
+//   const cartId = localStorage.getItem("wdsmartcartid");
+//   // call api remove item cart
+//   const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`;
+//   fetchApi(url, "DELETE")
+//     .then((res) => {
+//       if (res.success === true) {
+//         // Emit event to App.vue to update cart
+//         $emits("update-cart");
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// };
 
-onMounted(() => {
-  getAddressShops(`${url_api}/api/v1/address_shop`);
+onMounted(async () => {
+  await getAddressShops(`${url_api}/api/v1/address_shop`);
 });
 </script>

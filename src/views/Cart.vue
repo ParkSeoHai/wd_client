@@ -33,12 +33,26 @@
               </div>
               <div class="cart-item__qty">
                 <div class="selector-actions">
-                  <div class="quantity-area d-flex align-items-center justify-content-between">
-                    <button type="button" @click.prevent="handleQuantity(product.name, 'decrease')">
+                  <div
+                    class="quantity-area d-flex align-items-center justify-content-between"
+                  >
+                    <button
+                      type="button"
+                      @click.prevent="handleQuantity(product.name, 'decrease')"
+                    >
                       -
                     </button>
-                    <input type="text" min="1" max="999" readonly :value="product.quantity" />
-                    <button type="button" @click.prevent="handleQuantity(product.name, 'plus')">
+                    <input
+                      type="text"
+                      min="1"
+                      max="999"
+                      readonly
+                      :value="product.quantity"
+                    />
+                    <button
+                      type="button"
+                      @click.prevent="handleQuantity(product.name, 'plus')"
+                    >
                       +
                     </button>
                   </div>
@@ -112,88 +126,88 @@
 </template>
 
 <script setup>
-import Breadcrumb from '@/components/Breadcrumb.vue'
-import { computed, inject } from 'vue'
+import Breadcrumb from "@/components/Breadcrumb.vue";
+import { computed, inject } from "vue";
 
-import { fetchApi, formatter } from '@/api/Common.js'
+import { formatter } from "@/api/Common.js";
 
-const $route = inject('$route') // Route call api
+const $route = inject("$route"); // Route call api
 
 // Emit event to App.vue
-const $emits = defineEmits(['update-cart'])
+const $emits = defineEmits(["update-cart"]);
 // Props from App.vue
-const props = defineProps(['cartItems'])
+const props = defineProps(["cartItems"]);
 
 // Get total price
 const totalPrice = computed(() => {
-  return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
-})
+  return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+});
 
 // Handle quantity cart
 const handleQuantity = (name, action) => {
   const product = props.cartItems.find(
     (item) => item.name.trim().toLowerCase() === name.trim().toLowerCase()
-  )
+  );
   // Product is not exist
   if (product == null) {
-    alert('Product not found')
-    return
+    alert("Product not found");
+    return;
   }
 
   // Update quantity
-  let qtyProduct = product.quantity
-  if (action === 'decrease') {
+  let qtyProduct = product.quantity;
+  if (action === "decrease") {
     if (qtyProduct == 1) {
-      return
+      return;
     }
-    qtyProduct--
+    qtyProduct--;
   } else {
     if (qtyProduct == product.quantityMax) {
-      alert('Số lượng sản phẩm đã đạt giới hạn')
-      return
+      alert("Số lượng sản phẩm đã đạt giới hạn");
+      return;
     }
-    qtyProduct++
+    qtyProduct++;
   }
   // Get value cart object
-  const cartId = localStorage.getItem('wdsmartcartid')
+  const cartId = localStorage.getItem("wdsmartcartid");
   const cartItem = {
     cartId: cartId,
     productUrl: product.textUrl,
     option: product.option,
-    quantity: qtyProduct
-  }
+    quantity: qtyProduct,
+  };
   //Call api update cart item
-  fetchApi(`${$route}/Customer/UpdateItemCart`, 'PATCH', cartItem)
-    .then(async (res) => {
-      if (res.success === true) {
-        // Emit event to App.vue to update cart
-        $emits('update-cart')
-      } else {
-        alert('Update cart item failed')
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-}
+  // fetchApi(`${$route}/Customer/UpdateItemCart`, 'PATCH', cartItem)
+  //   .then(async (res) => {
+  //     if (res.success === true) {
+  //       // Emit event to App.vue to update cart
+  //       $emits('update-cart')
+  //     } else {
+  //       alert('Update cart item failed')
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+};
 
 // Handle remove item cart
 const removeItemCart = (productUrl) => {
   // get cart id from local storage
-  const cartId = localStorage.getItem('wdsmartcartid')
+  const cartId = localStorage.getItem("wdsmartcartid");
   // call api remove item cart
-  const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`
-  fetchApi(url, 'DELETE')
-    .then(async (res) => {
-      if (res.success === true) {
-        // Emit event to App.vue to update cart
-        $emits('update-cart')
-      } else {
-        alert('Delete cart item failed')
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-}
+  const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`;
+  // fetchApi(url, 'DELETE')
+  //   .then(async (res) => {
+  //     if (res.success === true) {
+  //       // Emit event to App.vue to update cart
+  //       $emits('update-cart')
+  //     } else {
+  //       alert('Delete cart item failed')
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
+};
 </script>
