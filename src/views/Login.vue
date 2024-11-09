@@ -24,13 +24,23 @@
             emailMessage
           }}</span>
         </div>
-        <div class="mt-3">
+        <div class="mt-3 position-relative">
           <input
             type="password"
-            v-model.trim.lazy="password"
+            v-model.trim="password"
+            class="password-input"
             :class="passwordMessage !== '' ? 'error' : ''"
             placeholder="Nhập mật khẩu (*)"
           />
+          <button
+            v-show="password"
+            type="button"
+            class="position-absolute top-50 end-0 me-3 translate-middle-y"
+            @click="setShowPassword"
+          >
+            <i v-if="showPassword" class="bi bi-eye-slash-fill fs-2"></i>
+            <i v-else class="bi bi-eye-fill fs-2"></i>
+          </button>
           <span v-show="passwordMessage !== ''" class="template-account__form--message">{{
             passwordMessage
           }}</span>
@@ -50,7 +60,7 @@
               v-if="loading"
               class="me-4"
               color="primary"
-              :size="25"
+              :size="20"
               indeterminate
             ></v-progress-circular>
             Đăng nhập
@@ -83,6 +93,7 @@ import Breadcrumb from "@/components/Breadcrumb.vue";
 import { login } from "@/service/AuthService";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import { nextTick } from "vue";
 
 const $toast = useToast();
 
@@ -109,6 +120,7 @@ watch(email, () => {
   }
 });
 // Password
+const showPassword = ref(false);
 const password = ref("");
 const passwordMessage = ref("");
 watch(password, () => {
@@ -120,6 +132,14 @@ watch(password, () => {
     isSubmit.value = true;
   }
 });
+// Handle show hide password
+const setShowPassword = () => {
+  showPassword.value = !showPassword.value;
+  nextTick(() => {
+    const passwordElement = document.querySelector(".password-input");
+    passwordElement.type = showPassword.value ? "text" : "password";
+  });
+};
 // Validate form
 const validateForm = () => {
   if (email.value.trim() === "") {
@@ -148,9 +168,7 @@ const submitForm = async () => {
         });
         // store localstorage
         localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));
-        $toast.success(data.message || "Đăng nhập thành công.", {
-          position: "top-right",
-        });
+        window.location.href = "/";
       } catch (error) {
         responseErrors.value.push(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
       } finally {
