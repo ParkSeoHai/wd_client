@@ -56,7 +56,7 @@
   .block-collection-group {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    gap: 16px;
 
     .item {
       padding-bottom: 8px;
@@ -64,9 +64,6 @@
       border-radius: 0;
       &:hover {
         filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
-      }
-      img {
-        height: 200px;
       }
     }
   }
@@ -157,9 +154,6 @@
           width: 195px;
           &:last-child {
             margin-right: 0;
-          }
-          img {
-            height: 148px;
           }
         }
       }

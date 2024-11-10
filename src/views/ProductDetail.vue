@@ -1,8 +1,8 @@
 <script setup>
+import { ref } from "vue";
 // Components
 import ProductDetailInfo from "@/components/ProductDetail/ProductDetailInfo.vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
-import { ref } from "vue";
 
 // Props from route
 const { productUrl } = defineProps(["productUrl"]);

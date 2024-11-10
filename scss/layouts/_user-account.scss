@@ -120,7 +120,8 @@
             background-color: variables.$color-primary;
             cursor: pointer;
             &:hover {
-                background-color: darken(variables.$color-primary, 10%);
+                // background-color: darken(variables.$color-primary, 10%);
+                background-color: variables.$color-primary;
             }
         }
 

@@ -4,8 +4,13 @@ import { formatter, calcProductPriceSale } from "@/service/Common.js";
 import axios from "axios";
 import ProductDescription from "./ProductDescription.vue";
 import ProductSpecifications from "./ProductSpecifications.vue";
+import { addItem } from "@/service/CartService";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 const urlApi = inject("url_api");
+
+const $toast = useToast();
 
 const emit = defineEmits([["setBreadcrumb"]]);
 // Props
@@ -39,7 +44,7 @@ const activeOptionChild = ref(0);
 
 // Option parent active
 const optionParent = computed(() => {
-  return product.options ? product.options.option_values[activeOptionParent.value] : {};
+  return product.options ? product.options.option_values[activeOptionParent.value] : null;
 });
 
 // Option child active
@@ -151,6 +156,7 @@ function thumbMouseleave() {
 }
 
 // Handle price product
+const productPriceSale = ref(0);
 const productPrice = ref(setPrice());
 
 function setPrice() {
@@ -164,27 +170,73 @@ function setPrice() {
       priceOptionChild > priceOptionParent ? priceOptionChild : priceOptionParent;
   }
 
+  productPriceSale.value = calcProductPriceSale({
+    price: priceTotal,
+    discount: product.product_discount,
+  });
+
   return priceTotal;
 }
 
 // Handle add product to cart
-// function addCart() {
-//   const cartId = localStorage.getItem("wdsmartcartid");
-//   if (cartId === null) {
-//     alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-//     return;
-//   }
-//   // Create object cart item
-//   const cartItem = {
-//     cartId: cartId,
-//     productUrl: product.value.textUrl,
-//     option:
-//       product.value.colors[activeColor.value].name +
-//       " / " +
-//       product.value.colors[activeColor.value].options[activeOption.value].value,
-//     quantity: count.value,
-//   };
-// }
+async function addCart() {
+  let user = JSON.parse(localStorage.getItem("wdsmart_user"));
+  if (!user) {
+    alert("Vui long dang nhap");
+    return;
+  }
+
+  // get image thumb
+  let productThumb = "";
+  for (let image of product.images) {
+    if (image.type === "thumbnail") {
+      productThumb = image.image_url;
+      break;
+    }
+  }
+
+  // get option
+  let option = {};
+  if (optionParent.value) {
+    const { _id, value } = optionParent.value;
+    option = { option_id: _id, option_value: value };
+    option.option_name = product.options.option_name;
+    // get sub option
+    if (optionChild.value) {
+      const { _id, value } = optionChild.value;
+      option.sub_option = { option_id: _id, option_value: value };
+      option.sub_option.option_name = optionParent.value.sub_options.option_name;
+    }
+  }
+
+  const cartItem = {
+    product_id: product._id,
+    product_name: product.product_name,
+    product_thumb: productThumb,
+    price_at_added: productPriceSale.value,
+    discount_at_added: product.product_discount,
+    option,
+    quantity: count.value,
+  };
+
+  // call service add item to cart
+  try {
+    const res = await addItem({
+      userId: user._id,
+      cartItem,
+      urlApi: `${urlApi}/api/v1/cart`,
+    });
+    if (res.status === 201) {
+      $toast.success(res.message, {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
+      position: "top-right",
+    });
+  }
+}
 </script>
 
 <template>
@@ -274,14 +326,7 @@ function setPrice() {
               </div>
               <!-- Price -->
               <div class="product-price">
-                <span class="price-now">{{
-                  formatter(
-                    calcProductPriceSale({
-                      price: productPrice,
-                      discount: product.product_discount,
-                    })
-                  )
-                }}</span>
+                <span class="price-now">{{ formatter(productPriceSale) }}</span>
                 <span class="price-compare">
                   <del>{{ formatter(productPrice) }}</del>
                 </span>
