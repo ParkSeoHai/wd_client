@@ -243,7 +243,7 @@
                 >
                   <span class="icon">
                     <i class="bi bi-cart"></i>
-                    <span class="quantity">0</span>
+                    <span class="quantity">{{ total_quantity }}</span>
                   </span>
                   <span class="text">Giỏ hàng</span>
                 </button>
@@ -259,7 +259,10 @@
                     </div>
                     <p class="title">Giỏ hàng</p>
                     <!-- Cart empty -->
-                    <div class="mini_cart_header text-center py-2" v-if="true">
+                    <div
+                      v-if="cart.cart_items.length === 0"
+                      class="mini_cart_header text-center py-2"
+                    >
                       <i class="bi bi-cart2"></i>
                       <p>Hiện chưa có sản phẩm</p>
                       <hr class="text-dark mb-1" />
@@ -267,17 +270,7 @@
                         class="cart-total d-flex align-items-baseline justify-content-between"
                       >
                         <span class="text">TỔNG TIỀN:</span>
-                        <span class="prices">0₫</span>
-                      </div>
-                      <div
-                        class="actions d-flex align-items-center justify-content-between py-2"
-                      >
-                        <router-link to="/cart" class="btn btn-primary"
-                          >XEM GIỎ HÀNG</router-link
-                        >
-                        <router-link to="thanh-toan" class="btn btn-outline-primary"
-                          >THANH TOÁN</router-link
-                        >
+                        <span class="cart-total__price">0₫</span>
                       </div>
                     </div>
                     <!-- Cart have product -->
@@ -286,38 +279,42 @@
                         <!-- Item -->
                         <li
                           class="item-cart d-flex align-items-center justify-content-between"
-                          v-for="item in props.cartItems"
-                          :key="item.id"
+                          v-for="item in cart.cart_items"
+                          :key="item._id"
                         >
                           <div class="cart-product w-100 d-flex align-items-center">
-                            <router-link :to="`/san-pham/${item.textUrl}`">
+                            <router-link :to="`/san-pham/${item.product_url}`">
                               <img
-                                :src="item.defaultImage"
-                                :alt="item.name"
+                                :src="item.product_thumb"
+                                :alt="item.product_name"
                                 class="img-thumb"
                               />
                             </router-link>
                             <div class="product-info w-100">
                               <p class="product-name">
-                                <router-link :to="`/san-pham/${item.textUrl}`">
-                                  {{ item.name }}
+                                <router-link :to="`/san-pham/${item.product_url}`">
+                                  {{ item.product_name }}
                                 </router-link>
                               </p>
-                              <p class="product-option">{{ item.option }}</p>
+                              <p class="product-option">
+                                {{
+                                  `${item.option?.option_value} / ${item.option.sub_option?.option_value}`
+                                }}
+                              </p>
                               <div
                                 class="d-flex align-items-center justify-content-between"
                               >
                                 <div class="d-flex align-items-center">
-                                  <span class="product-quantity">{{
-                                    item.quantity
-                                  }}</span>
+                                  <span class="product-quantity"
+                                    >SL: {{ item.quantity }}</span
+                                  >
                                   <p class="product-price">
-                                    {{ formatter(item.price) }}
+                                    {{ formatter(item.price_at_added) }}
                                   </p>
                                 </div>
                                 <p
                                   class="product-del"
-                                  @click="removeItemCart(item.textUrl)"
+                                  @click="removeItemCart(cart._id, item._id)"
                                 >
                                   Xóa
                                 </p>
@@ -354,18 +351,20 @@
                         class="cart-total d-flex align-items-baseline justify-content-between"
                       >
                         <span class="text">TỔNG TIỀN:</span>
-                        <span class="prices">{{ formatter(totalPrice) }}</span>
+                        <span class="cart-total__price">{{
+                          formatter(cart.total_price)
+                        }}</span>
                       </div>
-                      <div
-                        class="actions d-flex align-items-center justify-content-between py-2"
+                    </div>
+                    <div
+                      class="actions d-flex align-items-center justify-content-between py-2"
+                    >
+                      <router-link to="/cart" class="btn btn-primary"
+                        >XEM GIỎ HÀNG</router-link
                       >
-                        <router-link to="/cart" class="btn btn-primary"
-                          >XEM GIỎ HÀNG</router-link
-                        >
-                        <router-link to="thanh-toan" class="btn btn-outline-primary"
-                          >THANH TOÁN</router-link
-                        >
-                      </div>
+                      <router-link to="thanh-toan" class="btn btn-outline-primary"
+                        >THANH TOÁN</router-link
+                      >
                     </div>
                   </div>
                 </div>
@@ -379,21 +378,43 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 // Component
 import Logo from "./Logo.vue";
 // Api
 import axios from "axios";
 import { formatter } from "@/service/Common.js";
 import { login } from "@/service/AuthService";
+import { getCart, removeItem } from "@/service/CartService";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+
+const $toast = useToast();
 
 const url_api = inject("url_api");
 // inject from app.vue
 const setModalBackground = inject("setModalBackground");
 const listDropDown = inject("listDropDownHeader");
+const refreshCartStatus = inject("refreshCartStatus");
+const setRefreshCartHeader = inject("setRefreshCartHeader");
 
-// Props from parent component Header.vue
-const props = defineProps(["cartItems"]);
+// get user was login
+const user = ref(JSON.parse(localStorage.getItem("wdsmart_user")));
+
+const cart = ref({
+  cart_items: [],
+});
+
+const total_quantity = computed(() => {
+  return cart.value?.total_quantity || 0;
+});
+
+watch(refreshCartStatus, async () => {
+  if (refreshCartStatus.value) {
+    await getCartInfo();
+    setRefreshCartHeader(false);
+  }
+});
 
 // Handle address shops
 const addressShops = ref([]);
@@ -431,11 +452,6 @@ const changeSelectQuanHuyen = async (event) => {
 };
 // End handle address shops
 
-// Handle cart
-const totalPrice = computed(() => {
-  return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-});
-
 // Handle show dropdown header
 function showDropdown(dropDownName) {
   for (let dropDownItem in listDropDown.value) {
@@ -459,9 +475,6 @@ function closeDropdown(dropDownName) {
   // Handle emit event to App.vue
   setModalBackground(false);
 }
-
-// Handle user was login
-const user = ref(JSON.parse(localStorage.getItem("wdsmart_user")));
 
 // Handle login dropdown top header form
 const email = ref("");
@@ -491,27 +504,51 @@ function logout() {
   user.value = null;
   email.value = "";
   password.value = "";
+  cart.value = {
+    cart_items: [],
+  };
 }
 
+// get cart
+const getCartInfo = async () => {
+  if (user.value) {
+    try {
+      const foundCart = await getCart(`${url_api}/api/v1/cart/${user.value._id}`);
+      cart.value = foundCart;
+    } catch (error) {
+      $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
+        position: "top-right",
+      });
+    }
+  }
+};
+
 // Handle remove item cart
-// const removeItemCart = (productUrl) => {
-//   // get cart id from local storage
-//   const cartId = localStorage.getItem("wdsmartcartid");
-//   // call api remove item cart
-//   const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`;
-//   fetchApi(url, "DELETE")
-//     .then((res) => {
-//       if (res.success === true) {
-//         // Emit event to App.vue to update cart
-//         $emits("update-cart");
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// };
+const removeItemCart = async (cartId, cartItemId) => {
+  // call service remove cart
+  try {
+    const res = await removeItem({
+      cartId,
+      cartItemId,
+      urlApi: `${url_api}/api/v1/cart/removeItem`,
+    });
+    if (res.status === 200) {
+      // refresh cart header
+      await getCartInfo();
+    } else {
+      $toast.error("Đã xảy ra lỗi.", {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
+      position: "top-right",
+    });
+  }
+};
 
 onMounted(async () => {
   await getAddressShops(`${url_api}/api/v1/address_shop`);
+  await getCartInfo();
 });
 </script>

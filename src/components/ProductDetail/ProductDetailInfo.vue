@@ -8,9 +8,12 @@ import { addItem } from "@/service/CartService";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+const $toast = useToast();
+
 const urlApi = inject("url_api");
 
-const $toast = useToast();
+// inject from App.vue
+const setRefreshCartHeader = inject("setRefreshCartHeader");
 
 const emit = defineEmits([["setBreadcrumb"]]);
 // Props
@@ -20,19 +23,29 @@ const { productUrl } = defineProps(["productUrl"]);
 const getProductByUrl = async () => {
   const url = `${urlApi}/api/v1/product/${productUrl}`;
   const res = await axios.get(url);
-  console.log(res.data.metadata);
   return res.data.metadata;
 };
 
-const data = await getProductByUrl();
+let data = await getProductByUrl();
+const product = ref(data.product);
 
-const product = data.product;
+watch(
+  () => productUrl,
+  async () => {
+    data = await getProductByUrl();
+    product.value = data.product;
+    setBreadcrumb();
+  }
+);
 
 // emit parent
-emit("setBreadcrumb", {
-  breadCrumbs: data.breadCrumbs,
-  breadcrumbActive: product.product_name,
-});
+function setBreadcrumb() {
+  emit("setBreadcrumb", {
+    breadCrumbs: data.breadCrumbs,
+    breadcrumbActive: product.value.product_name,
+  });
+}
+setBreadcrumb();
 
 // Count add to cart
 let count = ref(1);
@@ -44,7 +57,9 @@ const activeOptionChild = ref(0);
 
 // Option parent active
 const optionParent = computed(() => {
-  return product.options ? product.options.option_values[activeOptionParent.value] : null;
+  return product.value.options
+    ? product.value.options.option_values[activeOptionParent.value]
+    : null;
 });
 
 // Option child active
@@ -84,7 +99,7 @@ function setShopAvailable() {
 let marginLeftThumbnail = ref(0);
 
 // Calc width block thumbnail - 1 item: 95px
-const widthThumbnail = product.images.length * 95;
+const widthThumbnail = product.value.images.length * 95;
 
 // Handle click button next/prev image active
 function handleImageActive(n) {
@@ -138,8 +153,8 @@ function thumbMouseup() {
   marginLeftOld += widthX;
   if (marginLeftThumbnail.value > 0) {
     marginLeftOld = 0;
-  } else if (marginLeftThumbnail.value < -(product.images.length - 9) * 95) {
-    marginLeftOld = -(product.images.length - 9) * 95;
+  } else if (marginLeftThumbnail.value < -(product.value.images.length - 9) * 95) {
+    marginLeftOld = -(product.value.images.length - 9) * 95;
   }
   marginLeftThumbnail.value = marginLeftOld;
 }
@@ -149,7 +164,7 @@ function thumbMouseleave() {
   // Handle margin left
   if (marginLeftThumbnail.value > 0) {
     marginLeftOld = 0;
-  } else if (marginLeftThumbnail.value < -(product.images.length - 9) * 95) {
+  } else if (marginLeftThumbnail.value < -(product.value.images.length - 9) * 95) {
     marginLeftOld = -(product.value.images.length - 9) * 95;
   }
   marginLeftThumbnail.value = marginLeftOld;
@@ -161,18 +176,20 @@ const productPrice = ref(setPrice());
 
 function setPrice() {
   // Get price
-  const priceOptionParent = product.product_price + optionParent.value.price_adjustment;
+  const priceOptionParent =
+    product.value.product_price + optionParent.value.price_adjustment;
   let priceTotal = priceOptionParent;
 
   if (optionChild.value) {
-    const priceOptionChild = product.product_price + optionChild.value.price_adjustment;
+    const priceOptionChild =
+      product.value.product_price + optionChild.value.price_adjustment;
     priceTotal =
       priceOptionChild > priceOptionParent ? priceOptionChild : priceOptionParent;
   }
 
   productPriceSale.value = calcProductPriceSale({
     price: priceTotal,
-    discount: product.product_discount,
+    discount: product.value.product_discount,
   });
 
   return priceTotal;
@@ -188,7 +205,7 @@ async function addCart() {
 
   // get image thumb
   let productThumb = "";
-  for (let image of product.images) {
+  for (let image of product.value.images) {
     if (image.type === "thumbnail") {
       productThumb = image.image_url;
       break;
@@ -200,7 +217,7 @@ async function addCart() {
   if (optionParent.value) {
     const { _id, value } = optionParent.value;
     option = { option_id: _id, option_value: value };
-    option.option_name = product.options.option_name;
+    option.option_name = product.value.options.option_name;
     // get sub option
     if (optionChild.value) {
       const { _id, value } = optionChild.value;
@@ -210,11 +227,12 @@ async function addCart() {
   }
 
   const cartItem = {
-    product_id: product._id,
-    product_name: product.product_name,
+    product_id: product.value._id,
+    product_name: product.value.product_name,
     product_thumb: productThumb,
+    product_url: product.value.product_url,
     price_at_added: productPriceSale.value,
-    discount_at_added: product.product_discount,
+    discount_at_added: product.value.product_discount,
     option,
     quantity: count.value,
   };
@@ -230,6 +248,8 @@ async function addCart() {
       $toast.success(res.message, {
         position: "top-right",
       });
+      // refresh cart header
+      setRefreshCartHeader(true);
     }
   } catch (error) {
     $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {

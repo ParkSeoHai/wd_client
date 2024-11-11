@@ -2,7 +2,7 @@
   <Header />
   <main>
     <div class="container p-0">
-      <RouterView @update-cart="updateCart" :cartItems="cartItems" />
+      <RouterView />
     </div>
     <!-- modal background -->
     <div v-if="isShowModal" @click="handleClickModalBackground" class="modal-main"></div>
@@ -23,6 +23,8 @@ let listDropDownHeader = ref({
   ddownCart: false,
 });
 
+const refreshCartStatus = ref(false);
+
 // Show background-modal
 let isShowModal = ref(false);
 
@@ -40,34 +42,20 @@ function handleClickModalBackground() {
   listDropDownHeader.value.ddownCart = false;
 }
 
+// Refresh cart
+const setRefreshCartHeader = (value) => {
+  refreshCartStatus.value = value;
+};
+
 // Provide to component child
 provide("setModalBackground", setModalBackground);
 provide("listDropDownHeader", listDropDownHeader);
-
-// Get value cart object
-const cartItems = ref([]);
-
-// Call api get cart
-// const fetchAPI = async () => {
-//   await getCartItems();
-//   // Import component Header
-//   Header.value = defineAsyncComponent(() => import("./components/Header.vue"));
-// };
-
-// Get cart items
-// const getCartItems = async () => {
-//   if (!localStorage.getItem("wdsmartcartid")) {
-//     return;
-//   }
-//   const urlGetCart = `${$route}/Customer/GetCartById?id=${localStorage.getItem(
-//     "wdsmartcartid"
-//   )}`;
-//   const responseGetCart = await fetchApi(urlGetCart);
-//   cartItems.value = responseGetCart.data.cartItems;
-// };
-
-// Refresh cart
-// const updateCart = async () => {
-//   await getCartItems();
-// };
+provide("refreshCartStatus", refreshCartStatus);
+provide("setRefreshCartHeader", setRefreshCartHeader);
 </script>
+
+<style>
+.v-toast {
+  top: 10%;
+}
+</style>
