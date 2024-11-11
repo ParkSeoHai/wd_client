@@ -92,7 +92,6 @@ import { inject, ref, watch } from "vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { login } from "@/service/AuthService";
 import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
 import { nextTick } from "vue";
 
 const $toast = useToast();

@@ -40,9 +40,9 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/cart',
+      path: '/gio-hang',
       name: 'Cart',
-      component: () => import('@/views/Cart.vue'),
+      component: () => import('@/views/Cart.vue')
     },
   ],
   scrollBehavior (to, from, savedPosition) {

@@ -1,19 +1,18 @@
 <script setup>
 import { computed, inject, ref, watch } from "vue";
 import { formatter, calcProductPriceSale } from "@/service/Common.js";
+import { useToast } from "vue-toast-notification";
 import axios from "axios";
+import { addItem } from "@/service/CartService";
 import ProductDescription from "./ProductDescription.vue";
 import ProductSpecifications from "./ProductSpecifications.vue";
-import { addItem } from "@/service/CartService";
-import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
 
 const $toast = useToast();
 
 const urlApi = inject("url_api");
 
 // inject from App.vue
-const setRefreshCartHeader = inject("setRefreshCartHeader");
+const setRefreshCart = inject("setRefreshCart");
 
 const emit = defineEmits([["setBreadcrumb"]]);
 // Props
@@ -249,7 +248,7 @@ async function addCart() {
         position: "top-right",
       });
       // refresh cart header
-      setRefreshCartHeader(true);
+      setRefreshCart(true);
     }
   } catch (error) {
     $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {

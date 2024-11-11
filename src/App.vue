@@ -12,9 +12,13 @@
 
 <script setup>
 import { provide, ref } from "vue";
+import "vue-toast-notification/dist/theme-sugar.css";
 // Component
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+
+// get user
+const user = JSON.parse(localStorage.getItem("wdsmart_user"));
 
 // Variable dropdrow header top
 let listDropDownHeader = ref({
@@ -22,8 +26,6 @@ let listDropDownHeader = ref({
   ddownLogin: false,
   ddownCart: false,
 });
-
-const refreshCartStatus = ref(false);
 
 // Show background-modal
 let isShowModal = ref(false);
@@ -43,15 +45,18 @@ function handleClickModalBackground() {
 }
 
 // Refresh cart
-const setRefreshCartHeader = (value) => {
+const refreshCartStatus = ref(false);
+
+const setRefreshCart = (value) => {
   refreshCartStatus.value = value;
 };
 
 // Provide to component child
+provide("user", user);
 provide("setModalBackground", setModalBackground);
 provide("listDropDownHeader", listDropDownHeader);
 provide("refreshCartStatus", refreshCartStatus);
-provide("setRefreshCartHeader", setRefreshCartHeader);
+provide("setRefreshCart", setRefreshCart);
 </script>
 
 <style>

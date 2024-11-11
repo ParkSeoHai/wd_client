@@ -359,7 +359,7 @@
                     <div
                       class="actions d-flex align-items-center justify-content-between py-2"
                     >
-                      <router-link to="/cart" class="btn btn-primary"
+                      <router-link to="/gio-hang" class="btn btn-primary"
                         >XEM GIỎ HÀNG</router-link
                       >
                       <router-link to="thanh-toan" class="btn btn-outline-primary"
@@ -396,10 +396,10 @@ const url_api = inject("url_api");
 const setModalBackground = inject("setModalBackground");
 const listDropDown = inject("listDropDownHeader");
 const refreshCartStatus = inject("refreshCartStatus");
-const setRefreshCartHeader = inject("setRefreshCartHeader");
+const setRefreshCart = inject("setRefreshCart");
 
 // get user was login
-const user = ref(JSON.parse(localStorage.getItem("wdsmart_user")));
+const user = inject("user");
 
 const cart = ref({
   cart_items: [],
@@ -412,7 +412,7 @@ const total_quantity = computed(() => {
 watch(refreshCartStatus, async () => {
   if (refreshCartStatus.value) {
     await getCartInfo();
-    setRefreshCartHeader(false);
+    setRefreshCart(false);
   }
 });
 
@@ -492,7 +492,7 @@ const submitFormLogin = async () => {
     });
     // store localstorage
     localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));
-    user.value = JSON.parse(localStorage.getItem("wdsmart_user"));
+    location.reload();
   } catch (error) {
     responseLoginErrors.value.push(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
   }
@@ -501,19 +501,14 @@ const submitFormLogin = async () => {
 // Handle logout
 function logout() {
   localStorage.removeItem("wdsmart_user");
-  user.value = null;
-  email.value = "";
-  password.value = "";
-  cart.value = {
-    cart_items: [],
-  };
+  location.reload();
 }
 
 // get cart
 const getCartInfo = async () => {
-  if (user.value) {
+  if (user) {
     try {
-      const foundCart = await getCart(`${url_api}/api/v1/cart/${user.value._id}`);
+      const foundCart = await getCart(`${url_api}/api/v1/cart/${user._id}`);
       cart.value = foundCart;
     } catch (error) {
       $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
@@ -535,6 +530,7 @@ const removeItemCart = async (cartId, cartItemId) => {
     if (res.status === 200) {
       // refresh cart header
       await getCartInfo();
+      setRefreshCart(true);
     } else {
       $toast.error("Đã xảy ra lỗi.", {
         position: "top-right",

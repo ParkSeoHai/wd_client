@@ -23,9 +23,6 @@ const formatter = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",
 });
-
-// if type == "flash_sale"
-const percentSale = (product.quantity_sold / product.quantity_sale) * 100;
 </script>
 
 <template>
@@ -72,19 +69,26 @@ const percentSale = (product.quantity_sold / product.quantity_sale) * 100;
     </ul>
 
     <!-- Flash sale -->
-    <template v-if="type === 'flash_sale'">
+    <template v-if="type === 'flash_sale' && product.flash_sale">
       <div class="fl_progressbar_group d-flex align-items-center">
         <div class="icon d-flex align-items-center">
           <i class="bi bi-fire"></i>
         </div>
         <span v-if="percentSale >= 90">Sắp cháy hàng</span>
         <span v-else
-          >Đã bán <strong>{{ product.quantity_sold }}</strong> sản phẩm</span
+          >Đã bán <strong>{{ product.flash_sale.quantity_sold }}</strong> sản phẩm</span
         >
       </div>
-
       <div class="fl_progressbar">
-        <div class="fl_percent" :style="{ width: percentSale + '%' }"></div>
+        <div
+          class="fl_percent"
+          :style="{
+            width:
+              (product.flash_sale.quantity_sold / product.flash_sale.quantity_sale) *
+                100 +
+              '%',
+          }"
+        ></div>
       </div>
     </template>
   </div>
