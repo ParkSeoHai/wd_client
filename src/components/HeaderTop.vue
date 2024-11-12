@@ -179,8 +179,8 @@
                         >
                       </p>
                       <div class="actions d-flex align-items-center gap-3">
-                        <a href="/user/account" class="btn btn-primary w-75"
-                          >Xem chi tiết</a
+                        <RouterLink to="/user/account" class="btn btn-primary w-75"
+                          >Xem chi tiết</RouterLink
                         >
                         <button @click="logout" class="btn btn-outline-primary w-25">
                           Đăng xuất

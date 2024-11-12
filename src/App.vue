@@ -5,7 +5,7 @@
       <RouterView />
     </div>
     <!-- modal background -->
-    <div v-if="isShowModal" @click="handleClickModalBackground" class="modal-main"></div>
+    <div v-if="isShowModal" @click="setModalBackground(false)" class="modal-main"></div>
   </main>
   <Footer />
 </template>
@@ -27,21 +27,29 @@ let listDropDownHeader = ref({
   ddownCart: false,
 });
 
+// modal account user
+const listModalAccount = ref({
+  modalAddAddress: false,
+  modalDelAddress: false,
+});
+
 // Show background-modal
 let isShowModal = ref(false);
 
 // Handle show / hide modal
 function setModalBackground(value) {
   isShowModal.value = value;
-}
-
-function handleClickModalBackground() {
-  // Hide modal background
-  isShowModal.value = false;
-  // Hide all dropdrown header
-  listDropDownHeader.value.ddownStoreAddress = false;
-  listDropDownHeader.value.ddownLogin = false;
-  listDropDownHeader.value.ddownCart = false;
+  if (value === false) {
+    // Hide modal background
+    isShowModal.value = false;
+    // Hide all dropdrown header
+    listDropDownHeader.value.ddownStoreAddress = false;
+    listDropDownHeader.value.ddownLogin = false;
+    listDropDownHeader.value.ddownCart = false;
+    // Hide all modal account
+    listModalAccount.value.modalAddAddress = false;
+    listModalAccount.value.modalDelAddress = false;
+  }
 }
 
 // Refresh cart
@@ -57,6 +65,7 @@ provide("setModalBackground", setModalBackground);
 provide("listDropDownHeader", listDropDownHeader);
 provide("refreshCartStatus", refreshCartStatus);
 provide("setRefreshCart", setRefreshCart);
+provide("listModalAccount", listModalAccount);
 </script>
 
 <style>
