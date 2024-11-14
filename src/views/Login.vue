@@ -163,7 +163,7 @@ const submitForm = async () => {
         const data = await login({
           email: email.value,
           password: password.value,
-          urlApi: `${url_api}/api/v1/user/login`,
+          urlApi: `${url_api}/api/v1/auth/login`,
         });
         // store localstorage
         localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));

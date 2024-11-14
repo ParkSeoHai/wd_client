@@ -91,6 +91,28 @@
             color: variables.$txt-primary;
         }
     }
+
+    .verify-frame {
+        &__desc {
+            width: 70%;
+            margin: 15px auto;
+            text-align: center;
+            font-size: 1.6rem;
+            line-height: 2rem;
+        }
+        &__otp {
+            .v-otp-input__field {
+                font-size: 1.8rem;
+            }
+        }
+        &__btn-submit {
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        &__btn-resend {
+            font-size: 1rem;
+        }
+    }
 }
 
 .cloud {

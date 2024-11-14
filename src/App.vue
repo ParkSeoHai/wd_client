@@ -67,9 +67,3 @@ provide("refreshCartStatus", refreshCartStatus);
 provide("setRefreshCart", setRefreshCart);
 provide("listModalAccount", listModalAccount);
 </script>
-
-<style>
-.v-toast {
-  top: 10%;
-}
-</style>

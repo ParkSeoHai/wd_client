@@ -348,7 +348,6 @@ const tabActive = ref(0);
 // get account user
 const getAccount = async () => {
   if (!user) {
-    alert("Vui lòng đăng nhập");
     window.location.href = "/";
   }
   const response = await axios.get(`${urlApi}/api/v1/user/account/${user._id}`);
@@ -370,26 +369,26 @@ const updateInfoUser = async () => {
     });
     userInfo.value = response.data.metadata.user;
     $toast.success(response.data.message, {
-      position: "top-right",
+      position: "top",
     });
   } catch (error) {
     // Kiểm tra lỗi và xử lý phù hợp
     if (error.response) {
       // Lỗi từ server
       $toast.error(error.response.data.message || "Lỗi từ server", {
-        position: "top-right",
+        position: "top",
       });
       throw new Error(error.response.data.message || "Lỗi từ server");
     } else if (error.request) {
       // Không nhận được phản hồi
       $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
-        position: "top-right",
+        position: "top",
       });
       throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
     } else {
       // Lỗi khác
       $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
-        position: "top-right",
+        position: "top",
       });
       throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
     }
@@ -464,19 +463,19 @@ const confirmDelAddress = async () => {
       if (error.response) {
         // Lỗi từ server
         $toast.error(error.response.data.message || "Lỗi từ server", {
-          position: "top-right",
+          position: "top",
         });
         throw new Error(error.response.data.message || "Lỗi từ server");
       } else if (error.request) {
         // Không nhận được phản hồi
         $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
-          position: "top-right",
+          position: "top",
         });
         throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
       } else {
         // Lỗi khác
         $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
-          position: "top-right",
+          position: "top",
         });
         throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
       }
@@ -534,19 +533,19 @@ const addCustomerAddress = async () => {
     if (error.response) {
       // Lỗi từ server
       $toast.error(error.response.data.message || "Lỗi từ server", {
-        position: "top-right",
+        position: "top",
       });
       throw new Error(error.response.data.message || "Lỗi từ server");
     } else if (error.request) {
       // Không nhận được phản hồi
       $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
-        position: "top-right",
+        position: "top",
       });
       throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
     } else {
       // Lỗi khác
       $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
-        position: "top-right",
+        position: "top",
       });
       throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
     }

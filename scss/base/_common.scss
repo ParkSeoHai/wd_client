@@ -95,7 +95,8 @@ a {
 .list-product {
   .item {
     position: relative;
-    padding: 4px;
+    padding: 6px;
+    padding-bottom: 30px;
     background-color: variables.$color-white;
     border: 1px solid #ededed;
     border-radius: 6px;
@@ -169,7 +170,7 @@ a {
       font-size: 1.2rem;
       background: #f3f4f6;
       border-radius: 6px;
-      margin-top: 10px;
+      margin: 10px 0;
       border: 1px solid #e5e7eb;
       li {
         padding: 4px;
@@ -212,6 +213,26 @@ a {
         margin: 5px 0 0;
         text-align: center;
         width: 100%;
+      }
+    }
+
+    &__bottom {
+      position: absolute;
+      bottom: 0;
+      width: calc(100% - 10px);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+
+      &--icon-text {
+        font-size: 1.4rem;
+        color: variables.$txt-dark;
+      }
+
+      &--icon-heart {
+        position: relative;
+        font-size: 2rem;
+        color: #d70018;
       }
     }
 

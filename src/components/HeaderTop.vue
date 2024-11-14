@@ -488,7 +488,7 @@ const submitFormLogin = async () => {
     const data = await login({
       email: email.value,
       password: password.value,
-      urlApi: `${url_api}/api/v1/user/login`,
+      urlApi: `${url_api}/api/v1/auth/login`,
     });
     // store localstorage
     localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));
@@ -512,7 +512,7 @@ const getCartInfo = async () => {
       cart.value = foundCart;
     } catch (error) {
       $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
-        position: "top-right",
+        position: "top",
       });
     }
   }
@@ -538,7 +538,7 @@ const removeItemCart = async (cartId, cartItemId) => {
     }
   } catch (error) {
     $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
-      position: "top-right",
+      position: "top",
     });
   }
 };

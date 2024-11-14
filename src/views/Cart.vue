@@ -35,7 +35,7 @@ const getCartInfo = async () => {
       cart.value = foundCart;
     } catch (error) {
       $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
-        position: "top-right",
+        position: "top",
       });
     }
   }
@@ -57,12 +57,12 @@ const updateQuantityItemCart = async (cartId, cartItemId, value) => {
       setRefreshCart(true);
     } else {
       $toast.error("Đã xảy ra lỗi.", {
-        position: "top-right",
+        position: "top",
       });
     }
   } catch (error) {
     $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
-      position: "top-right",
+      position: "top",
     });
   }
 };
@@ -82,12 +82,12 @@ const removeItemCart = async (cartId, cartItemId) => {
       setRefreshCart(true);
     } else {
       $toast.error("Đã xảy ra lỗi.", {
-        position: "top-right",
+        position: "top",
       });
     }
   } catch (error) {
     $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
-      position: "top-right",
+      position: "top",
     });
   }
 };

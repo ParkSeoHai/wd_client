@@ -147,7 +147,8 @@ a {
 /* Product item */
 .list-product .item {
   position: relative;
-  padding: 4px;
+  padding: 6px;
+  padding-bottom: 30px;
   background-color: #fff;
   border: 1px solid #ededed;
   border-radius: 6px;
@@ -216,7 +217,7 @@ a {
   font-size: 1.2rem;
   background: #f3f4f6;
   border-radius: 6px;
-  margin-top: 10px;
+  margin: 10px 0;
   border: 1px solid #e5e7eb;
 }
 .list-product .item .hash-tag-loop li {
@@ -257,6 +258,23 @@ a {
   margin: 5px 0 0;
   text-align: center;
   width: 100%;
+}
+.list-product .item__bottom {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 10px);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.list-product .item__bottom--icon-text {
+  font-size: 1.4rem;
+  color: #333;
+}
+.list-product .item__bottom--icon-heart {
+  position: relative;
+  font-size: 2rem;
+  color: #d70018;
 }
 @keyframes display-icon-hover {
   0% {
@@ -980,7 +998,6 @@ body {
   gap: 16px;
 }
 .section_collection_group .block-collection-group .item {
-  padding-bottom: 8px;
   border: 1px solid #ededed;
   border-radius: 0;
 }
@@ -1637,6 +1654,23 @@ body {
 .template-account__question a {
   font-weight: 700;
   color: #1877f2;
+}
+.template-account .verify-frame__desc {
+  width: 70%;
+  margin: 15px auto;
+  text-align: center;
+  font-size: 1.6rem;
+  line-height: 2rem;
+}
+.template-account .verify-frame__otp .v-otp-input__field {
+  font-size: 1.8rem;
+}
+.template-account .verify-frame__btn-submit {
+  text-align: center;
+  font-size: 1.8rem;
+}
+.template-account .verify-frame__btn-resend {
+  font-size: 1rem;
 }
 
 .cloud {
