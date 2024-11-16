@@ -243,7 +243,7 @@ a {
   animation: display-icon-hover ease-in-out 0.2s;
 }
 .list-product .item__price--percent {
-  background: url("../../src/assets/images/product_percent.svg") no-repeat;
+  background: url("../../assets/images/product_percent.svg") no-repeat;
   height: 31px;
   left: -5px;
   position: absolute;
