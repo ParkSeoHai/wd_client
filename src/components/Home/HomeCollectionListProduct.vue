@@ -1,8 +1,9 @@
 <script setup>
 import { inject, onMounted, ref } from "vue";
+import axios from "axios";
 // Component
 import ProductItem from "../ProductItem.vue";
-import axios from "axios";
+import { getProductsByCategory } from "@/service/ProductService";
 
 const urlApi = inject("url_api");
 
@@ -14,13 +15,6 @@ const products = ref([]);
 // Categories
 const categories = ref([]);
 
-// Func get all products by props.category url
-const getProductsByCategory = async () => {
-  const url = `${urlApi}/api/v1/product/category/${categoryUrl}?limit=10`;
-  const response = await axios.get(url);
-  return response.data.metadata.products;
-};
-
 // Func get subcategories by category url
 const getSubCategories = async () => {
   const url = `${urlApi}/api/v1/category/sub/${categoryUrl}`;
@@ -30,7 +24,8 @@ const getSubCategories = async () => {
 
 // Call function when component is mounted
 onMounted(async () => {
-  products.value = await getProductsByCategory();
+  const res = await getProductsByCategory({ categoryUrl, urlApi });
+  products.value = res.metadata.products;
   categories.value = await getSubCategories();
 });
 </script>

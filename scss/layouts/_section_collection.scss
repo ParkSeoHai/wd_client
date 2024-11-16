@@ -35,13 +35,17 @@
         
         &:hover {
           background-color: variables.$bg-primary;
-          color: variables.$color-white;
+          a {
+            color: variables.$color-white;
+          }
         }
 
         &.active {
           background-color: variables.$bg-primary;
-          color: variables.$color-white;
           pointer-events: none;
+          a {
+            color: variables.$color-white;
+          }
         }
       }
     }
@@ -69,8 +73,8 @@
 
   // Bottom
   .collection-bottom {
-    padding-top: 24px;
-    padding-bottom: 6px;
+    padding-top: 50px;
+    padding-bottom: 14px;
     .link {
       text-align: center;
       a {
@@ -143,6 +147,7 @@
     .block-list-product {
       position: relative;
       overflow: hidden;
+      padding-left: 5px;
       padding-bottom: 20px;
       .list-product {
         display: grid;

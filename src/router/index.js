@@ -19,8 +19,8 @@ const router = createRouter({
     },
     {
       path: '/danh-muc/:categoryUrl',
-      name: 'ProductByCategory',
-      component: () => import('@/views/ProductFilter.vue'),
+      name: 'ProductCategory',
+      component: () => import('@/views/ProductCategory.vue'),
       props: true
     },
     {

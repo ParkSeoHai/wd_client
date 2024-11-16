@@ -22,6 +22,7 @@ const user = JSON.parse(localStorage.getItem("wdsmart_user"));
 
 // Variable dropdrow header top
 let listDropDownHeader = ref({
+  ddownSearch: false,
   ddownStoreAddress: false,
   ddownLogin: false,
   ddownCart: false,
@@ -43,6 +44,7 @@ function setModalBackground(value) {
     // Hide modal background
     isShowModal.value = false;
     // Hide all dropdrown header
+    listDropDownHeader.value.ddownSearch = false;
     listDropDownHeader.value.ddownStoreAddress = false;
     listDropDownHeader.value.ddownLogin = false;
     listDropDownHeader.value.ddownCart = false;

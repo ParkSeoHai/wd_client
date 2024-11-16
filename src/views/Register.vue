@@ -31,14 +31,24 @@
           ></v-btn>
         </div>
         <v-divider class="mt-3 mb-6"></v-divider>
-        <div class="mb-3">Need another <strong>code</strong>?</div>
-        <v-btn
-          class="verify-frame__btn-resend"
-          color="primary"
-          text="Re-send Email"
-          variant="tonal"
-          @click="resendEmail"
-        ></v-btn>
+
+        <div class="mt-5 d-flex justify-content-between">
+          <v-btn
+            text="Back"
+            class="verify-frame__btn-back"
+            @click="(otp = ''), (showVerifyAccount = false), (loading = false)"
+          ></v-btn>
+          <div>
+            <div class="mb-3">Need another <strong>code</strong>?</div>
+            <v-btn
+              class="verify-frame__btn-resend"
+              color="primary"
+              text="Re-send Email"
+              variant="tonal"
+              @click="resendEmail"
+            ></v-btn>
+          </div>
+        </div>
       </div>
       <template v-else>
         <h1 class="template-account__heading">Tạo tài khoản</h1>
@@ -274,6 +284,7 @@ const getOtpEmail = async () => {
   try {
     const res = await axios.post(`${url_api}/api/v1/auth/getOTP`, {
       emailTo: email.value,
+      name: name.value,
     });
     otp.value = res.data;
     showVerifyAccount.value = true;

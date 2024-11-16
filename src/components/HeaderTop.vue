@@ -14,16 +14,100 @@
                 class="form-control header-search-input"
                 id="header-search-input"
                 placeholder="Nhập tìm kiếm..."
+                v-model.trim="search.input"
+                @click.prevent="showDropdown('ddownSearch')"
               />
             </div>
-            <button
-              type="button"
-              class="btn btn-primary btn-search"
-              onclick="searchProduct()"
-            >
+            <button type="button" class="btn btn-primary btn-search">
               <i class="bi bi-search"></i>
             </button>
           </form>
+          <!-- dropdown -->
+          <div
+            v-show="listDropDown.ddownSearch"
+            @click.stop=""
+            class="header-search__dropdown header-action_dropdown bg-grey-opacity"
+          >
+            <div class="header-dropdown_content">
+              <div class="icon-close" @click="closeDropdown('ddownSearch')">
+                <i class="bi bi-x"></i>
+              </div>
+              <p class="title mt-2">Tìm kiếm sản phẩm</p>
+              <div v-if="search.input">
+                <div v-if="search.loading === true" class="text-center p-5">
+                  <v-progress-circular
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+                <div v-else>
+                  <!-- <template v-if="search.products === null">
+                    <p class="py-5 text-center">Vui lòng nhập từ khóa tìm kiếm</p>
+                  </template> -->
+                  <template v-if="search.products.length > 0">
+                    <div class="search-list">
+                      <router-link
+                        v-for="product in search.products"
+                        :key="product._id"
+                        :to="`/san-pham/${product.product_url}`"
+                        class="search-item"
+                      >
+                        <div class="search-item__img">
+                          <img
+                            v-if="product.imageThumbs.length > 0"
+                            :src="product.imageThumbs[0].image_url"
+                          />
+                          <img
+                            v-else
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOU0iaTa57K7OKcsCM3m0tEORCxzbYllHIUQ&s"
+                          />
+                        </div>
+                        <div class="search-item__content">
+                          <h3 class="search-item__content--title">
+                            {{ product.product_name }}
+                          </h3>
+                          <div class="search-item__content--price">
+                            <span class="price-sale">{{
+                              formatter(product.product_price_sale)
+                            }}</span>
+                            <del class="price-del">{{
+                              formatter(product.product_price)
+                            }}</del>
+                          </div>
+                        </div>
+                      </router-link>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div>
+                      <p class="py-5 text-center">Không tìm thấy sản phẩm nào</p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+              <div v-else>
+                <p class="py-5 text-center">Vui lòng nhập từ khóa tìm kiếm</p>
+                <!-- <div class="d-flex justify-content-between mt-3">
+                  <p>Lịch sử tìm kiếm</p>
+                  <button class="header-search__dropdown--link">Xóa tất cả</button>
+                </div>
+                <ul class="list-history">
+                  <li class="item-history">
+                    <a href="" class="item-history__link">iPhone 13</a>
+                  </li>
+                  <li class="item-history">
+                    <a href="" class="item-history__link">iPhone 15</a>
+                  </li>
+                  <li class="item-history">
+                    <a href="" class="item-history__link">iPhone 11</a>
+                  </li>
+                  <li class="item-history">
+                    <a href="" class="item-history__link">Samsung</a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+          </div>
         </div>
         <!-- Actions -->
         <div class="col-5 group-icon-header ps-3">
@@ -378,16 +462,17 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref, watch } from "vue";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 // Component
 import Logo from "./Logo.vue";
-// Api
+// Libs
 import axios from "axios";
+import debounce from "lodash.debounce";
+import { useToast } from "vue-toast-notification";
+// Service
 import { formatter } from "@/service/Common.js";
 import { login } from "@/service/AuthService";
 import { getCart, removeItem } from "@/service/CartService";
-import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
 
 const $toast = useToast();
 
@@ -405,9 +490,37 @@ const cart = ref({
   cart_items: [],
 });
 
+const search = reactive({
+  input: "",
+  products: [],
+  loading: false,
+});
+
 const total_quantity = computed(() => {
   return cart.value?.total_quantity || 0;
 });
+
+watch(
+  () => search.input,
+  () => {
+    search.loading = true;
+    search.products = [];
+  }
+);
+
+watch(
+  () => search.input,
+  debounce(async () => {
+    setTimeout(async () => {
+      if (search.input !== "") {
+        search.products = await searchProduct(search.input, 1, 10);
+      } else {
+        search.products = [];
+      }
+      search.loading = false;
+    }, 1000);
+  }, 500)
+);
 
 watch(refreshCartStatus, async () => {
   if (refreshCartStatus.value) {
@@ -459,10 +572,11 @@ function showDropdown(dropDownName) {
       // Handle emit event to App.vue
       if (listDropDown.value[dropDownItem] === true) {
         setModalBackground(false);
+        listDropDown.value[dropDownItem] = false;
       } else {
         setModalBackground(true);
+        listDropDown.value[dropDownItem] = true;
       }
-      listDropDown.value[dropDownItem] = !listDropDown.value[dropDownItem];
     } else {
       listDropDown.value[dropDownItem] = false;
     }
@@ -541,6 +655,14 @@ const removeItemCart = async (cartId, cartItemId) => {
       position: "top",
     });
   }
+};
+
+// Handle search product
+const searchProduct = async (searchStr, page, limit) => {
+  const res = await axios.get(
+    `${url_api}/api/v1/product/search?q=${searchStr}&p=${page}&limit=${limit}`
+  );
+  return res.data.metadata.products;
 };
 
 onMounted(async () => {

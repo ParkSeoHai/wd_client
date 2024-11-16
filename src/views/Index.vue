@@ -11,6 +11,8 @@
   <HomeCollectionGroup />
   <!-- Section Product group 1 -->
   <HomeCollectionListProduct category-name="Điện thoại" category-url="dien-thoai" />
+  <!-- Section Product group 2 -->
+  <HomeCollectionListProduct category-name="Laptop" category-url="laptop" />
   <!-- Section home blog -->
   <HomeBlogNews />
 </template>

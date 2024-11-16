@@ -1,7 +1,7 @@
 <template>
   <div class="background"></div>
   <Breadcrumb class="position-absolute z-3" :breadcrumb-active="'Tài khoản'" />
-  <div class="mb-4" style="min-height: 500px">
+  <div class="mb-4" style="min-height: 600px">
     <div class="cloud x1"></div>
     <div class="cloud x2"></div>
     <div class="cloud x3"></div>
@@ -12,8 +12,10 @@
       <div class="user-account__block--left bg-color-white">
         <div class="block__left--header">
           <div class="user__avatar">
-            <img v-if="userInfo.picture" :src="userInfo.picture" :alt="userInfo.name" />
-            <span v-else>{{ textPicture }}</span>
+            <img v-if="userInfo.avatar" :src="userInfo.avatar" :alt="userInfo.name" />
+            <span v-else :style="{ background: textPicture.backgroundColor }">{{
+              textPicture.text
+            }}</span>
           </div>
           <div class="user__infor">
             <p class="user__infor--name">
@@ -29,30 +31,40 @@
               :class="{ active: tabActive === 0 }"
               @click="tabActive = 0"
             >
-              <a href="#" class="block__left--link">
+              <button class="block__left--link">
                 <i class="bi bi-person-fill block__left--icon"></i>
                 <span class="ms-3">Thông tin cá nhân</span>
-              </a>
+              </button>
             </li>
             <li
               class="block__left--item"
               :class="{ active: tabActive === 1 }"
               @click="tabActive = 1"
             >
-              <a href="#" class="block__left--link">
-                <i class="bi bi-box-fill block__left--icon"></i>
-                <span class="ms-3">Đơn hàng của bạn</span>
-              </a>
+              <button class="block__left--link">
+                <i class="bi bi-box2-heart-fill block__left--icon"></i>
+                <span class="ms-3">Sản phẩm yêu thích</span>
+              </button>
             </li>
             <li
               class="block__left--item"
               :class="{ active: tabActive === 2 }"
               @click="tabActive = 2"
             >
-              <a href="#" class="block__left--link">
+              <button class="block__left--link">
+                <i class="bi bi-box-fill block__left--icon"></i>
+                <span class="ms-3">Đơn hàng của bạn</span>
+              </button>
+            </li>
+            <li
+              class="block__left--item"
+              :class="{ active: tabActive === 3 }"
+              @click="tabActive = 3"
+            >
+              <button class="block__left--link">
                 <i class="bi bi-house-fill block__left--icon"></i>
                 <span class="ms-3">Địa chỉ giao hàng</span>
-              </a>
+              </button>
             </li>
           </ul>
         </div>
@@ -137,6 +149,24 @@
         </div>
         <!-- Tab 1 -->
         <div v-else-if="tabActive == 1">
+          <div v-if="favorite" class="favorite-tab">
+            <div class="list-product">
+              <product-item
+                v-for="product in favorite.favorite_items"
+                :product="product"
+                :key="product._id"
+              />
+            </div>
+          </div>
+          <div v-else>
+            <p>
+              Bạn chưa có đơn hàng nào. Mời bạn mua thêm sản phẩm
+              <router-link to="/all">tại đây</router-link>.
+            </p>
+          </div>
+        </div>
+        <!-- Tab 1 -->
+        <div v-else-if="tabActive == 2">
           <div class="block-right__table">
             <div class="table-responsive" v-if="userInfo.order">
               <table class="table">
@@ -323,8 +353,9 @@
 
 <script setup>
 import Breadcrumb from "@/components/Breadcrumb.vue";
+import ProductItem from "@/components/ProductItem.vue";
 import axios from "axios";
-import { computed, inject, onMounted, reactive, ref } from "vue";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 import { useToast } from "vue-toast-notification";
 
 const $toast = useToast();
@@ -336,14 +367,35 @@ const listModalAccount = inject("listModalAccount");
 const setModalBackground = inject("setModalBackground");
 
 const userInfo = ref({});
+const favorite = ref(null);
 
 const textPicture = computed(() => {
-  if (userInfo.value.avatar) return "NH";
-  return "EMPTY";
+  if (userInfo.value.name) {
+    const nameArr = userInfo.value.name.split(" ", 3);
+    let txtAvatar = "";
+    nameArr.forEach((txt) => {
+      if (txt !== "") txtAvatar += txt.slice(0, 1);
+    });
+    const bgArr = ["#563d78", "#e15026", "#1877f2", "#016f35"];
+    const random = Math.floor(Math.random() * bgArr.length);
+    return {
+      text: txtAvatar,
+      backgroundColor: bgArr[random],
+    };
+  }
+  return "AVT";
 });
 
 // Handle tabs
 const tabActive = ref(0);
+
+// watch change tab
+watch(tabActive, async () => {
+  // get favorite
+  if (tabActive.value === 1) {
+    favorite.value = await getFavorite();
+  }
+});
 
 // get account user
 const getAccount = async () => {
@@ -550,6 +602,14 @@ const addCustomerAddress = async () => {
       throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
     }
   }
+};
+
+// handle product favorite
+const getFavorite = async () => {
+  const res = await axios.get(
+    `${urlApi}/api/v1/customer/favorite/${user._id}?p=1&limit=10`
+  );
+  return res.data.metadata;
 };
 
 onMounted(async () => {

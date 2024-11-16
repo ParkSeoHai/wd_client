@@ -39,6 +39,9 @@ watch(
 
 // emit parent
 function setBreadcrumb() {
+  data.breadCrumbs.forEach((item) => {
+    item.category_url = `danh-muc/${item.category_url}`;
+  });
   emit("setBreadcrumb", {
     breadCrumbs: data.breadCrumbs,
     breadcrumbActive: product.value.product_name,
