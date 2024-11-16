@@ -21,15 +21,18 @@ import HomeBannerGroupItem from "./HomeBannerGroupItem.vue";
 
 const listBanners = [
   {
-    imageUrl: "../../assets/images/banner-group-1.webp",
+    imageUrl:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/dknt-oppo-find-x8-home.jpg",
     linkUrl: "/banner-1",
   },
   {
-    imageUrl: "../../assets/images/banner-group-2.webp",
+    imageUrl:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/udsv-right-laptop.jpg",
     linkUrl: "/banner-2",
   },
   {
-    imageUrl: "../../assets/images/banner-group-3.webp",
+    imageUrl:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/right-banner-14-10.jpg",
     linkUrl: "/banner-3",
   },
 ];

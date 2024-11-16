@@ -4,7 +4,7 @@
   <!-- Banner group -->
   <HomeBannerGroup />
   <!-- Section category -->
-  <HomeCategory />
+  <HomeCategory class="d-none" />
   <!-- Section flash sale -->
   <HomeFlashSale />
   <!-- Section collection -->

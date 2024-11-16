@@ -49,16 +49,24 @@ import Navbar from "../Navbar.vue";
 // Slider show
 const imageSliders = [
   {
-    image: "../../assets/images/banner-slider-1.webp",
+    image:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/sliding-home-iphone-16-pro-km-moi.jpg",
     link: "/slider-1",
   },
   {
-    image: "../../assets/images/banner-slider-2.webp",
+    image:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/samsung-galaxy-s24-ultra-home-15-11.png",
     link: "/slider-2",
   },
   {
-    image: "../../assets/images/banner-slider-3.webp",
+    image:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/samsung-galaxy-s24-ultra-home-15-11.png",
     link: "/slider-3",
+  },
+  {
+    image:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/tecno-camon-30s-banner-home.jpg",
+    link: "/slider-4",
   },
 ];
 
