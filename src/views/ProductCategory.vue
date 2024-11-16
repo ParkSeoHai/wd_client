@@ -13,7 +13,7 @@
 <script setup>
 // Component
 import Breadcrumb from "@/components/Breadcrumb.vue";
-import ListProduct from "@/components/ProductFilter/ListProduct.vue";
+import ListProduct from "@/components/ProductCategory/ListProduct.vue";
 import { ref } from "vue";
 
 // Props category url from params route

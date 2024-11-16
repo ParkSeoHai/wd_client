@@ -248,14 +248,14 @@ async function addCart() {
     });
     if (res.status === 201) {
       $toast.success(res.message, {
-        position: "top-right",
+        position: "top",
       });
       // refresh cart header
       setRefreshCart(true);
     }
   } catch (error) {
     $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
-      position: "top-right",
+      position: "top",
     });
   }
 }

@@ -6,7 +6,7 @@
         <Logo />
         <!-- Search -->
         <div class="col-4 header-search p-0">
-          <form id="formSearch" class="header-search-form">
+          <form id="formSearch" @submit.prevent="submitSearch" class="header-search-form">
             <div class="form-group">
               <label for="header-search-input" hidden="hidden"></label>
               <input
@@ -18,7 +18,7 @@
                 @click.prevent="showDropdown('ddownSearch')"
               />
             </div>
-            <button type="button" class="btn btn-primary btn-search">
+            <button class="btn btn-primary btn-search">
               <i class="bi bi-search"></i>
             </button>
           </form>
@@ -473,6 +473,7 @@ import { useToast } from "vue-toast-notification";
 import { formatter } from "@/service/Common.js";
 import { login } from "@/service/AuthService";
 import { getCart, removeItem } from "@/service/CartService";
+import { searchProduct } from "@/service/ProductService";
 
 const $toast = useToast();
 
@@ -513,12 +514,16 @@ watch(
   debounce(async () => {
     setTimeout(async () => {
       if (search.input !== "") {
-        search.products = await searchProduct(search.input, 1, 10);
+        const res = await searchProduct({
+          searchStr: search.input,
+          urlApi: url_api,
+        });
+        search.products = res.metadata;
       } else {
         search.products = [];
       }
       search.loading = false;
-    }, 1000);
+    }, 500);
   }, 500)
 );
 
@@ -657,13 +662,8 @@ const removeItemCart = async (cartId, cartItemId) => {
   }
 };
 
-// Handle search product
-const searchProduct = async (searchStr, page, limit) => {
-  const res = await axios.get(
-    `${url_api}/api/v1/product/search?q=${searchStr}&p=${page}&limit=${limit}`
-  );
-  return res.data.metadata.products;
-};
+// Handle enter form search
+const submitSearch = () => {};
 
 onMounted(async () => {
   await getAddressShops(`${url_api}/api/v1/address_shop`);

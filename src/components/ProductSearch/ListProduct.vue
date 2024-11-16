@@ -1,59 +1,48 @@
 <script setup>
-import { inject, ref, watch } from "vue";
+import { inject, ref } from "vue";
 // Component
 import ProductItem from "@/components/ProductItem.vue";
-import Sort from "@/components/ProductFilter/Sort.vue";
-import { getProductsByCategory } from "@/service/ProductService";
+import Sort from "@/components/ProductCategory/Sort.vue";
+import { searchProduct } from "@/service/ProductService";
 
 const urlApi = inject("url_api");
 
-const { categoryUrl } = defineProps(["categoryUrl"]);
+const { searchStr } = defineProps(["searchStr"]);
 const emit = defineEmits(["setBreadcrumb"]);
+// set breadscrumb
+emit("setBreadcrumb", {
+  breadcrumbActive: `Kết quả tìm kiếm cho: ${searchStr}`,
+});
 
 const products = ref([]);
 const totalProduct = ref(0);
 const page = ref(1);
 const limit = ref(20);
 
-watch(
-  () => categoryUrl,
-  async () => {
-    products.value = await getDataProduct({ page: page.value, limit: limit.value });
-  }
-);
-
-watch(page, async () => {
-  const productsMore = await getDataProduct({ page: page.value, limit: limit.value });
-  products.value.push(...productsMore);
+// get product
+const res = await searchProduct({
+  searchStr,
+  page: page.value,
+  limit: limit.value,
+  urlApi,
 });
-
-const setBreadcrumb = (breadCrumbs) => {
-  breadCrumbs.forEach((item) => {
-    item.category_url = `danh-muc/${item.category_url}`;
-  });
-  emit("setBreadcrumb", {
-    breadCrumbs: breadCrumbs.slice(0, breadCrumbs.length - 1),
-    breadcrumbActive: breadCrumbs[breadCrumbs.length - 1].category_name,
-  });
-};
-
-const getDataProduct = async ({ page, limit, sort }) => {
-  const res = await getProductsByCategory({ categoryUrl, page, limit, sort, urlApi });
-  setBreadcrumb(res.metadata.breadCrumbs);
-  totalProduct.value = res.options.totalSize;
-  return res.metadata.products;
-};
 
 // Handle when click sort product by price
 const sortProductByPrice = async (value) => {
   let sort = "";
   if (value === 1) sort = "desc";
   if (value === 2) sort = "asc";
-  products.value = await getDataProduct({ page: page.value, limit: limit.value, sort });
+  const res = await searchProduct({
+    searchStr,
+    page: page.value,
+    limit: limit.value,
+    urlApi,
+    sort,
+  });
+  products.value = res.metadata;
 };
 
-// await get products
-products.value = await getDataProduct({ page: page.value, limit: limit.value });
+products.value = res.metadata;
 </script>
 
 <template>

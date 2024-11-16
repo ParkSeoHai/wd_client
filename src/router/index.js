@@ -13,9 +13,6 @@ const router = createRouter({
       name: 'product',
       component: () => import('@/views/ProductDetail.vue'),
       props: true
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
     },
     {
       path: '/danh-muc/:categoryUrl',
@@ -43,6 +40,12 @@ const router = createRouter({
       path: '/gio-hang',
       name: 'Cart',
       component: () => import('@/views/Cart.vue')
+    },
+    {
+      path: '/search/result/:searchStr?',
+      name: 'Search',
+      component: () => import('@/views/ProductSearch.vue'),
+      props: true
     },
   ],
   scrollBehavior (to, from, savedPosition) {
