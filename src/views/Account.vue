@@ -1,7 +1,7 @@
 <template>
   <div class="background"></div>
-  <Breadcrumb class="position-absolute z-3" :breadcrumb-active="breadcrumbActive" />
-  <div style="height: 500px">
+  <Breadcrumb class="position-absolute z-3" :breadcrumb-active="'Tài khoản'" />
+  <div class="mb-4" style="min-height: 600px">
     <div class="cloud x1"></div>
     <div class="cloud x2"></div>
     <div class="cloud x3"></div>
@@ -12,15 +12,15 @@
       <div class="user-account__block--left bg-color-white">
         <div class="block__left--header">
           <div class="user__avatar">
-            <img
-              v-if="userInfo.picture"
-              :src="userInfo.picture"
-              :alt="`${userInfo.firstName} ${userInfo.lastName}`"
-            />
-            <span v-else>{{ textPicture }}</span>
+            <img v-if="userInfo.avatar" :src="userInfo.avatar" :alt="userInfo.name" />
+            <span v-else :style="{ background: textPicture.backgroundColor }">{{
+              textPicture.text
+            }}</span>
           </div>
           <div class="user__infor">
-            <p class="user__infor--name">{{ userInfo.firstName }} {{ userInfo.lastName }}</p>
+            <p class="user__infor--name">
+              {{ userInfo.name }}
+            </p>
             <p class="user__infor--email">{{ userInfo.email }}</p>
           </div>
         </div>
@@ -31,30 +31,40 @@
               :class="{ active: tabActive === 0 }"
               @click="tabActive = 0"
             >
-              <a href="#" class="block__left--link">
+              <button class="block__left--link">
                 <i class="bi bi-person-fill block__left--icon"></i>
                 <span class="ms-3">Thông tin cá nhân</span>
-              </a>
+              </button>
             </li>
             <li
               class="block__left--item"
               :class="{ active: tabActive === 1 }"
               @click="tabActive = 1"
             >
-              <a href="#" class="block__left--link">
-                <i class="bi bi-box-fill block__left--icon"></i>
-                <span class="ms-3">Đơn hàng của bạn</span>
-              </a>
+              <button class="block__left--link">
+                <i class="bi bi-box2-heart-fill block__left--icon"></i>
+                <span class="ms-3">Sản phẩm yêu thích</span>
+              </button>
             </li>
             <li
               class="block__left--item"
               :class="{ active: tabActive === 2 }"
               @click="tabActive = 2"
             >
-              <a href="#" class="block__left--link">
+              <button class="block__left--link">
+                <i class="bi bi-box-fill block__left--icon"></i>
+                <span class="ms-3">Đơn hàng của bạn</span>
+              </button>
+            </li>
+            <li
+              class="block__left--item"
+              :class="{ active: tabActive === 3 }"
+              @click="tabActive = 3"
+            >
+              <button class="block__left--link">
                 <i class="bi bi-house-fill block__left--icon"></i>
                 <span class="ms-3">Địa chỉ giao hàng</span>
-              </a>
+              </button>
             </li>
           </ul>
         </div>
@@ -66,35 +76,37 @@
           <h2 class="block-right__header">Thông tin tài khoản</h2>
           <div class="block-right__body">
             <div class="block-right__item">
-              <label for="name" class="block-right__label">Tên</label>
+              <label for="name" class="block-right__label">Họ và tên</label>
               <input
                 type="text"
                 id="name"
                 class="block-right__input"
-                placeholder="Nhập tên"
-                v-model="userInfo.firstName"
-              />
-            </div>
-            <div class="block-right__item">
-              <label for="name" class="block-right__label">Họ đệm</label>
-              <input
-                type="text"
-                id="name"
-                class="block-right__input"
-                placeholder="Nhập họ đệm"
-                v-model="userInfo.lastName"
+                placeholder="Nhập họ và tên tên"
+                v-model="userInfo.name"
               />
             </div>
             <div class="block-right__item">
               <label class="block-right__label">Giới tính</label>
               <div class="d-flex align-items-center">
                 <div class="block-right__radio">
-                  <input type="radio" id="nam" name="sex" />
-                  <label for="nam">Nam</label>
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    value="0"
+                    v-model="userInfo.gender"
+                  />
+                  <label for="male">Nam</label>
                 </div>
                 <div class="block-right__radio">
-                  <input type="radio" id="nu" name="sex" />
-                  <label for="nu">Nữ</label>
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="1"
+                    v-model="userInfo.gender"
+                  />
+                  <label for="female">Nữ</label>
                 </div>
               </div>
             </div>
@@ -105,8 +117,8 @@
                 id="email"
                 class="block-right__input"
                 placeholder="Nhập Email"
-                readonly
-                v-model="userInfo.email"
+                disabled
+                :value="userInfo.email"
               />
             </div>
             <div class="block-right__item">
@@ -116,20 +128,45 @@
                 id="phoneNumber"
                 class="block-right__input"
                 placeholder="Nhập số điện thoại"
-                v-model="userInfo.phoneNumber"
+                v-model="userInfo.phone_number"
               />
             </div>
             <div class="block-right__item">
               <label for="birthday" class="block-right__label">Ngày sinh</label>
-              <input type="date" id="birthday" class="block-right__input" value="" />
+              <input
+                type="date"
+                id="birthday"
+                v-model="userInfo.birthday"
+                class="block-right__input"
+              />
             </div>
             <div class="text-center">
-              <button class="btn-base block-right__btn">Cập nhật</button>
+              <button @click.prevent="updateInfoUser" class="btn-base block-right__btn">
+                Cập nhật
+              </button>
             </div>
           </div>
         </div>
         <!-- Tab 1 -->
         <div v-else-if="tabActive == 1">
+          <div v-if="favorite" class="favorite-tab">
+            <div class="list-product">
+              <product-item
+                v-for="product in favorite.favorite_items"
+                :product="product"
+                :key="product._id"
+              />
+            </div>
+          </div>
+          <div v-else>
+            <p>
+              Bạn chưa có đơn hàng nào. Mời bạn mua thêm sản phẩm
+              <router-link to="/all">tại đây</router-link>.
+            </p>
+          </div>
+        </div>
+        <!-- Tab 1 -->
+        <div v-else-if="tabActive == 2">
           <div class="block-right__table">
             <div class="table-responsive" v-if="userInfo.order">
               <table class="table">
@@ -178,62 +215,41 @@
               <p class="block-right__header">Địa chỉ của tôi</p>
               <button
                 class="btn-base block-right__address--btn"
-                v-if="userInfo.customerAddresses.length <= 5"
-                @click="(showModal = true), (showModalAddAddress = true)"
+                :disabled="userInfo.address.length >= 5"
+                @click="showModalAddAddress(null)"
               >
                 <i class="bi bi-plus"></i>
                 <span>Thêm địa chỉ mới</span>
               </button>
             </div>
             <!-- List address -->
-            <div class="list-address" v-if="userInfo.customerAddresses.length > 0">
+            <div class="list-address" v-if="userInfo.address.length > 0">
               <!-- Item -->
-              <div
-                class="address-item"
-                v-for="item in userInfo.customerAddresses"
-                :key="item.id"
-              >
+              <div class="address-item" v-for="item in userInfo.address" :key="item._id">
                 <!-- Left -->
                 <div class="left">
                   <div class="address-item__header">
-                    <p class="name">{{ item.customerName }}</p>
-                    <p class="phone">{{ item.phoneNumber }}</p>
+                    <p class="name">{{ item.name }}</p>
+                    <p class="phone">{{ item.phone_number }}</p>
                   </div>
                   <div class="address-item__body">
                     <p class="address">
-                      {{ item.address }}
+                      {{ item.detail }}
                     </p>
-                    <p v-if="item.isDefault" class="address-default">Mặc định</p>
+                    <p v-if="item.default" class="address-default">Mặc định</p>
                   </div>
                 </div>
                 <!-- Right -->
                 <div class="right">
-                  <p @click="updateAddress(item.id)">Cập nhật</p>
-                  <p @click="delAddress(item.id)">Xóa</p>
+                  <p @click.prevent="showModalAddAddress(item._id)">Cập nhật</p>
+                  <p @click.prevent="showModalDelAddress(item._id)">Xóa</p>
                 </div>
               </div>
-              <!-- Item -->
-              <!-- <div class="address-item">
-                <div class="left">
-                  <div class="address-item__header">
-                    <p class="name">Nguyen Van Hai</p>
-                    <p class="phone">0333301536</p>
-                  </div>
-                  <div class="address-item__body">
-                    <p class="address">
-                      Ktx Đn 4, Nguyễn Cơ Thạch, Phường Mỹ Đình 2 Phường Mỹ Đình 2, Quận Nam Từ
-                      Liêm, Hà Nội
-                    </p>
-                  </div>
-                </div>
-                <div class="right">
-                  <p>Cập nhật</p>
-                  <p>Xóa</p>
-                </div>
-              </div> -->
             </div>
             <div v-else class="address-empty">
-              <p class="text-center mt-5">Bạn chưa có địa chỉ nào. Mời bạn thêm địa chỉ mới.</p>
+              <p class="text-center mt-5">
+                Bạn chưa có địa chỉ nào. Mời bạn thêm địa chỉ mới.
+              </p>
             </div>
           </div>
         </div>
@@ -241,158 +257,362 @@
     </div>
   </div>
   <!-- Modal add new address -->
-  <div class="modal-address modal-new__address" v-if="showModalAddAddress">
+  <div class="modal-address modal-new__address" v-if="listModalAccount.modalAddAddress">
     <p v-if="idAddressUpdate" class="modal-new__address--header">Cập nhật địa chỉ</p>
     <p v-else class="modal-new__address--header">Địa chỉ mới</p>
-    <form @submit.prevent="addAddress" class="modal-new__address--form">
+    <form @submit.prevent="addCustomerAddress" class="modal-new__address--form">
       <div class="d-flex align-items-center gap-4">
-        <input type="text" class="form-control" placeholder="Họ và tên" required v-model="addressName" />
-        <input type="text" class="form-control" placeholder="Số điện thoại" required v-model="addressPhone" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Họ và tên"
+          required
+          v-model="addressCustomer.name"
+        />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Số điện thoại"
+          required
+          v-model="addressCustomer.phone_number"
+        />
       </div>
       <div class="d-flex align-items-center gap-4 mt-4">
-        <input type="text" class="form-control" placeholder="Tỉnh/ Thành phố" required v-model="addressCity" />
-        <input type="text" class="form-control" placeholder="Quận/Huyện" required v-model="addressDistrict" />
-        <input type="text" class="form-control" placeholder="Phường/Xã" required v-model="addressWard" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tỉnh/ Thành phố"
+          required
+          v-model="addressCustomer.city"
+        />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Quận/Huyện"
+          required
+          v-model="addressCustomer.quan_huyen"
+        />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Phường/Xã"
+          required
+          v-model="addressCustomer.xa_phuong"
+        />
       </div>
       <div class="d-flex align-items-center gap-4 mt-4">
-        <input type="text" class="form-control" placeholder="Địa chỉ cụ thể" required v-model="addressDetail" />
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Địa chỉ cụ thể"
+          required
+          v-model="addressCustomer.detail"
+        />
       </div>
       <div class="form-check d-flex align-items-center modal-new__address--checkbox">
-        <input class="form-check-input" type="checkbox" id="defaultAddress" v-model="addressDefault" />
-        <label class="form-check-label" for="defaultAddress">Đặt làm địa chỉ mặc định</label>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="defaultAddress"
+          v-model="addressCustomer.default"
+        />
+        <label class="form-check-label" for="defaultAddress"
+          >Đặt làm địa chỉ mặc định</label
+        >
       </div>
       <div class="modal-address__actions mt-5">
-        <button
-          class="btn-base btn-left"
-          @click.prevent="(showModal = false), (showModalAddAddress = false)"
-        >
+        <button class="btn-base btn-left" @click.prevent="closeModalAddAddress">
           <span>Trở lại</span>
         </button>
         <button class="btn-base btn-right" type="submit">
-          <span>Hoàn thành</span>
+          <span>Lưu</span>
         </button>
       </div>
     </form>
   </div>
   <!-- Modal confirm delete address -->
-  <div class="modal-address modal-del__address" v-if="showModalDelAddress && idAddressDel">
+  <div class="modal-address modal-del__address" v-if="listModalAccount.modalDelAddress">
     <p class="modal-del__address">Bạn có chắc muốn xoá địa chỉ này?</p>
     <div class="modal-address__actions mt-5">
       <button
         class="btn-base btn-left"
-        @click.prevent="(showModal = false), (showModalDelAddress = false)"
+        @click.prevent="
+          setModalBackground(false),
+            (listModalAccount.modalDelAddress = false),
+            (addressCustomer._id = null)
+        "
       >
         <span>TRỞ LẠI</span>
       </button>
       <button class="btn-base btn-right">
-        <span @click.prevent="confirmDel(idAddressDel)">XÓA</span>
+        <span @click="confirmDelAddress">XÓA</span>
       </button>
     </div>
   </div>
-  <Modal v-if="showModal" @click="clickModal"></Modal>
 </template>
 
 <script setup>
-import Modal from '@/components/Modal.vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
-import { inject, onMounted, ref } from 'vue'
-import { fetchApi } from '@/api/Common.js'
+import Breadcrumb from "@/components/Breadcrumb.vue";
+import ProductItem from "@/components/ProductItem.vue";
+import axios from "axios";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
+import { useToast } from "vue-toast-notification";
 
-// Breadcrumb
-const breadcrumbActive = 'Tài khoản'
-// Router web api
-const $route = inject('$route')
-// Get text picture if user info is not picture
-const textPicture = ref()
-// Get email from local storage
-const email = JSON.parse(localStorage.getItem('wdsmartuser')).email
+const $toast = useToast();
 
-const userInfo = ref({})
+const urlApi = inject("url_api");
+// inject from app.vue
+const user = inject("user");
+const listModalAccount = inject("listModalAccount");
+const setModalBackground = inject("setModalBackground");
+
+const userInfo = ref({});
+const favorite = ref(null);
+
+const textPicture = computed(() => {
+  if (userInfo.value.name) {
+    const nameArr = userInfo.value.name.split(" ", 3);
+    let txtAvatar = "";
+    nameArr.forEach((txt) => {
+      if (txt !== "") txtAvatar += txt.slice(0, 1);
+    });
+    const bgArr = ["#563d78", "#e15026", "#1877f2", "#016f35"];
+    const random = Math.floor(Math.random() * bgArr.length);
+    return {
+      text: txtAvatar,
+      backgroundColor: bgArr[random],
+    };
+  }
+  return "AVT";
+});
+
 // Handle tabs
-const tabActive = ref(0)
-const showModal = ref(false)
-const showModalAddAddress = ref(false)
-const showModalDelAddress = ref(false)
+const tabActive = ref(0);
 
-const clickModal = () => {
-  showModal.value = false
-  showModalAddAddress.value = false
-  showModalDelAddress.value = false
-}
+// watch change tab
+watch(tabActive, async () => {
+  // get favorite
+  if (tabActive.value === 1) {
+    favorite.value = await getFavorite();
+  }
+});
+
+// get account user
+const getAccount = async () => {
+  if (!user) {
+    window.location.href = "/";
+  }
+  const response = await axios.get(`${urlApi}/api/v1/user/account/${user._id}`);
+  userInfo.value = response.data.metadata.user;
+  resetAddressCustomer();
+};
+
+// update info user
+const updateInfoUser = async () => {
+  const { _id, birthday, gender, name, phone_number } = userInfo.value;
+  // call api server
+  try {
+    const response = await axios.post(`${urlApi}/api/v1/user/account/update`, {
+      _id,
+      birthday,
+      gender,
+      name,
+      phone_number,
+    });
+    userInfo.value = response.data.metadata.user;
+    $toast.success(response.data.message, {
+      position: "top",
+    });
+  } catch (error) {
+    // Kiểm tra lỗi và xử lý phù hợp
+    if (error.response) {
+      // Lỗi từ server
+      $toast.error(error.response.data.message || "Lỗi từ server", {
+        position: "top",
+      });
+      throw new Error(error.response.data.message || "Lỗi từ server");
+    } else if (error.request) {
+      // Không nhận được phản hồi
+      $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
+    } else {
+      // Lỗi khác
+      $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
+  }
+};
 
 // Handle add new address
-const addressName = ref()
-const addressPhone = ref()
-const addressCity = ref()
-const addressDistrict = ref()
-const addressWard = ref()
-const addressDetail = ref()
-const addressDefault = ref(false)
-
-const addAddress = async () => {
-  const router = `${$route}/Customer/AddCustomerAddress?email=${email}`
-  const data = {
-    customerName: addressName.value,
-    city: addressCity.value,
-    district: addressDistrict.value,
-    address: addressDetail.value + ', ' + addressWard.value + ', ' + addressDistrict.value + ', ' + addressCity.value,
-    phoneNumber: addressPhone.value,
-    isDefault: addressDefault.value
-  }
-  const response = await fetchApi(router, 'POST', data)
-  if (response.success) {
-    // If success, close modal, reset data form and fetch data
-    showModalAddAddress.value = false
-    showModal.value = false
-    addressName.value = null
-    addressPhone.value = null
-    addressCity.value = null
-    addressDistrict.value = null
-    addressWard.value = null
-    addressDetail.value = null
-    addressDefault.value = false
-    await fetchData()
-  } else {
-    alert(response.message)
-  }
-}
+const addressCustomer = reactive({
+  _id: null,
+  name: "",
+  phone_number: "",
+  city: "",
+  quan_huyen: "",
+  xa_phuong: "",
+  detail: "",
+  default: false,
+});
 
 // Handle update user address
-const idAddressUpdate = ref()
-const updateAddress = (addressId) => {
-  showModal.value = true
-  showModalAddAddress.value = true
-  idAddressUpdate.value = addressId
-}
+const showModalAddAddress = (addressId = null) => {
+  addressCustomer._id = addressId;
+  setModalBackground(true);
+  listModalAccount.value.modalAddAddress = true;
+  // update
+  if (addressId !== null) {
+    // find address by id
+    const foundAddress = userInfo.value.address.find(
+      (item) => item._id.toString() === addressId.toString()
+    );
+    if (foundAddress) {
+      addressCustomer.name = foundAddress.name;
+      addressCustomer.phone_number = foundAddress.phone_number;
+      addressCustomer.city = foundAddress.city;
+      addressCustomer.quan_huyen = foundAddress.quan_huyen;
+      addressCustomer.xa_phuong = foundAddress.xa_phuong;
+      addressCustomer.detail = foundAddress.detail;
+      addressCustomer.default = foundAddress.default;
+    } else {
+      console.error("error");
+    }
+  }
+};
+
+const closeModalAddAddress = () => {
+  listModalAccount.modalAddAddress = false;
+  setModalBackground(false);
+  resetAddressCustomer();
+};
 
 // Handle delete user address
-const idAddressDel = ref()
+const showModalDelAddress = (addressId) => {
+  addressCustomer._id = addressId;
+  setModalBackground(true);
+  listModalAccount.value.modalDelAddress = true;
+};
 
-const delAddress = (addressId) => {
-  showModalDelAddress.value = true
-  showModal.value = true
-  idAddressDel.value = addressId
-}
-
-const confirmDel = async (addressId) => {
-  const router = `${$route}/Customer/DeleteCustomerAddress?addressId=${addressId}`
-  const response = await fetchApi(router, 'DELETE')
-  if (response.success) {
-    showModalDelAddress.value = false
-    showModal.value = false
-    idAddressDel.value = null
-    await fetchData()
+const confirmDelAddress = async () => {
+  if (addressCustomer._id !== null) {
+    // call api remove
+    try {
+      const response = await axios.post(`${urlApi}/api/v1/user/customerAddress/remove`, {
+        userId: user._id,
+        addressId: addressCustomer._id,
+      });
+      // success
+      userInfo.value.address = response.data.metadata.address;
+      addressCustomer._id = null;
+      setModalBackground(false);
+      listModalAccount.modalDelAddress = false;
+    } catch (error) {
+      // Kiểm tra lỗi và xử lý phù hợp
+      if (error.response) {
+        // Lỗi từ server
+        $toast.error(error.response.data.message || "Lỗi từ server", {
+          position: "top",
+        });
+        throw new Error(error.response.data.message || "Lỗi từ server");
+      } else if (error.request) {
+        // Không nhận được phản hồi
+        $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
+          position: "top",
+        });
+        throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
+      } else {
+        // Lỗi khác
+        $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
+          position: "top",
+        });
+        throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
+      }
+    }
   } else {
-    alert(response.message)
+    $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
+      position: "top-right",
+    });
   }
-}
+};
 
-// Fetch data user info
-const fetchData = async () => {
-  const response = await fetchApi(`${$route}/Customer/GetInfo?email=${email}`)
-  userInfo.value = response.data
-  textPicture.value = userInfo.value.firstName.slice(0, 1) + userInfo.value.lastName.slice(0, 1)
-}
+// reset value input add address
+const resetAddressCustomer = () => {
+  addressCustomer._id = null;
+  addressCustomer.name = userInfo.value.name;
+  addressCustomer.phone_number = userInfo.value.phone_number;
+  addressCustomer.city = "";
+  addressCustomer.quan_huyen = "";
+  addressCustomer.xa_phuong = "";
+  addressCustomer.detail = "";
+  addressCustomer.default = false;
+};
 
-onMounted(fetchData)
+// add / update customer address
+const addCustomerAddress = async () => {
+  let url = "";
+  let data = {};
+  if (addressCustomer._id !== null) {
+    // update
+    url = `${urlApi}/api/v1/user/customerAddress/update`;
+    data = {
+      userId: user._id,
+      addressItem: addressCustomer,
+    };
+  } else {
+    // add
+    url = `${urlApi}/api/v1/user/customerAddress`;
+    // get address detail
+    addressCustomer.detail += `, ${addressCustomer.xa_phuong}, ${addressCustomer.quan_huyen}, ${addressCustomer.city}, Việt Nam`;
+    data = {
+      userId: user._id,
+      addressItem: addressCustomer,
+    };
+  }
+
+  // call api server
+  try {
+    const response = await axios.post(url, data);
+    userInfo.value.address = response.data.metadata.address;
+    setModalBackground(false);
+    listModalAccount.modalAddAddress = false;
+    resetAddressCustomer();
+  } catch (error) {
+    // Kiểm tra lỗi và xử lý phù hợp
+    if (error.response) {
+      // Lỗi từ server
+      $toast.error(error.response.data.message || "Lỗi từ server", {
+        position: "top",
+      });
+      throw new Error(error.response.data.message || "Lỗi từ server");
+    } else if (error.request) {
+      // Không nhận được phản hồi
+      $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
+    } else {
+      // Lỗi khác
+      $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
+  }
+};
+
+// handle product favorite
+const getFavorite = async () => {
+  const res = await axios.get(
+    `${urlApi}/api/v1/customer/favorite/${user._id}?p=1&limit=10`
+  );
+  return res.data.metadata;
+};
+
+onMounted(async () => {
+  await getAccount();
+});
 </script>

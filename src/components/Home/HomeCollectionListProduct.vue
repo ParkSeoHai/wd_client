@@ -1,3 +1,35 @@
+<script setup>
+import { inject, onMounted, ref } from "vue";
+import axios from "axios";
+// Component
+import ProductItem from "../ProductItem.vue";
+import { getProductsByCategory } from "@/service/ProductService";
+
+const urlApi = inject("url_api");
+
+// Props from index.vue
+const { categoryName, categoryUrl } = defineProps(["categoryName", "categoryUrl"]);
+
+// List product
+const products = ref([]);
+// Categories
+const categories = ref([]);
+
+// Func get subcategories by category url
+const getSubCategories = async () => {
+  const url = `${urlApi}/api/v1/category/sub/${categoryUrl}`;
+  const response = await axios.get(url);
+  return response.data.metadata;
+};
+
+// Call function when component is mounted
+onMounted(async () => {
+  const res = await getProductsByCategory({ categoryUrl, urlApi });
+  products.value = res.metadata.products;
+  categories.value = await getSubCategories();
+});
+</script>
+
 <template>
   <!-- Section Product group 1 -->
   <section class="section_collection_group">
@@ -9,19 +41,14 @@
             <!-- Top -->
             <div class="top-head d-flex justify-content-between align-items-center">
               <h2>
-                {{ props.category }}
-                <span v-if="categoryActive !== ''">/ {{ categoryActive }}</span>
+                {{ categoryName }}
               </h2>
               <ul class="menu-col d-flex">
                 <!-- Item link -->
-                <li
-                  v-for="category in categories"
-                  :key="category.id"
-                  class="menu-item"
-                  :class="category.textUrl == categoryActive ? 'active' : ''"
-                  @click="changeProducts(category)"
-                >
-                  {{ category.name }}
+                <li v-for="category in categories" :key="category._id" class="menu-item">
+                  <router-link :to="`/danh-muc/${category.category_url}`">
+                    {{ category.category_name }}
+                  </router-link>
                 </li>
               </ul>
             </div>
@@ -30,20 +57,14 @@
               <!-- Item -->
               <ProductItem
                 v-for="product in products"
-                :key="product.id"
-                :productObj="product"
+                :key="product._id"
+                :product="product"
               />
             </div>
             <!-- Bottom -->
             <div class="collection-bottom">
               <div class="link">
-                <router-link
-                  :to="
-                    categoryActive === ''
-                      ? `/danh-muc/${props.textUrl}`
-                      : `/danh-muc/${categoryActive}`
-                  "
-                >
+                <router-link :to="`/danh-muc/${categoryUrl}`">
                   <span>Xem tất cả</span>
                   <i class="bi bi-chevron-double-right"></i>
                 </router-link>
@@ -55,42 +76,3 @@
     </div>
   </section>
 </template>
-
-<script setup>
-import { inject, onMounted, ref } from "vue";
-// Component
-import ProductItem from "../ProductItem.vue";
-// Service
-import { getCategoriesLevel2 } from "@/api/CategoryService";
-import { getProductsByCategory } from "@/api/ProductService";
-
-const $route = inject("$route");
-
-// Props
-const props = defineProps(["category", "textUrl"]);
-const categoryActive = ref("");
-
-// List product
-const products = ref([]);
-// Categories
-const categories = ref([]);
-
-// Async function to fetch data
-const fetchData = async () => {
-  try {
-    // Asign value
-    products.value = await getProductsByCategory($route, props.category, 10);
-    categories.value = await getCategoriesLevel2($route, props.category);
-  } catch (error) {
-    console.error(error.message);
-  }
-};
-
-// Change product when click category item in HomeCollectionListProduct.vue
-async function changeProducts(category) {
-  categoryActive.value = category.textUrl;
-  products.value = await getProductsByCategory($route, category.name, 10);
-}
-
-// Call function when component is mounted
-</script>

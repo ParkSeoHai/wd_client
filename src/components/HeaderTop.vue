@@ -6,7 +6,7 @@
         <Logo />
         <!-- Search -->
         <div class="col-4 header-search p-0">
-          <form id="formSearch" class="header-search-form">
+          <form id="formSearch" @submit.prevent="submitSearch" class="header-search-form">
             <div class="form-group">
               <label for="header-search-input" hidden="hidden"></label>
               <input
@@ -14,16 +14,100 @@
                 class="form-control header-search-input"
                 id="header-search-input"
                 placeholder="Nhập tìm kiếm..."
+                v-model.trim="search.input"
+                @click.prevent="showDropdown('ddownSearch')"
               />
             </div>
-            <button
-              type="button"
-              class="btn btn-primary btn-search"
-              onclick="searchProduct()"
-            >
+            <button class="btn btn-primary btn-search">
               <i class="bi bi-search"></i>
             </button>
           </form>
+          <!-- dropdown -->
+          <div
+            v-show="listDropDown.ddownSearch"
+            @click.stop=""
+            class="header-search__dropdown header-action_dropdown bg-grey-opacity"
+          >
+            <div class="header-dropdown_content">
+              <div class="icon-close" @click="closeDropdown('ddownSearch')">
+                <i class="bi bi-x"></i>
+              </div>
+              <p class="title mt-2">Tìm kiếm sản phẩm</p>
+              <div v-if="search.input">
+                <div v-if="search.loading === true" class="text-center p-5">
+                  <v-progress-circular
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+                <div v-else>
+                  <!-- <template v-if="search.products === null">
+                    <p class="py-5 text-center">Vui lòng nhập từ khóa tìm kiếm</p>
+                  </template> -->
+                  <template v-if="search.products.length > 0">
+                    <div class="search-list">
+                      <router-link
+                        v-for="product in search.products"
+                        :key="product._id"
+                        :to="`/san-pham/${product.product_url}`"
+                        class="search-item"
+                      >
+                        <div class="search-item__img">
+                          <img
+                            v-if="product.imageThumbs.length > 0"
+                            :src="product.imageThumbs[0].image_url"
+                          />
+                          <img
+                            v-else
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOU0iaTa57K7OKcsCM3m0tEORCxzbYllHIUQ&s"
+                          />
+                        </div>
+                        <div class="search-item__content">
+                          <h3 class="search-item__content--title">
+                            {{ product.product_name }}
+                          </h3>
+                          <div class="search-item__content--price">
+                            <span class="price-sale">{{
+                              formatter(product.product_price_sale)
+                            }}</span>
+                            <del class="price-del">{{
+                              formatter(product.product_price)
+                            }}</del>
+                          </div>
+                        </div>
+                      </router-link>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div>
+                      <p class="py-5 text-center">Không tìm thấy sản phẩm nào</p>
+                    </div>
+                  </template>
+                </div>
+              </div>
+              <div v-else>
+                <p class="py-5 text-center">Vui lòng nhập từ khóa tìm kiếm</p>
+                <!-- <div class="d-flex justify-content-between mt-3">
+                  <p>Lịch sử tìm kiếm</p>
+                  <button class="header-search__dropdown--link">Xóa tất cả</button>
+                </div>
+                <ul class="list-history">
+                  <li class="item-history">
+                    <a href="" class="item-history__link">iPhone 13</a>
+                  </li>
+                  <li class="item-history">
+                    <a href="" class="item-history__link">iPhone 15</a>
+                  </li>
+                  <li class="item-history">
+                    <a href="" class="item-history__link">iPhone 11</a>
+                  </li>
+                  <li class="item-history">
+                    <a href="" class="item-history__link">Samsung</a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+          </div>
         </div>
         <!-- Actions -->
         <div class="col-5 group-icon-header ps-3">
@@ -119,7 +203,7 @@
                               rel="noopener noreferrer"
                               class="infoLocation d-flex align-items-baseline gap-1"
                             >
-                              <i class="bi bi-arrow-bar-right"></i>
+                              <i class="bi bi-geo-alt-fill"></i>
                               <span>Chỉ đường</span>
                             </a>
                           </li>
@@ -135,10 +219,10 @@
               <div class="block header-login d-flex align-items-center">
                 <span class="icon"><i class="bi bi-person-fill"></i></span>
                 <!-- User logged -->
-                <span v-if="userLogged" class="text">
+                <span v-if="user" class="text">
                   Tài khoản
                   <span class="small-text d-flex align-items-center">
-                    của bạn
+                    của tôi
                     <i class="bi bi-chevron-down ms-1"></i>
                   </span>
                 </span>
@@ -160,14 +244,14 @@
                       <i class="bi bi-x"></i>
                     </div>
                     <!-- User logged -->
-                    <div v-if="userLogged">
+                    <div v-if="user">
                       <p class="title">Thông tin tài khoản</p>
                       <p class="desc mt-4">
                         Tên:
                         <span
                           class="d-inline-block fw-bold my-0"
                           style="font-size: 1.5rem"
-                          >{{ user.firstName }} {{ user.lastName }}</span
+                          >{{ user.name }}</span
                         >
                       </p>
                       <p class="desc">
@@ -179,15 +263,12 @@
                         >
                       </p>
                       <div class="actions d-flex align-items-center gap-3">
-                        <a href="/user/account" class="btn btn-primary w-75"
-                          >Xem chi tiết</a
+                        <RouterLink to="/user/account" class="btn btn-primary w-75"
+                          >Xem chi tiết</RouterLink
                         >
-                        <a
-                          href="/user/logout"
-                          @click.prevent="logout"
-                          class="btn btn-outline-primary w-25"
-                          >Đăng xuất</a
-                        >
+                        <button @click="logout" class="btn btn-outline-primary w-25">
+                          Đăng xuất
+                        </button>
                       </div>
                     </div>
                     <div v-else>
@@ -209,7 +290,7 @@
                             id="email-login"
                             required
                             placeholder="Email"
-                            v-model="email"
+                            v-model.trim="email"
                           />
                         </div>
                         <div class="mb-2">
@@ -219,18 +300,18 @@
                             id="password-login"
                             required
                             placeholder="Password"
-                            v-model="password"
+                            v-model.trim="password"
                           />
                         </div>
                         <button type="submit" class="btn btn-login">Đăng nhập</button>
                       </form>
                       <span class="create-account d-block">
                         Khách hàng mới?
-                        <a href="/user/register">Tạo tài khoản</a>
+                        <RouterLink to="/user/register">Tạo tài khoản</RouterLink>
                       </span>
                       <span class="forgot-account d-block">
                         Quên mật khẩu?
-                        <a href="#">Khôi phục mật khẩu</a>
+                        <RouterLink to="#">Khôi phục mật khẩu</RouterLink>
                       </span>
                     </div>
                   </div>
@@ -246,7 +327,7 @@
                 >
                   <span class="icon">
                     <i class="bi bi-cart"></i>
-                    <span class="quantity">{{ props.cartItems.length }}</span>
+                    <span class="quantity">{{ total_quantity }}</span>
                   </span>
                   <span class="text">Giỏ hàng</span>
                 </button>
@@ -263,8 +344,8 @@
                     <p class="title">Giỏ hàng</p>
                     <!-- Cart empty -->
                     <div
+                      v-if="cart.cart_items.length === 0"
                       class="mini_cart_header text-center py-2"
-                      v-if="props.cartItems.length == 0"
                     >
                       <i class="bi bi-cart2"></i>
                       <p>Hiện chưa có sản phẩm</p>
@@ -273,17 +354,7 @@
                         class="cart-total d-flex align-items-baseline justify-content-between"
                       >
                         <span class="text">TỔNG TIỀN:</span>
-                        <span class="prices">0₫</span>
-                      </div>
-                      <div
-                        class="actions d-flex align-items-center justify-content-between py-2"
-                      >
-                        <router-link to="/cart" class="btn btn-primary"
-                          >XEM GIỎ HÀNG</router-link
-                        >
-                        <router-link to="thanh-toan" class="btn btn-outline-primary"
-                          >THANH TOÁN</router-link
-                        >
+                        <span class="cart-total__price">0₫</span>
                       </div>
                     </div>
                     <!-- Cart have product -->
@@ -292,38 +363,42 @@
                         <!-- Item -->
                         <li
                           class="item-cart d-flex align-items-center justify-content-between"
-                          v-for="item in props.cartItems"
-                          :key="item.id"
+                          v-for="item in cart.cart_items"
+                          :key="item._id"
                         >
                           <div class="cart-product w-100 d-flex align-items-center">
-                            <router-link :to="`/san-pham/${item.textUrl}`">
+                            <router-link :to="`/san-pham/${item.product_url}`">
                               <img
-                                :src="item.defaultImage"
-                                :alt="item.name"
+                                :src="item.product_thumb"
+                                :alt="item.product_name"
                                 class="img-thumb"
                               />
                             </router-link>
                             <div class="product-info w-100">
                               <p class="product-name">
-                                <router-link :to="`/san-pham/${item.textUrl}`">
-                                  {{ item.name }}
+                                <router-link :to="`/san-pham/${item.product_url}`">
+                                  {{ item.product_name }}
                                 </router-link>
                               </p>
-                              <p class="product-option">{{ item.option }}</p>
+                              <p class="product-option">
+                                {{
+                                  `${item.option?.option_value} / ${item.option.sub_option?.option_value}`
+                                }}
+                              </p>
                               <div
                                 class="d-flex align-items-center justify-content-between"
                               >
                                 <div class="d-flex align-items-center">
-                                  <span class="product-quantity">{{
-                                    item.quantity
-                                  }}</span>
+                                  <span class="product-quantity"
+                                    >SL: {{ item.quantity }}</span
+                                  >
                                   <p class="product-price">
-                                    {{ formatter(item.price) }}
+                                    {{ formatter(item.price_at_added) }}
                                   </p>
                                 </div>
                                 <p
                                   class="product-del"
-                                  @click="removeItemCart(item.textUrl)"
+                                  @click="removeItemCart(cart._id, item._id)"
                                 >
                                   Xóa
                                 </p>
@@ -360,18 +435,20 @@
                         class="cart-total d-flex align-items-baseline justify-content-between"
                       >
                         <span class="text">TỔNG TIỀN:</span>
-                        <span class="prices">{{ formatter(totalPrice) }}</span>
+                        <span class="cart-total__price">{{
+                          formatter(cart.total_price)
+                        }}</span>
                       </div>
-                      <div
-                        class="actions d-flex align-items-center justify-content-between py-2"
+                    </div>
+                    <div
+                      class="actions d-flex align-items-center justify-content-between py-2"
+                    >
+                      <router-link to="/gio-hang" class="btn btn-primary"
+                        >XEM GIỎ HÀNG</router-link
                       >
-                        <router-link to="/cart" class="btn btn-primary"
-                          >XEM GIỎ HÀNG</router-link
-                        >
-                        <router-link to="thanh-toan" class="btn btn-outline-primary"
-                          >THANH TOÁN</router-link
-                        >
-                      </div>
+                      <router-link to="thanh-toan" class="btn btn-outline-primary"
+                        >THANH TOÁN</router-link
+                      >
                     </div>
                   </div>
                 </div>
@@ -383,20 +460,79 @@
     </div>
   </div>
 </template>
+
 <script setup>
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 // Component
 import Logo from "./Logo.vue";
-// Api
+// Libs
 import axios from "axios";
-import { formatter, fetchApi } from "@/api/Common.js";
+import debounce from "lodash.debounce";
+import { useToast } from "vue-toast-notification";
+// Service
+import { formatter } from "@/service/Common.js";
+import { login } from "@/service/AuthService";
+import { getCart, removeItem } from "@/service/CartService";
+import { searchProduct } from "@/service/ProductService";
+
+const $toast = useToast();
 
 const url_api = inject("url_api");
+// inject from app.vue
+const setModalBackground = inject("setModalBackground");
+const listDropDown = inject("listDropDownHeader");
+const refreshCartStatus = inject("refreshCartStatus");
+const setRefreshCart = inject("setRefreshCart");
 
-const $emits = defineEmits(["handle-modal", "update-cart"]);
-// Props from parent component Header.vue
-const props = defineProps(["cartItems"]);
-const $route = inject("$route"); // Route call api
+// get user was login
+const user = inject("user");
+
+const cart = ref({
+  cart_items: [],
+});
+
+const search = reactive({
+  input: "",
+  products: [],
+  loading: false,
+});
+
+const total_quantity = computed(() => {
+  return cart.value?.total_quantity || 0;
+});
+
+watch(
+  () => search.input,
+  () => {
+    search.loading = true;
+    search.products = [];
+  }
+);
+
+watch(
+  () => search.input,
+  debounce(async () => {
+    setTimeout(async () => {
+      if (search.input !== "") {
+        const res = await searchProduct({
+          searchStr: search.input,
+          urlApi: url_api,
+        });
+        search.products = res.metadata;
+      } else {
+        search.products = [];
+      }
+      search.loading = false;
+    }, 500);
+  }, 500)
+);
+
+watch(refreshCartStatus, async () => {
+  if (refreshCartStatus.value) {
+    await getCartInfo();
+    setRefreshCart(false);
+  }
+});
 
 // Handle address shops
 const addressShops = ref([]);
@@ -432,33 +568,20 @@ const changeSelectQuanHuyen = async (event) => {
     `${url_api}/api/v1/address_shop?city=${citySelect}&quan_huyen=${valueOption}`
   );
 };
-
-// Handle cart
-const totalPrice = computed(() => {
-  return props.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-});
-
-// List dropdown header
-let listDropDown = ref({
-  ddownStoreAddress: false,
-  ddownLogin: false,
-  ddownCart: false,
-});
-
-// Handle user was login
-const userLogged = ref(false);
-const user = JSON.parse(localStorage.getItem("wdsmartuser"));
-if (user) {
-  userLogged.value = true;
-}
+// End handle address shops
 
 // Handle show dropdown header
 function showDropdown(dropDownName) {
   for (let dropDownItem in listDropDown.value) {
     if (dropDownItem === dropDownName) {
-      listDropDown.value[dropDownName] = !listDropDown.value[dropDownName];
-      // Handle emit event to components/Header.vue
-      $emits("handle-modal", true);
+      // Handle emit event to App.vue
+      if (listDropDown.value[dropDownItem] === true) {
+        setModalBackground(false);
+        listDropDown.value[dropDownItem] = false;
+      } else {
+        setModalBackground(true);
+        listDropDown.value[dropDownItem] = true;
+      }
     } else {
       listDropDown.value[dropDownItem] = false;
     }
@@ -468,8 +591,8 @@ function showDropdown(dropDownName) {
 // Handle close dropdown
 function closeDropdown(dropDownName) {
   listDropDown.value[dropDownName] = false;
-  // Handle emit event to components/Header.vue
-  $emits("handle-modal", false);
+  // Handle emit event to App.vue
+  setModalBackground(false);
 }
 
 // Handle login dropdown top header form
@@ -477,58 +600,73 @@ const email = ref("");
 const password = ref("");
 const responseLoginErrors = ref([]);
 
-function submitFormLogin() {
+const submitFormLogin = async () => {
   responseLoginErrors.value = [];
-  // Call API login
-  axios
-    .post(`${$route}/Customer/Login`, {
+  // Call service login
+  try {
+    const data = await login({
       email: email.value,
       password: password.value,
-    })
-    .then((response) => {
-      console.log(response.data);
-      if (response.data.success === true) {
-        // Save user info to localStorage
-        localStorage.setItem("wdsmartuser", JSON.stringify(response.data.data));
-        localStorage.setItem("wdsmartcartid", response.data.data.cartId);
-        // Redirect to home page
-        window.location.href = "/";
-      } else {
-        // Show error messages
-        responseLoginErrors.value = response.data.errors;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
+      urlApi: `${url_api}/api/v1/auth/login`,
     });
-}
+    // store localstorage
+    localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));
+    location.reload();
+  } catch (error) {
+    responseLoginErrors.value.push(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+  }
+};
 
 // Handle logout
 function logout() {
-  localStorage.removeItem("wdsmartuser");
-  localStorage.removeItem("wdsmartcartid");
-  window.location.href = "/";
+  localStorage.removeItem("wdsmart_user");
+  location.reload();
 }
 
-// Handle remove item cart
-const removeItemCart = (productUrl) => {
-  // get cart id from local storage
-  const cartId = localStorage.getItem("wdsmartcartid");
-  // call api remove item cart
-  const url = `${$route}/Customer/RemoveItemCart?cartId=${cartId}&productUrl=${productUrl}`;
-  fetchApi(url, "DELETE")
-    .then((res) => {
-      if (res.success === true) {
-        // Emit event to App.vue to update cart
-        $emits("update-cart");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+// get cart
+const getCartInfo = async () => {
+  if (user) {
+    try {
+      const foundCart = await getCart(`${url_api}/api/v1/cart/${user._id}`);
+      cart.value = foundCart;
+    } catch (error) {
+      $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
+        position: "top",
+      });
+    }
+  }
 };
 
-onMounted(() => {
-  getAddressShops(`${url_api}/api/v1/address_shop`);
+// Handle remove item cart
+const removeItemCart = async (cartId, cartItemId) => {
+  // call service remove cart
+  try {
+    const res = await removeItem({
+      cartId,
+      cartItemId,
+      urlApi: `${url_api}/api/v1/cart/removeItem`,
+    });
+    if (res.status === 200) {
+      // refresh cart header
+      await getCartInfo();
+      setRefreshCart(true);
+    } else {
+      $toast.error("Đã xảy ra lỗi.", {
+        position: "top-right",
+      });
+    }
+  } catch (error) {
+    $toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.", {
+      position: "top",
+    });
+  }
+};
+
+// Handle enter form search
+const submitSearch = () => {};
+
+onMounted(async () => {
+  await getAddressShops(`${url_api}/api/v1/address_shop`);
+  await getCartInfo();
 });
 </script>

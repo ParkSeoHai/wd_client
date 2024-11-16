@@ -35,13 +35,17 @@
         
         &:hover {
           background-color: variables.$bg-primary;
-          color: variables.$color-white;
+          a {
+            color: variables.$color-white;
+          }
         }
 
         &.active {
           background-color: variables.$bg-primary;
-          color: variables.$color-white;
           pointer-events: none;
+          a {
+            color: variables.$color-white;
+          }
         }
       }
     }
@@ -56,25 +60,21 @@
   .block-collection-group {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    gap: 16px;
 
     .item {
-      padding-bottom: 8px;
       border: 1px solid #ededed;
       border-radius: 0;
       &:hover {
         filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
-      }
-      img {
-        height: 200px;
       }
     }
   }
 
   // Bottom
   .collection-bottom {
-    padding-top: 24px;
-    padding-bottom: 6px;
+    padding-top: 50px;
+    padding-bottom: 14px;
     .link {
       text-align: center;
       a {
@@ -91,6 +91,85 @@
         }
         i {
           font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  // section group new, product hot sale
+  .block-group {
+    margin-top: 14px;
+    position: relative;
+
+    .top-head {
+      margin-bottom: 15px;
+      h2 {
+        position: relative;
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding-left: 12px;
+        &:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background: #000;
+        }
+      }
+      a {
+        font-size: 1.4rem;
+        color: #828282;
+      }
+      i {
+        font-size: 1rem;
+      }
+    }
+  
+    .btn-arrow {
+      color: variables.$color-dark;
+      padding: 0;
+      &:hover {
+        color: #555;
+      }
+    }
+    .btn-arrow-left {
+      left: -8px;
+    }
+    .btn-arrow-right {
+      right: -8px;
+    }
+    &:hover .btn-arrow {
+      display: block;
+    }
+    .block-list-product {
+      position: relative;
+      overflow: hidden;
+      padding-left: 5px;
+      padding-bottom: 20px;
+      .list-product {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        transition: margin-left 0.3s linear;
+        .item {
+          margin-right: 15px;
+          width: 195px;
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+      .list-circle {
+        bottom: 0;
+        .item {
+          width: 10px;
+          height: 10px;
+          border-color: variables.$txt-primary;
+          &.active {
+            background-color: variables.$txt-primary;
+          }
         }
       }
     }

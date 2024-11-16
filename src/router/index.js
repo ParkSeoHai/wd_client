@@ -9,18 +9,15 @@ const router = createRouter({
       component: () => import('@/views/Index.vue')
     },
     {
-      path: '/san-pham/:textUrl',
+      path: '/san-pham/:productUrl',
       name: 'product',
       component: () => import('@/views/ProductDetail.vue'),
       props: true
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
     },
     {
       path: '/danh-muc/:categoryUrl',
-      name: 'ProductByCategory',
-      component: () => import('@/views/ProductFilter.vue'),
+      name: 'ProductCategory',
+      component: () => import('@/views/ProductCategory.vue'),
       props: true
     },
     {
@@ -40,11 +37,24 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/cart',
+      path: '/gio-hang',
       name: 'Cart',
-      component: () => import('@/views/Cart.vue'),
+      component: () => import('@/views/Cart.vue')
     },
-  ]
+    {
+      path: '/search/result/:searchStr?',
+      name: 'Search',
+      component: () => import('@/views/ProductSearch.vue'),
+      props: true
+    },
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    // return desired position
+    return {
+      top: 0,
+      behavior: "instant"
+    }
+  }
 })
 
 export default router;

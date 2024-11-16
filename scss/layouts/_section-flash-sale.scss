@@ -79,9 +79,10 @@
   // Body
   .flash-sale-body {
     position: relative;
-    padding: 0 40px 40px 40px;
+    padding: 0 40px 40px 35px;
     .block-body {
-      overflow: hidden;      
+      padding-left: 5px;
+      overflow: hidden;
     }
     .list-product {
       display: grid;
@@ -93,9 +94,6 @@
         max-width: 240px;
         &:last-child {
           margin-right: 0;
-        }
-        img {
-          height: 200px;
         }
         .fl_progressbar_group {
           margin-top: 8px;

@@ -5,22 +5,26 @@
   position: relative;
 
   .nav-group {
+    height: 100%;
+
     .list-menu-nav {
       max-height: 350px;
-      border: 1px solid #ccc;
+      border: 1px solid #e1e1e1;
       border-right: none;
+      min-height: 100%;
+      background-color: #fff;
       overflow-y: auto;
     }
 
-    .item::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 40px;
-      background-color: transparent;
-      top: 0;
-      left: calc(25% - 25px);
-    }
+    // .item::after {
+    //   content: "";
+    //   position: absolute;
+    //   width: 20px;
+    //   height: 40px;
+    //   background-color: transparent;
+    //   top: 0;
+    //   left: calc(25% - 25px);
+    // }
 
     .item:hover .nav-dropdown {
       display: grid;
@@ -32,11 +36,12 @@
       align-items: center;
       justify-content: space-between;
       min-height: 40px;
+      font-weight: 600;
 
       .content {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
       }
 
       .icon {

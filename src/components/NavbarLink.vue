@@ -6,7 +6,7 @@ const { category } = defineProps(["category"]);
 <template>
   <li class="item">
     <router-link
-      :to="`/danh-muc/${category.category_name}`"
+      :to="`/danh-muc/${category.category_url}`"
       class="nav-link"
       :title="`${category.category_name}`"
     >
@@ -28,7 +28,7 @@ const { category } = defineProps(["category"]);
         :key="subnav._id"
       >
         <router-link
-          :to="`/danh-muc/${subnav.category_name}`"
+          :to="`/danh-muc/${subnav.category_url}`"
           class="nav-dropdown__link lv1"
         >
           {{ subnav.category_name }}
@@ -40,7 +40,7 @@ const { category } = defineProps(["category"]);
             :key="subnavItem._id"
           >
             <router-link
-              :to="`/danh-muc/${subnavItem.category_name}`"
+              :to="`/danh-muc/${subnavItem.category_url}`"
               class="nav-dropdown__link"
               >{{ subnavItem.category_name }}</router-link
             >

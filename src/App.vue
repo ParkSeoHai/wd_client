@@ -1,56 +1,71 @@
 <template>
-  <Header @handle-modal="handleModal" @update-cart="updateCart" :cartItems="cartItems" />
+  <Header />
   <main>
     <div class="container p-0">
-      <RouterView @update-cart="updateCart" :cartItems="cartItems" />
+      <RouterView />
     </div>
-    <Modal v-if="isShowModal" />
+    <!-- modal background -->
+    <div v-if="isShowModal" @click="setModalBackground(false)" class="modal-main"></div>
   </main>
   <Footer />
 </template>
 
 <script setup>
-import { defineAsyncComponent, inject, onMounted, ref } from 'vue'
+import { provide, ref } from "vue";
+import "vue-toast-notification/dist/theme-sugar.css";
 // Component
-let Header = ref()
-import Footer from './components/Footer.vue'
-import Modal from './components/Modal.vue'
-// API
-import { fetchApi } from '@/api/Common.js'
+import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
+
+// get user
+const user = JSON.parse(localStorage.getItem("wdsmart_user"));
+
+// Variable dropdrow header top
+let listDropDownHeader = ref({
+  ddownSearch: false,
+  ddownStoreAddress: false,
+  ddownLogin: false,
+  ddownCart: false,
+});
+
+// modal account user
+const listModalAccount = ref({
+  modalAddAddress: false,
+  modalDelAddress: false,
+});
 
 // Show background-modal
-let isShowModal = ref(false)
-const $route = inject('$route') // Route call api
+let isShowModal = ref(false);
 
-// Hanlel show / hide modal
-function handleModal(value) {
-  isShowModal.value = value
-}
-
-// Get value cart object
-const cartItems = ref([])
-
-// Call api get cart
-const fetchAPI = async () => {
-  await getCartItems()
-  // Import component Header
-  Header.value = defineAsyncComponent(() => import('./components/Header.vue'))
-}
-
-// Get cart items
-const getCartItems = async () => {
-  if (!localStorage.getItem('wdsmartcartid')) {
-    return
+// Handle show / hide modal
+function setModalBackground(value) {
+  isShowModal.value = value;
+  if (value === false) {
+    // Hide modal background
+    isShowModal.value = false;
+    // Hide all dropdrown header
+    listDropDownHeader.value.ddownSearch = false;
+    listDropDownHeader.value.ddownStoreAddress = false;
+    listDropDownHeader.value.ddownLogin = false;
+    listDropDownHeader.value.ddownCart = false;
+    // Hide all modal account
+    listModalAccount.value.modalAddAddress = false;
+    listModalAccount.value.modalDelAddress = false;
   }
-  const urlGetCart = `${$route}/Customer/GetCartById?id=${localStorage.getItem('wdsmartcartid')}`
-  const responseGetCart = await fetchApi(urlGetCart)
-  cartItems.value = responseGetCart.data.cartItems
 }
 
 // Refresh cart
-const updateCart = async () => {
-  await getCartItems()
-}
+const refreshCartStatus = ref(false);
 
-onMounted(fetchAPI)
+const setRefreshCart = (value) => {
+  refreshCartStatus.value = value;
+};
+
+// Provide to component child
+provide("user", user);
+provide("setModalBackground", setModalBackground);
+provide("listDropDownHeader", listDropDownHeader);
+provide("refreshCartStatus", refreshCartStatus);
+provide("setRefreshCart", setRefreshCart);
+provide("listModalAccount", listModalAccount);
 </script>
