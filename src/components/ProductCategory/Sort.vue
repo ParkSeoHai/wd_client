@@ -1,9 +1,9 @@
 <template>
-  <div class="filter-sort-block__row">
-    <div class="filter-sort__title">Sắp xếp theo</div>
-    <div class="filter-sort__list-filter">
+  <div class="sort-block__row">
+    <div class="sort__title">Sắp xếp theo</div>
+    <div class="sort__list-filter">
       <button
-        class="btn filter-sort__btn"
+        class="btn sort__btn"
         v-for="(item, index) in listSorts"
         :key="index"
         :class="sortActive == index + 1 ? 'active' : ''"

@@ -1,5 +1,5 @@
 @use "../base/variables";
-@use "../base/mixin";
+@use "../base";
 
 /* Section flash sale */
 #section-flash-sale {
@@ -14,12 +14,33 @@
   }
   // Top
   .flash-sale-top {
+    @include base.d-flex;
+    justify-content: space-between;
     padding: 0 40px;
+    @include base.breakpoint(md) {
+      padding: 0 12px;
+    }
+    @include base.breakpoint(sm) {
+      display: block;
+    }
     .title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
       font-weight: 700;
       text-transform: uppercase;
       font-size: 2rem;
       color: variables.$color-white;
+      @include base.breakpoint(sm) {
+        font-size: 1.8rem;
+        justify-content: center;
+      }
+      img {
+        width: 35px;
+        @include base.breakpoint(sm) {
+          width: 40px;
+        }
+      }
     }
   }
   .list-item-notify {
@@ -28,6 +49,17 @@
       width: 500px;
       height: 30px;
       overflow: hidden;
+      @include base.breakpoint(xl) {
+        width: 300px;
+      }
+      @include base.breakpoint(lg) {
+        display: none;
+      }
+      @include base.breakpoint(sm) {
+        display: block;
+        margin-top: 10px;
+        width: 100%;
+      }
     }
 
     .list-product-suggess {
@@ -58,6 +90,12 @@
   }
 
   .countdown-deal {
+    .list {
+      @include base.breakpoint(sm) {
+        margin-top: 10px;
+        justify-content: center;
+      }
+    }
     .item {
       text-align: center;
       padding: 5px 7px;
@@ -80,18 +118,37 @@
   .flash-sale-body {
     position: relative;
     padding: 0 40px 40px 35px;
+    @include base.breakpoint(md) {
+      padding: 0 12px 33px 8px;
+    }
     .block-body {
       padding-left: 5px;
       overflow: hidden;
     }
-    .list-product {
+    .flash-sale__list-product {
+      // display: flex;
+      // flex-wrap: nowrap;
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       margin-top: 12px;
+      gap: 10px;
       transition: margin-left 0.3s linear;
       .item {
-        margin-right: 10px;
-        max-width: 240px;
+        // width: 237px;
+        // @include base.breakpoint(xxl) {
+        //   width: 200px;
+        // }
+        // @include base.breakpoint(xl) {
+        //   width: 209px;
+        // }
+        // @include base.breakpoint(lg) {
+        //   width: 202px;
+        // }
+        // @include base.breakpoint(md) {
+        //   width: 217px;
+        // }
+        // @include base.breakpoint(sm) {
+        // }
         &:last-child {
           margin-right: 0;
         }

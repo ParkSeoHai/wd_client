@@ -1,0 +1,31 @@
+@use "../base/variables";
+
+.filter-sort-block {
+    margin-bottom: 20px;
+    .filter-sort {
+        &__list--product {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+    }
+    
+    .filter-sort-bottom {
+        text-align: center;
+        margin-top: 20px;
+        &__btn {
+            min-width: 335px;
+            padding: 5px 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0px 2px 8px 1px #ccc;
+            &:hover {
+                color: variables.$txt-primary;
+                border-color: variables.$txt-primary;
+                background-color: rgba($color: variables.$txt-primary, $alpha: 0.1);
+            }
+        }
+    }
+}

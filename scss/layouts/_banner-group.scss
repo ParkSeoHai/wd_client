@@ -1,12 +1,31 @@
+@use "../base";
+
 /* Banner group */
 #banner-group {
   margin-top: 14px;
-  .bg-color-white {
+  .banner-group__block {
     padding-top: 5px;
+    overflow-x: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .banner-list {
+    display: grid;
+    gap: 10px;
   }
   .banner-item {
+    display: block;
     padding-top: 10px;
-    
+    @include base.breakpoint(lg) {
+      width: 310px;
+    }
+    @include base.breakpoint(md) {
+      width: 280px;
+    }
+    @include base.breakpoint(sm) {
+      width: 250px;
+    }
   }
   img {
     width: 100%;

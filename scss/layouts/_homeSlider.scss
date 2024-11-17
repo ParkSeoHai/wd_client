@@ -1,4 +1,4 @@
-@use "../base/variables";
+@use "../base";
 
 /* Main Home Slider */
 .home-slider {
@@ -6,7 +6,9 @@
 
   .nav-group {
     height: 100%;
-
+    @include base.breakpoint(lg) {
+      display: none;
+    }
     .list-menu-nav {
       max-height: 350px;
       border: 1px solid #e1e1e1;
@@ -53,7 +55,7 @@
       }
 
       &:hover > .content span {
-        color: variables.$colorShopHover;
+        color: base.$colorShopHover;
       }
     }
   }
@@ -84,7 +86,7 @@
     }
 
     &__link:hover {
-      color: variables.$colorShopHover;
+      color: base.$colorShopHover;
     }
 
     &__link.lv1 {
@@ -96,6 +98,15 @@
 
   .home-banner-slider {
     height: 350px;
+    padding-left: 0;
+    @include base.breakpoint(lg) {
+      padding-left: 6px;
+      height: 284px;
+    }
+    @include base.breakpoint(sm) {
+      padding-left: 6px;
+      height: 150px;
+    }
   }
 
   .banner-slider {

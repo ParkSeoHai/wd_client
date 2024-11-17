@@ -1,5 +1,4 @@
-@use "../base/mixin";
-@use "../base/variables";
+@use "../base";
 
 .section-home-blog {
   margin-top: 14px;
@@ -11,6 +10,9 @@
       font-weight: 700;
       text-transform: uppercase;
       padding-left: 12px;
+      @include base.breakpoint(xl) {
+        font-size: 1.8rem;
+      }
       &:before {
         content: "";
         position: absolute;
@@ -29,7 +31,11 @@
       font-size: 1rem;
     }
   }
-
+  .item-blog:last-child {
+    @include base.breakpoint(lg) {
+      margin-top: 14px;
+    }
+  }
   .blog-body {
     .content {
       margin-bottom: 15px;
@@ -39,16 +45,16 @@
       object-fit: cover;
     }
     .title {
-      @include mixin.d-webkit-box();
+      @include base.d-webkit-box();
       font-size: 1.7rem;
       font-weight: 600;
       margin-top: 12px;
       line-height: 20px;
     }
     .desc {
-      @include mixin.d-webkit-box(3);
+      @include base.d-webkit-box(3);
       font-size: 1.4rem;
-      color: variables.$txt-dark;
+      color: base.$txt-dark;
       margin-top: 8px;
       line-height: 20px;
     }

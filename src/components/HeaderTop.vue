@@ -1,11 +1,11 @@
 <template>
   <div class="header-top d-flex align-items-center">
-    <div class="container p-0">
+    <div class="container-xl">
       <div class="row d-flex align-items-center">
         <!-- Logo -->
         <Logo />
         <!-- Search -->
-        <div class="col-4 header-search p-0">
+        <div class="col-6 col-xl-4 col-lg-3 col-sm-5 header-search p-0">
           <form id="formSearch" @submit.prevent="submitSearch" class="header-search-form">
             <div class="form-group">
               <label for="header-search-input" hidden="hidden"></label>
@@ -110,10 +110,10 @@
           </div>
         </div>
         <!-- Actions -->
-        <div class="col-5 group-icon-header ps-3">
-          <ul class="list-icon-header d-flex align-items-center justify-content-between">
+        <div class="col-3 col-xl-5 col-lg-6 col-sm-4 group-icon-header ps-3">
+          <ul class="list-icon-header d-flex align-items-center">
             <!-- Phone number -->
-            <li class="item">
+            <li class="item header-top__contact">
               <a
                 href="tel:033301536"
                 class="item-link text-white d-flex align-items-center"
@@ -126,7 +126,10 @@
               </a>
             </li>
             <!-- Store address -->
-            <li class="item item-dropdown" @click="showDropdown('ddownStoreAddress')">
+            <li
+              class="item item-dropdown header-top__shop-address"
+              @click="showDropdown('ddownStoreAddress')"
+            >
               <div class="header-store block d-flex align-items-center">
                 <span class="icon"><i class="bi bi-geo-alt"></i></span>
                 <span class="text">
@@ -474,6 +477,7 @@ import { formatter } from "@/service/Common.js";
 import { login } from "@/service/AuthService";
 import { getCart, removeItem } from "@/service/CartService";
 import { searchProduct } from "@/service/ProductService";
+import router from "@/router";
 
 const $toast = useToast();
 
@@ -663,7 +667,11 @@ const removeItemCart = async (cartId, cartItemId) => {
 };
 
 // Handle enter form search
-const submitSearch = () => {};
+const submitSearch = () => {
+  if (search.input !== "") {
+    router.push({ path: `/search/result/${search.input}` });
+  }
+};
 
 onMounted(async () => {
   await getAddressShops(`${url_api}/api/v1/address_shop`);
