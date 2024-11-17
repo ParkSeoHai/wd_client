@@ -1,9 +1,12 @@
 <template>
   <!-- Banner group -->
   <section id="banner-group">
-    <div class="container p-0">
-      <div class="bg-color-white">
-        <div class="row">
+    <div class="bg-color-white banner-group__block">
+      <div class="">
+        <div
+          class="banner-list"
+          :style="[`grid-template-columns: repeat(${listBanners.length}, 1fr);`]"
+        >
           <!-- Item -->
           <HomeBannerGroupItem
             v-for="(bannerItem, index) in listBanners"
@@ -29,6 +32,11 @@ const listBanners = [
     imageUrl:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/udsv-right-laptop.jpg",
     linkUrl: "/banner-2",
+  },
+  {
+    imageUrl:
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/right-banner-14-10.jpg",
+    linkUrl: "/banner-3",
   },
   {
     imageUrl:

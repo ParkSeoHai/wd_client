@@ -10,7 +10,26 @@ body {
 main {
   position: relative;
   background-color: #f5f5f5;
-  padding-bottom: 320px;
+  padding-bottom: 350px;
+  @include mixin.breakpoint(lg) {
+    padding-bottom: 500px;
+  }
+  @include mixin.breakpoint(md) {
+    padding-bottom: 560px;
+  }
+  @include mixin.breakpoint(sm) {
+    padding-bottom: 900px;
+  }
+}
+
+.logo-link .logo-img {
+  height: 50px;
+  @include mixin.breakpoint(md) {
+    height: 45px;
+  }
+  @include mixin.breakpoint(sm) {
+    height: 35px;
+  }
 }
 
 a {
@@ -58,15 +77,24 @@ a {
   border: none;
   z-index: 100;
   display: none;
+  @include mixin.breakpoint(xl) {
+    display: block;
+  }
   &:hover {
     color: #c5c5c5;
   }
 }
 .btn-arrow-left {
   left: 0;
+  @include mixin.breakpoint(md) {
+    left: -8px;
+  }
 }
 .btn-arrow-right {
   right: 0;
+  @include mixin.breakpoint(md) {
+    right: -8px;
+  }
 }
 
 /* List circle */
@@ -153,6 +181,7 @@ a {
     .box-pro-prices {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
 
       margin-top: 5px;
@@ -160,10 +189,16 @@ a {
       span {
         font-size: 1.6rem;
         color: red;
+        @include mixin.breakpoint(sm) {
+          font-size: 1.5rem;
+        }
       }
       .compare-price {
         font-size: 1.5rem;
         color: #707070;
+        @include mixin.breakpoint(sm) {
+          font-size: 1.4rem;
+        }
       }
     }
     .hash-tag-loop {
@@ -173,8 +208,10 @@ a {
       margin: 10px 0;
       border: 1px solid #e5e7eb;
       li {
-        padding: 4px;
+        padding: 2px;
+        line-height: 18px;
         color: variables.$txt-dark;
+        @include mixin.d-webkit-box(2);
       }
     }
 
@@ -268,5 +305,39 @@ a {
     border: none;
     width: 40px;
     font-size: 1.6rem;
+  }
+}
+
+// Sort product
+.sort-block__row {
+  margin-bottom: 15px;
+  .sort__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .sort__list-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sort__btn {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 10px;
+    background-color: #f3f4f6;
+    border: 1px solid #ccc;
+    &.active {
+        color: variables.$txt-primary;
+        border-color: variables.$txt-primary;
+        background-color: rgba($color: variables.$txt-primary, $alpha: 0.1);
+    }
+  }
+  .sort__btn--icon {
+    margin-right: 5px;
+    font-size: 1.5rem;
   }
 }

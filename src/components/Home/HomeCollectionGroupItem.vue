@@ -20,7 +20,7 @@
       <div
         class="body-col product-new list-product d-grid"
         :style="[
-          `width: ${widthCollectionStyle}px`,
+          `width: ${products.length * widthItem.width}px`,
           `grid-template-columns: repeat(${products.length}, 1fr)`,
           `margin-left: ${marginLeftBlock}px`,
         ]"
@@ -32,7 +32,11 @@
           class="item"
           v-for="n in circleCount"
           :key="n"
-          :class="(n - 1) * -widthBlog === marginLeftBlock ? 'active' : ''"
+          :class="
+            (n - 1) * -(widthItem.width * widthItem.countShow) === marginLeftBlock
+              ? 'active'
+              : ''
+          "
           @click.prevent="handleCircleProduct(n - 1)"
         ></li>
       </ul>
@@ -49,9 +53,10 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import ProductItem from "../ProductItem.vue";
 import axios from "axios";
+import { useWindowSize } from "@vueuse/core";
 
 // Props import from HomeCollectionGroup.vue
 const { title, linkHref, urlApi } = defineProps(["title", "linkHref", "urlApi"]);
@@ -66,13 +71,33 @@ const getProducts = async () => {
 
 products.value = await getProducts();
 
-// Caculator width div class=`product-new list-product`
-const widthCollectionStyle = products.value.length * 210;
 // Width each blog product
-const widthBlog = 210 * 3;
+const { width } = useWindowSize();
+const widthItem = computed(() => {
+  let data = {
+    width: 207,
+    countShow: 3,
+  };
+  if (width.value < 1400) {
+    data.width = 177;
+  }
+  if (width.value < 1200) {
+    data.width = width.value / 4 - 20;
+    data.countShow = 2;
+  }
+  if (width.value < 768) {
+    data.width = width.value / 3 - 13;
+    data.countShow = 3;
+  }
+  if (width.value < 576) {
+    data.width = width.value / 2 - 20;
+    data.countShow = 2;
+  }
+  return data;
+});
 
 // Calc count circle display
-const circleCount = Math.ceil(products.value.length / 3);
+const circleCount = Math.ceil(products.value.length / widthItem.value.countShow);
 // Value margin style
 let marginLeftBlock = ref(0);
 
@@ -82,7 +107,10 @@ let showArrowRight = ref(true);
 
 const handleShowArrow = watchEffect(() => {
   // Arrow right
-  if (-marginLeftBlock.value + widthBlog > widthCollectionStyle) {
+  if (
+    -(marginLeftBlock.value + widthItem.value.width) * widthItem.value.countShow >
+    products.value.length * widthItem.value.width
+  ) {
     showArrowRight.value = false;
   } else {
     showArrowRight.value = true;
@@ -98,11 +126,11 @@ handleShowArrow;
 
 // Calc when prev, next blog product
 function handleArrowProduct(value) {
-  marginLeftBlock.value += value * widthBlog;
+  marginLeftBlock.value += value * (widthItem.value.width * widthItem.value.countShow);
 }
 
 // Calc when click circle
 function handleCircleProduct(value) {
-  marginLeftBlock.value = -(widthBlog * value);
+  marginLeftBlock.value = -(widthItem.value.width * widthItem.value.countShow * value);
 }
 </script>

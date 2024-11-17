@@ -2,19 +2,21 @@
   <!-- Breadcrumb -->
   <Breadcrumb :breadcrumbs="[]" :breadcrumbActive="breadcrumbActive" />
   <!-- Content -->
-  <Suspense>
-    <template #default>
-      <list-product @set-breadcrumb="setBreadcrumb" :search-str="searchStr" />
-    </template>
-    <template #fallback> Loading... </template>
-  </Suspense>
+  <div class="product-search-block">
+    <Suspense>
+      <template #default>
+        <container @set-breadcrumb="setBreadcrumb" :search-str="searchStr" />
+      </template>
+      <template #fallback> Loading... </template>
+    </Suspense>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 // Component
 import Breadcrumb from "@/components/Breadcrumb.vue";
-import ListProduct from "@/components/ProductSearch/ListProduct.vue";
+import Container from "@/components/ProductSearch/Container.vue";
 
 // Props from params route
 const { searchStr } = defineProps(["searchStr"]);

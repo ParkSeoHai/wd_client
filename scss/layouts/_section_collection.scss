@@ -1,17 +1,24 @@
-@use "../base/variables";
+@use "../base";
 
 .section_collection_group {
   margin-top: 14px;
 
   .top-head {
+    @include base.d-flex;
+    justify-content: space-between;
     margin-bottom: 15px;
+    @include base.breakpoint(md) {
+      display: block;
+    }
     h2 {
       position: relative;
       font-size: 2rem;
       font-weight: 700;
       text-transform: uppercase;
       padding-left: 12px;
-
+      @include base.breakpoint(md) {
+        font-size: 1.8rem;
+      }
       &:before {
         content: "";
         position: absolute;
@@ -23,7 +30,11 @@
       }
     }
     .menu-col {
+      flex-wrap: wrap;
       gap: 6px;
+      @include base.breakpoint(md) {
+        margin-top: 16px;
+      }
       .menu-item {
         padding: 8px 14px;
         border: 1px solid #ededed;
@@ -34,17 +45,17 @@
         cursor: pointer;
         
         &:hover {
-          background-color: variables.$bg-primary;
+          background-color: base.$bg-primary;
           a {
-            color: variables.$color-white;
+            color: base.$color-white;
           }
         }
 
         &.active {
-          background-color: variables.$bg-primary;
+          background-color: base.$bg-primary;
           pointer-events: none;
           a {
-            color: variables.$color-white;
+            color: base.$color-white;
           }
         }
       }
@@ -60,8 +71,16 @@
   .block-collection-group {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
-
+    gap: 12px;
+    @include base.breakpoint(xl) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @include base.breakpoint(md) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @include base.breakpoint(sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
     .item {
       border: 1px solid #ededed;
       border-radius: 0;
@@ -73,21 +92,24 @@
 
   // Bottom
   .collection-bottom {
-    padding-top: 50px;
+    padding-top: 40px;
     padding-bottom: 14px;
+    @include base.breakpoint(md) {
+      padding-top: 30px;
+    }
     .link {
       text-align: center;
       a {
         font-size: 1.4rem;
-        background-color: variables.$bg-primary;
-        color: variables.$color-white;
+        background-color: base.$bg-primary;
+        color: base.$color-white;
         padding: 12px 62px;
         border-radius: 5px;
         &:hover {
           background-color: #fff;
-          color: variables.$txt-primary;
+          color: base.$txt-primary;
           transition: background-color linear 0.3s;
-          border: 1px solid variables.$txt-primary;
+          border: 1px solid base.$txt-primary;
         }
         i {
           font-size: 1rem;
@@ -109,6 +131,9 @@
         font-weight: 700;
         text-transform: uppercase;
         padding-left: 12px;
+        @include base.breakpoint(sm) {
+          font-size: 1.8rem;
+        }
         &:before {
           content: "";
           position: absolute;
@@ -129,7 +154,7 @@
     }
   
     .btn-arrow {
-      color: variables.$color-dark;
+      color: base.$color-dark;
       padding: 0;
       &:hover {
         color: #555;
@@ -154,11 +179,7 @@
         grid-template-columns: repeat(3, 1fr);
         transition: margin-left 0.3s linear;
         .item {
-          margin-right: 15px;
-          width: 195px;
-          &:last-child {
-            margin-right: 0;
-          }
+          margin-right: 12px;
         }
       }
       .list-circle {
@@ -166,9 +187,9 @@
         .item {
           width: 10px;
           height: 10px;
-          border-color: variables.$txt-primary;
+          border-color: base.$txt-primary;
           &.active {
-            background-color: variables.$txt-primary;
+            background-color: base.$txt-primary;
           }
         }
       }

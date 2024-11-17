@@ -1,7 +1,7 @@
 <template>
   <Header />
   <main>
-    <div class="container p-0">
+    <div class="container-xl">
       <RouterView />
     </div>
     <!-- modal background -->

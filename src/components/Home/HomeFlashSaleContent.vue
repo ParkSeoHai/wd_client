@@ -1,11 +1,9 @@
 <template>
   <!-- Top -->
-  <div class="flash-sale-top d-flex align-items-center justify-content-between">
-    <h2 class="title d-flex">
-      <span>
-        <img src="../../assets/images/flashsale-hot.webp" alt="" />
-        SẢN PHẨM KHUYẾN MẠI
-      </span>
+  <div class="flash-sale-top">
+    <h2 class="title">
+      <img src="../../assets/images/flashsale-hot.webp" alt="" />
+      SẢN PHẨM KHUYẾN MẠI
     </h2>
     <div class="list-item-notify">
       <div class="marquee">
@@ -65,10 +63,10 @@
     </button>
     <div class="block-body">
       <div
-        class="list-product"
+        class="flash-sale__list-product list-product"
         :style="[
           `grid-template-columns: repeat(${productsLength}, 1fr)`,
-          `width: ${widthListProduct}px`,
+          `width: ${productsLength * widthItem.width}px`,
           `margin-left: ${marginLeft}px`,
         ]"
       >
@@ -85,7 +83,7 @@
           class="item"
           v-for="n in circleCount"
           :key="n"
-          :class="(n - 1) * -widthBlog === marginLeft ? 'active' : ''"
+          :class="(n - 1) * -(widthItem.width + 2) === marginLeft ? 'active' : ''"
           @click.prevent="handleCircleProduct(n - 1)"
         ></li>
       </ul>
@@ -101,10 +99,11 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 // Component
 import ProductItem from "../ProductItem.vue";
 import axios from "axios";
+import { useWindowSize } from "@vueuse/core";
 
 const urlApi = inject("url_api");
 
@@ -126,33 +125,60 @@ products.value = data.flash_sale_items;
 
 const productsLength = products.value.length || 0;
 
-// Calc count display circle / (1 circle = 5 product)
-// const circleCount = Math.ceil(productsLength / 5);
-const circleCount = productsLength + 1 - 5;
+// Calc width blog all product / reponsive
+const { width } = useWindowSize();
+const widthItem = computed(() => {
+  let data = {
+    width: 245,
+    countShow: 5,
+  };
+  if (width.value < 1400) {
+    data.width = 209;
+  }
+  if (width.value < 1200) {
+    data.width = width.value / 4 - 23;
+    data.countShow = 4;
+  }
+  if (width.value < 992) {
+    data.width = width.value / 3 - 30;
+    data.countShow = 3;
+  }
+  if (width.value < 768) {
+    data.width = width.value / 3 - 12;
+    data.countShow = 3;
+  }
+  if (width.value < 576) {
+    data.width = width.value / 2 - 18;
+    data.countShow = 2;
+  }
+  if (width.value < 356) {
+    data.width = width.value - 30;
+    data.countShow = 1;
+  }
+  return data;
+});
 
-// Calc width blog all product
-const widthListProduct = productsLength * 250;
-// Width each blog product
-const widthBlog = 250;
+// Calc count display circle
+const circleCount = productsLength + 1 - widthItem.value.countShow;
 
 // Value style margin left
 let marginLeft = ref(0);
 
 // Calc when prev, next blog product
 function handleArrowProduct(value) {
-  marginLeft.value += value * widthBlog;
+  marginLeft.value += value * (widthItem.value.width + 2);
 
   if (marginLeft.value > 0) {
-    marginLeft.value = -widthBlog * (circleCount - 1);
+    marginLeft.value = -(widthItem.value.width + 2) * (circleCount - 1);
   }
-  if (marginLeft.value < -widthBlog * (circleCount - 1)) {
+  if (marginLeft.value < -(widthItem.value.width + 2) * (circleCount - 1)) {
     marginLeft.value = 0;
   }
 }
 
 // Calc when click circle
 function handleCircleProduct(value) {
-  marginLeft.value = -(widthBlog * value);
+  marginLeft.value = -((widthItem.value.width + 2) * value);
 }
 
 const timeRunForwards = (data) => {

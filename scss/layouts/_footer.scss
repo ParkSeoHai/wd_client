@@ -1,4 +1,4 @@
-@use "../base/variables";
+@use "../base";
 
 #footer {
   position: absolute;
@@ -9,12 +9,31 @@
   background-color: #000;
   .footer-top {
     padding: 15px 0;
+    &__register {
+      @include base.d-flex;
+      justify-content: space-between;
+      @include base.breakpoint(sm) {
+        display: block;
+      }
+    }
     .title-regis {
       text-transform: uppercase;
       color: #fff;
       font-size: 1.7rem;
+      width: 30%;
+      @include base.breakpoint(lg) {
+        font-size: 1.6rem;
+      }
+      @include base.breakpoint(sm) {
+        width: 100%;
+        margin-bottom: 12px;
+      }
     }
     .form-send-mail {
+      width: 65%;
+      @include base.breakpoint(sm) {
+        width: 100%;
+      }
       .form-group {
         position: relative;
       }
@@ -22,7 +41,7 @@
         padding: 12px 100px 12px 36px;
         font-size: 1.4rem;
         border: none;
-        min-width: 400px;
+        width: 100%;
         background: #fff;
         &:focus-visible {
           border: none;
@@ -46,9 +65,15 @@
       }
     }
     .social-footer {
+      @include base.breakpoint(md) {
+        margin-top: 15px;
+      }
       a {
         font-size: 2.8rem;
         color: #fff;
+        @include base.breakpoint(sm) {
+          font-size: 2.5rem;
+        }
       }
     }
   }
@@ -65,10 +90,12 @@
     .information {
       p {
         padding: 8px 0;
+        line-height: 20px;
       }
       
       li {
         padding: 8px 0;
+        line-height: 20px;
       }
 
       li i {
@@ -81,15 +108,18 @@
         font-size: 1.7rem;
         font-weight: 600;
         margin-bottom: 14px;
+        @include base.breakpoint(md) {
+          margin-top: 20px;
+        }
       }
       ul {
-        list-style: circle;
+        list-style: disc;
         a {
           display: block;
           padding: 6px 0;
           color: #fff;
           &:hover {
-            color: variables.$colorShopHover;
+            color: base.$colorShopHover;
           }
         }
       }
@@ -99,14 +129,18 @@
       font-size: 1.7rem;
       font-weight: 600;
       margin-bottom: 14px;
+      @include base.breakpoint(md) {
+        margin-top: 20px;
+      }
     }
 
     .footer-support {
       li {
         padding: 6px 0;
+        line-height: 20px;
       }
       a {
-        color: variables.$txt-primary;
+        color: base.$txt-primary;
       }
     }
   }

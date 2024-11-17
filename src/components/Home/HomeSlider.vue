@@ -1,41 +1,39 @@
 <template>
   <!-- Home Slider -->
   <section id="home-slider" class="home-slider">
-    <div class="container p-0">
-      <div class="row">
-        <div class="col-3">
-          <!-- Navbar -->
-          <Navbar />
-        </div>
-        <div class="col-9 pt-3 ps-0 home-banner-slider">
-          <div class="banner-slider">
-            <button
-              v-if="imageSliders.length > 1"
-              @click.prevent="showSlider(-1)"
-              class="btn-arrow btn-arrow-left"
-            >
-              <i class="bi bi-chevron-compact-left"></i>
-            </button>
-            <a :href="sliderShow.link" class="slider-link">
-              <img :src="sliderShow.image" alt="" />
-            </a>
-            <button
-              v-if="imageSliders.length > 1"
-              @click.prevent="showSlider(1)"
-              class="btn-arrow btn-arrow-right"
-            >
-              <i class="bi bi-chevron-compact-right"></i>
-            </button>
-            <ul class="list-circle" v-if="imageSliders.length > 1">
-              <li
-                class="item"
-                v-for="n in imageSliders.length"
-                :key="n"
-                :class="sliderIndex === n - 1 ? 'active' : ''"
-                @click.prevent="handleCircle(n - 1)"
-              ></li>
-            </ul>
-          </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <!-- Navbar -->
+        <Navbar />
+      </div>
+      <div class="col-lg-9 pt-3 home-banner-slider">
+        <div class="banner-slider">
+          <button
+            v-if="imageSliders.length > 1"
+            @click.prevent="showSlider(-1)"
+            class="btn-arrow btn-arrow-left"
+          >
+            <i class="bi bi-chevron-compact-left"></i>
+          </button>
+          <a :href="sliderShow.link" class="slider-link">
+            <img :src="sliderShow.image" alt="" />
+          </a>
+          <button
+            v-if="imageSliders.length > 1"
+            @click.prevent="showSlider(1)"
+            class="btn-arrow btn-arrow-right"
+          >
+            <i class="bi bi-chevron-compact-right"></i>
+          </button>
+          <ul class="list-circle" v-if="imageSliders.length > 1">
+            <li
+              class="item"
+              v-for="n in imageSliders.length"
+              :key="n"
+              :class="sliderIndex === n - 1 ? 'active' : ''"
+              @click.prevent="handleCircle(n - 1)"
+            ></li>
+          </ul>
         </div>
       </div>
     </div>
