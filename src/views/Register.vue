@@ -5,7 +5,7 @@
     :breadcrumbs="breadcrumbs"
     :breadcrumb-active="'Đăng ký'"
   />
-  <div class="template-account" style="height: 600px">
+  <div class="template-account template-register">
     <div class="cloud x1"></div>
     <div class="cloud x2"></div>
     <div class="cloud x3"></div>

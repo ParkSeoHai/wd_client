@@ -5,7 +5,7 @@
         <!-- Logo -->
         <Logo />
         <!-- Search -->
-        <div class="col-6 col-xl-4 col-lg-3 col-sm-5 header-search p-0">
+        <div class="col-6 col-xl-4 col-lg-5 col-sm-5 header-search pe-5">
           <form id="formSearch" @submit.prevent="submitSearch" class="header-search-form">
             <div class="form-group">
               <label for="header-search-input" hidden="hidden"></label>
@@ -110,7 +110,7 @@
           </div>
         </div>
         <!-- Actions -->
-        <div class="col-3 col-xl-5 col-lg-6 col-sm-4 group-icon-header ps-3">
+        <div class="col-3 col-xl-5 col-lg-4 col-sm-4 group-icon-header">
           <ul class="list-icon-header d-flex align-items-center">
             <!-- Phone number -->
             <li class="item header-top__contact">
@@ -240,7 +240,7 @@
                 <div
                   v-show="listDropDown.ddownLogin"
                   @click.stop=""
-                  class="header-action_dropdown bg-grey-opacity"
+                  class="header-action_dropdown header-login_dropdown-block bg-grey-opacity"
                 >
                   <div class="header-dropdown_content header-dropdown_login">
                     <div class="icon-close" @click="closeDropdown('ddownLogin')">
@@ -266,10 +266,15 @@
                         >
                       </p>
                       <div class="actions d-flex align-items-center gap-3">
-                        <RouterLink to="/user/account" class="btn btn-primary w-75"
+                        <RouterLink
+                          to="/user/account"
+                          class="btn dropdown_login-btn btn-primary w-75"
                           >Xem chi tiết</RouterLink
                         >
-                        <button @click="logout" class="btn btn-outline-primary w-25">
+                        <button
+                          @click="logout"
+                          class="btn dropdown_login-btn btn-outline-primary w-25"
+                        >
                           Đăng xuất
                         </button>
                       </div>

@@ -1,4 +1,3 @@
-@use "../base/variables";
 @use "../base";
 
 /* Header */
@@ -11,7 +10,7 @@
   .header-action_dropdown {
     position: absolute;
     top: 50px;
-    right: -50%;
+    right: -5%;
     z-index: 999;
     width: 420px;
     padding: 10px 20px;
@@ -20,6 +19,9 @@
     border: 1px solid #999;
     cursor: default;
     animation: d-block-dropdown linear 0.2s;
+    @include base.breakpoint(sm) {
+      width: calc(100vw - 1px);
+    }
     &:before {
       content: "";
       position: absolute;
@@ -35,17 +37,22 @@
       width: 0;
       height: 0;
       top: -10px;
-      right: 20%;
+      right: 10%;
       border-left: 12px solid transparent;
       border-right: 12px solid transparent;
       border-bottom: 12px solid #f8f8f8;
+    }
+    &.header-cart_dropdown::after {
+      @include base.breakpoint(md) {
+        right: 2%;
+      }
     }
   }
 
   .header-dropdown_content {
     position: relative;
     .title {
-      color: variables.$txt-dark;
+      color: base.$txt-dark;
       margin-bottom: 5px;
       text-transform: uppercase;
       font-size: 1.7rem;
@@ -57,10 +64,10 @@
       top: -5px;
       right: -15px;
       font-size: 2rem;
-      color: variables.$color-dark;
+      color: base.$color-dark;
       &:hover {
         cursor: pointer;
-        color: variables.$color-white;
+        color: base.$color-white;
         background-color: rgb(232, 8, 8);
       }
     }
@@ -113,12 +120,18 @@
         }
         .infoLocation {
           padding-top: 8px;
-          color: variables.$txt-primary;
+          color: base.$txt-primary;
           span {
-            color: variables.$txt-primary;
+            color: base.$txt-primary;
           }
         }
       }
+    }
+  }
+
+  .header-login_dropdown-block {
+    @include base.breakpoint(sm) {
+      right: -80%;
     }
   }
 
@@ -133,11 +146,19 @@
     }
     .actions {
       margin-top: 20px;
+      @include base.breakpoint(sm) {
+        margin-top: 5px;
+      }
       button, a {
         border-radius: 0;
         padding: 12px;
         font-size: 1.3rem;
         font-weight: 600;
+      }
+      .dropdown_login-btn {
+        @include base.breakpoint(sm) {
+          width: 50% !important;
+        }
       }
     }
   }
@@ -171,22 +192,25 @@
   // Header top
   .header-top {
     padding: 8px 0;
-    background: variables.$bg-header;
+    background: base.$bg-header;
   }
 
   .header-search {
     position: relative;
+    @include base.breakpoint(lg) {
+      padding-right: 0 !important;
+    }
     &-form {
       width: 100%;
     }
     &-input {
       font-size: 1.6rem;
-      color: variables.$txt-dark;
+      color: base.$txt-dark;
       border: none;
       border-radius: 8px;
       padding: 8px 80px 8px 8px;
       @include base.breakpoint(md) {
-        padding: 4px 80px 4px 8px;
+        padding: 6px 52px 6px 8px;
         font-size: 1.6rem;
       }
       &:focus {
@@ -196,20 +220,35 @@
     .btn-search {
       position: absolute;
       top: 50%;
-      right: 2px;
+      right: 32px;
       padding: 2px 24px;
       font-size: 2rem;
       transform: translateY(-50%);
+      @include base.breakpoint(lg) {
+        right: 2px;
+      }
       @include base.breakpoint(md) {
         padding: 0 14px;
         font-size: 1.8rem;
       }
+      @include base.breakpoint(sm) {
+        right: 4px;
+      }
     }
     &__dropdown {
-      left: 0;
+      left: 5px;
       width: 500px;
       max-height: 500px;
       overflow-y: auto;
+      @include base.breakpoint(md) {
+        left: -60%;
+        width: calc(100vw - 2px);
+      }
+      @include base.breakpoint(sm) {
+        left: -50%;
+        width: calc(100vw - 2px);
+        max-height: 350px;
+      }
       &.header-action_dropdown:after {
         right: 80%;
       }
@@ -278,7 +317,7 @@
     }
     .item {
       position: relative;
-      color: variables.$color-white;
+      color: base.$color-white;
       cursor: pointer;
 
       .text {
@@ -320,8 +359,17 @@
         }
         // Drop down
         .header-cart_dropdown {
-          right: -30%;
+          right: 0;
           top: 55px;
+          @include base.breakpoint(sm) {
+            right: -7px;
+            padding: 10px;
+          }
+          .icon-close {
+            @include base.breakpoint(sm) {
+              right: -6px;
+            }
+          }
         }
         .mini_cart_header {
           color: #444;
@@ -338,6 +386,9 @@
             font-size: 1.6rem;
             font-weight: 600;
             color: #000;
+            @include base.breakpoint(sm) {
+              display: block;
+            }
           }
           &__price {
             color: red;
@@ -346,12 +397,19 @@
           }
         }
         .actions {
+          @include base.breakpoint(sm) {
+            column-gap: 8px;
+          }
           a {
             border-radius: 0;
             padding: 12px;
             font-size: 1.3rem;
             font-weight: 600;
             min-width: 180px;
+            @include base.breakpoint(sm) {
+              min-width: 0;
+              flex: 1;
+            }
           }
         }
 
@@ -359,6 +417,9 @@
           margin-bottom: 5px;
           max-height: 500px;
           overflow-y: auto;
+          @include base.breakpoint(md) {
+            max-height: 300px;
+          }
         }
 
         .item-cart {
@@ -407,7 +468,7 @@
             padding: 6px;
             cursor: pointer;
             &:hover {
-              color: variables.$txt-primary;
+              color: base.$txt-primary;
               transition: color linear 0.2s;
             }
           }
@@ -417,9 +478,12 @@
       .cart-btn {
         padding: 2px 12px;
         background: transparent;
-        border: 2px solid variables.$color-white;
+        border: 2px solid base.$color-white;
         @include base.breakpoint(md) {
           border: none;
+        }
+        @include base.breakpoint(sm) {
+          padding: 2px;
         }
         .text {
           @include base.breakpoint(md) {
@@ -428,7 +492,11 @@
         }
       }
     }
-    .header-top__contact,
+    .header-top__contact {
+      @include base.breakpoint(xl) {
+        display: none;
+      }
+    }
     .header-top__shop-address {
       @include base.breakpoint(lg) {
         display: none;
@@ -438,15 +506,34 @@
 
   //  Header bottom
   .header-bottom {
-    background: variables.$color-white;
+    background: base.$color-white;
     box-shadow: 0 4px 12px #ccc;
     @include base.breakpoint(md) {
       display: none;
     }
+    .navigation {
+      position: relative;
+      &_dropdown {
+        position: absolute;
+        top: 36px;
+        left: 0;
+        right: 0;
+        height: 350px;
+        margin-right: 0;
+        z-index: 999;
+        @include base.breakpoint(lg) {
+          top: 45px;
+          height: 280px;
+        }
+        .nav-dropdown {
+          left: calc(25% - 6px);
+        }
+      }
+    }
     .block-left {
       padding: 6px 15px;
       background: #4176ee;
-      color: variables.$color-white;
+      color: base.$color-white;
       font: {
         size: 1.6rem;
         weight: 700;
@@ -463,7 +550,7 @@
         transition: color 0.3s;
 
         &:hover > span.title {
-          color: variables.$colorShopHover;
+          color: base.$colorShopHover;
         }
       }
       .title {

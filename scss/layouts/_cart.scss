@@ -1,4 +1,4 @@
-@use "../base/variables";
+@use "../base";
 
 .cart-page {
     min-height: 500px;
@@ -27,7 +27,7 @@
             margin: 20px 0;
             text-align: center;
             a {
-                color: variables.$txt-primary;
+                color: base.$txt-primary;
                 font-weight: 700;
             }
         }
@@ -37,6 +37,21 @@
             justify-content: space-between;
             padding: 10px 0;
             border-top: 1px solid #eee;
+            @include base.breakpoint(lg) {
+                flex-direction: column;
+            }
+
+            &__right {
+                display: flex;
+                justify-content: space-between;
+                width: 40%;
+                @include base.breakpoint(lg) {
+                    width: 100%;
+                }
+                @include base.breakpoint(sm) {
+                    flex-direction: column;
+                }
+            }
 
             &:first-child {
                 border-top: none;
@@ -44,6 +59,9 @@
 
             &__info--product {
                 width: 60%;
+                @include base.breakpoint(lg) {
+                    width: 100%;
+                }
             }
 
             &__img img {
@@ -60,24 +78,40 @@
                 font-size: 1.5rem;
                 font-weight: 600;
                 margin-bottom: 8px;
+                line-height: 22px;
             }
 
             &__group--option {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-right: 16px;
+
+                @include base.breakpoint(lg) {
+                    display: block;
+                }
 
                 .item-option {
                     font-size: 1.4rem;
+                    line-height: 20px;
                 }
 
                 .item-option__price {
-                    margin-left: 10px;
                     color: #e70303;
+                    @include base.breakpoint(lg) {
+                        margin-top: 8px;
+                    }
                 }
             }
 
             &__qty {
                 text-align: center;
+                @include base.breakpoint(lg) {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
             }
 
             &__remove {
@@ -86,11 +120,12 @@
                 font-weight: 700;
                 color: #000;
                 cursor: pointer;
+
                 span {
                     border-bottom: 1px solid #000;
                 }
                 &:hover {
-                    color: variables.$txt-primary;
+                    color: base.$txt-primary;
                     transition: color linear 0.2s;
                 }
             }
@@ -100,20 +135,32 @@
                 font-weight: 700;
                 color: #e70303;
                 margin: auto 0;
+                @include base.breakpoint(sm) {
+                    margin-top: 12px;
+                }
             }
         }
     }
+
     .cart-right {
+        @include base.breakpoint(md) {
+            margin-top: 15px;
+        }
         .cart-total {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
             padding: 15px 0;
             font-size: 1.6rem;
             font-weight: 700;
             &__price {
                 color: #e70303;
                 font-size: 2rem;
+                @include base.breakpoint(md) {
+                    font-size: 1.8rem;
+                }
             }
         }
     }

@@ -101,7 +101,7 @@ onMounted(async () => {
   <Breadcrumb breadcrumb-active="Giỏ hàng" />
   <section id="cart-template" class="cart-page">
     <div class="row">
-      <div class="col-9">
+      <div class="col-lg-8 col-md-7">
         <div class="cart-left bg-color-white">
           <div class="cart-title">
             <h2>Giỏ hàng:</h2>
@@ -134,38 +134,40 @@ onMounted(async () => {
                   </div>
                 </div>
               </div>
-              <div class="cart-item__qty">
-                <div class="selector-actions">
-                  <div
-                    class="quantity-area d-flex align-items-center justify-content-between"
-                  >
-                    <button
-                      type="button"
-                      @click.prevent="updateQuantityItemCart(cart._id, item._id, -1)"
+              <div class="cart-item__right">
+                <div class="cart-item__qty">
+                  <div class="selector-actions cart-item__selector">
+                    <div
+                      class="quantity-area d-flex align-items-center justify-content-between"
                     >
-                      -
-                    </button>
-                    <input
-                      type="text"
-                      min="1"
-                      max="999"
-                      readonly
-                      :value="item.quantity"
-                    />
-                    <button
-                      type="button"
-                      @click.prevent="updateQuantityItemCart(cart._id, item._id, 1)"
-                    >
-                      +
-                    </button>
+                      <button
+                        type="button"
+                        @click.prevent="updateQuantityItemCart(cart._id, item._id, -1)"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="text"
+                        min="1"
+                        max="999"
+                        readonly
+                        :value="item.quantity"
+                      />
+                      <button
+                        type="button"
+                        @click.prevent="updateQuantityItemCart(cart._id, item._id, 1)"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div class="cart-item__remove">
+                    <span @click="removeItemCart(cart._id, item._id)">Xóa</span>
                   </div>
                 </div>
-                <div class="cart-item__remove">
-                  <span @click="removeItemCart(cart._id, item._id)">Xóa</span>
+                <div class="cart-item__price">
+                  <span>{{ formatter(item.quantity * item.price_at_added) }}</span>
                 </div>
-              </div>
-              <div class="cart-item__price">
-                <span>{{ formatter(item.quantity * item.price_at_added) }}</span>
               </div>
             </div>
           </div>
@@ -178,7 +180,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-lg-4 col-md-5">
         <div class="cart-right bg-color-white">
           <div class="cart-title">
             <p>Thông tin đơn hàng</p>

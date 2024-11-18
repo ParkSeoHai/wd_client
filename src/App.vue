@@ -28,6 +28,8 @@ let listDropDownHeader = ref({
   ddownCart: false,
 });
 
+const showNavHeaderBottom = ref(false);
+
 // modal account user
 const listModalAccount = ref({
   modalAddAddress: false,
@@ -48,6 +50,8 @@ function setModalBackground(value) {
     listDropDownHeader.value.ddownStoreAddress = false;
     listDropDownHeader.value.ddownLogin = false;
     listDropDownHeader.value.ddownCart = false;
+    // Hide all dropdrown header bottom
+    showNavHeaderBottom.value = false;
     // Hide all modal account
     listModalAccount.value.modalAddAddress = false;
     listModalAccount.value.modalDelAddress = false;
@@ -68,4 +72,5 @@ provide("listDropDownHeader", listDropDownHeader);
 provide("refreshCartStatus", refreshCartStatus);
 provide("setRefreshCart", setRefreshCart);
 provide("listModalAccount", listModalAccount);
+provide("showNavHeaderBottom", showNavHeaderBottom);
 </script>
