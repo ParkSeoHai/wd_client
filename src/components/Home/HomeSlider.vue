@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-lg-3">
         <!-- Navbar -->
-        <Navbar />
+        <navbar class="nav-home__slider" />
       </div>
       <div class="col-lg-9 pt-3 home-banner-slider">
         <div class="banner-slider">

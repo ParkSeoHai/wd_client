@@ -4,11 +4,14 @@
 .home-slider {
   position: relative;
 
-  .nav-group {
-    height: 100%;
+  .nav-home__slider {
     @include base.breakpoint(lg) {
       display: none;
     }
+  }
+
+  .nav-group {
+    height: 100%;
     .list-menu-nav {
       max-height: 350px;
       border: 1px solid #e1e1e1;
@@ -16,6 +19,10 @@
       min-height: 100%;
       background-color: #fff;
       overflow-y: auto;
+      .item__icon {
+        min-height: 40px;
+        padding: 0 12px;
+      }
     }
 
     // .item::after {
@@ -34,9 +41,6 @@
 
     .nav-link {
       padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       min-height: 40px;
       font-weight: 600;
 
@@ -44,6 +48,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        width: 100%;
       }
 
       .icon {

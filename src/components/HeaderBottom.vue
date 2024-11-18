@@ -1,10 +1,34 @@
+<script setup lang="ts">
+import { inject } from "vue";
+import Navbar from "./Navbar.vue";
+
+const showNavHeaderBottom = inject("showNavHeaderBottom");
+const setModalBackground = inject("setModalBackground");
+
+const toggleNavDropdown = () => {
+  showNavHeaderBottom.value = !showNavHeaderBottom.value;
+  if (showNavHeaderBottom.value) {
+    setModalBackground(true);
+  } else {
+    setModalBackground(false);
+  }
+};
+</script>
+
 <template>
   <div class="header-bottom">
     <div class="container-xl">
       <div class="navigation">
+        <!-- dropdown nav -->
+        <div v-if="showNavHeaderBottom" class="navigation_dropdown home-slider row">
+          <navbar class="col-3" />
+        </div>
         <div class="row d-flex align-items-center">
           <div class="col-3">
-            <div class="block-left d-flex align-items-center">
+            <div
+              @click="toggleNavDropdown"
+              class="block-left d-flex align-items-center cursor-pointer"
+            >
               <span class="icon">
                 <i class="bi bi-command"></i>
               </span>

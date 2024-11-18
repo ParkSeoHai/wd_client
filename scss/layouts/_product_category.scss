@@ -1,4 +1,4 @@
-@use "../base/variables";
+@use "../base";
 
 .filter-sort-block {
     margin-bottom: 20px;
@@ -6,7 +6,16 @@
         &__list--product {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
+            gap: 10px;
+            @include base.breakpoint(xl) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            @include base.breakpoint(md) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            @include base.breakpoint(sm) {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     }
     
@@ -22,9 +31,9 @@
             background-color: #fff;
             box-shadow: 0px 2px 8px 1px #ccc;
             &:hover {
-                color: variables.$txt-primary;
-                border-color: variables.$txt-primary;
-                background-color: rgba($color: variables.$txt-primary, $alpha: 0.1);
+                color: base.$txt-primary;
+                border-color: base.$txt-primary;
+                background-color: rgba($color: base.$txt-primary, $alpha: 0.1);
             }
         }
     }

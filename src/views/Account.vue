@@ -261,7 +261,7 @@
     <p v-if="idAddressUpdate" class="modal-new__address--header">Cập nhật địa chỉ</p>
     <p v-else class="modal-new__address--header">Địa chỉ mới</p>
     <form @submit.prevent="addCustomerAddress" class="modal-new__address--form">
-      <div class="d-flex align-items-center gap-4">
+      <div class="modal-address__group-input">
         <input
           type="text"
           class="form-control"
@@ -277,7 +277,7 @@
           v-model="addressCustomer.phone_number"
         />
       </div>
-      <div class="d-flex align-items-center gap-4 mt-4">
+      <div class="mt-4 modal-address__group-input">
         <input
           type="text"
           class="form-control"
@@ -300,7 +300,7 @@
           v-model="addressCustomer.xa_phuong"
         />
       </div>
-      <div class="d-flex align-items-center gap-4 mt-4">
+      <div class="mt-4 modal-address__group-input">
         <input
           type="text"
           class="form-control"
