@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { inject, ref, watch } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { login } from "@/service/AuthService";
 import { useToast } from "vue-toast-notification";
@@ -99,6 +99,7 @@ const $toast = useToast();
 const loading = ref(false);
 
 const url_api = inject("url_api");
+const user = inject("user");
 
 const responseErrors = ref([]);
 const message = "(*) Vui lòng không bỏ trống";
@@ -176,4 +177,10 @@ const submitForm = async () => {
     }, 1000);
   }
 };
+
+onMounted(() => {
+  if (user) {
+    window.location.href = "/";
+  }
+});
 </script>

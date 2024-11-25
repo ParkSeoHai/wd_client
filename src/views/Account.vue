@@ -361,6 +361,7 @@ import { useToast } from "vue-toast-notification";
 const $toast = useToast();
 
 const urlApi = inject("url_api");
+
 // inject from app.vue
 const user = inject("user");
 const listModalAccount = inject("listModalAccount");
@@ -613,6 +614,7 @@ const getFavorite = async () => {
 };
 
 onMounted(async () => {
+  setModalBackground(false);
   await getAccount();
 });
 </script>

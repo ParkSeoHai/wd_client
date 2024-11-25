@@ -17,6 +17,7 @@
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
     "lodash.debounce": "^4.0.8",
+    "swiper": "^11.1.15",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
     "vue-toast-notification": "^3.1.2",

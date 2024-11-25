@@ -1,15 +1,19 @@
 <script setup>
-import { computed, inject, ref, watch } from "vue";
+import { useElementSize } from "@vueuse/core";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { formatter, calcProductPriceSale } from "@/service/Common.js";
 import { useToast } from "vue-toast-notification";
 import axios from "axios";
 import { addItem } from "@/service/CartService";
 import ProductDescription from "./ProductDescription.vue";
 import ProductSpecifications from "./ProductSpecifications.vue";
+import ProductRating from "./ProductRating.vue";
 
 const $toast = useToast();
 
 const urlApi = inject("url_api");
+const user = inject("user");
 
 // inject from App.vue
 const setRefreshCart = inject("setRefreshCart");
@@ -17,12 +21,84 @@ const setRefreshCart = inject("setRefreshCart");
 const emit = defineEmits([["setBreadcrumb"]]);
 // Props
 const { productUrl } = defineProps(["productUrl"]);
+const favoriteItemExist = ref(false);
 
 // Func get product by url
 const getProductByUrl = async () => {
   const url = `${urlApi}/api/v1/product/${productUrl}`;
   const res = await axios.get(url);
   return res.data.metadata;
+};
+
+// if user was login then check product in favorite
+const checkProductInFavorite = async () => {
+  if (user) {
+    const res = await axios.post(`${urlApi}/api/v1/customer/favorite/checkItem`, {
+      userId: user._id,
+      productId: product.value._id,
+    });
+    return res.data;
+  }
+  return false;
+};
+
+const toggleServiceProductFavorite = async (urlApi) => {
+  // call api
+  try {
+    const response = await axios.post(urlApi, {
+      userId: user._id,
+      productId: product.value._id,
+    });
+    $toast.success(response.data.message, {
+      position: "top",
+    });
+    return response.data;
+  } catch (error) {
+    // Kiểm tra lỗi và xử lý phù hợp
+    if (error.response) {
+      // Lỗi từ server
+      $toast.error(error.response.data.message || "Lỗi từ server", {
+        position: "top",
+      });
+      throw new Error(error.response.data.message || "Lỗi từ server");
+    } else if (error.request) {
+      // Không nhận được phản hồi
+      $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
+    } else {
+      // Lỗi khác
+      $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
+  }
+};
+
+// handle toggle product to favorite
+const toggleProductFavorite = async () => {
+  // check user
+  if (!user) {
+    $toast.info("Vui lòng đăng nhập", {
+      position: "top",
+    });
+    return;
+  }
+  if (favoriteItemExist.value) {
+    // remove
+    const res = await toggleServiceProductFavorite(
+      `${urlApi}/api/v1/customer/favorite/removeItem`
+    );
+    if (res.status === 200) favoriteItemExist.value = false;
+  } else {
+    // add
+    const res = await toggleServiceProductFavorite(
+      `${urlApi}/api/v1/customer/favorite/addItem`
+    );
+    if (res.status === 201) favoriteItemExist.value = true;
+  }
 };
 
 let data = await getProductByUrl();
@@ -51,8 +127,6 @@ setBreadcrumb();
 
 // Count add to cart
 let count = ref(1);
-// Variable storage value active thumbnail
-const activeThumbnail = ref(0);
 // Option
 const activeOptionParent = ref(0);
 const activeOptionChild = ref(0);
@@ -97,17 +171,6 @@ function setShopAvailable() {
   return shops;
 }
 
-// Variable value margin-left style
-let marginLeftThumbnail = ref(0);
-
-// Calc width block thumbnail - 1 item: 95px
-const widthThumbnail = product.value.images.length * 95;
-
-// Handle click button next/prev image active
-function handleImageActive(n) {
-  activeThumbnail.value -= n;
-}
-
 // Watch handle count add cart
 watch(count, () => {
   let quantity = optionParent.value.stock;
@@ -119,58 +182,45 @@ watch(count, () => {
   } else if (count.value < 1) {
     count.value = 1;
   } else if (count.value > quantity) {
-    alert("Số lượng sản phẩm không đủ");
+    $toast.default("Số lượng sản phẩm không đủ", { position: "top" });
     count.value = quantity;
   }
 });
 
-// Handle product thumbnail mouse event
-let isStartThumbEvent = false;
-let offsetXArray = [];
-let widthX = 0;
-let marginLeftOld = 0;
+// handle swiper main product
+let swiperProduct = null;
 
-function thumbMousemove(event) {
-  if (!isStartThumbEvent) return;
-  // Check if offsetX already exists in the array
-  if (!offsetXArray.includes(event.pageX)) {
-    offsetXArray.push(event.pageX);
-    let startValueArr = offsetXArray[0];
-    let endValueArr = offsetXArray[offsetXArray.length - 1];
-    // Giá trị cuối mảng - giá trị đầu mảng
-    widthX = endValueArr - startValueArr;
-    // Tính giá trị margin left
-    marginLeftThumbnail.value = widthX + marginLeftOld;
-  }
-}
+const onSwiper = (swiper) => {
+  swiperProduct = swiper;
+};
 
-function thumbMousedown() {
-  isStartThumbEvent = true;
-  offsetXArray = [];
-  widthX = 0;
-}
+const onSlideChange = () => {
+  activeThumb.value = swiperProduct.realIndex;
+};
 
-function thumbMouseup() {
-  isStartThumbEvent = false;
-  marginLeftOld += widthX;
-  if (marginLeftThumbnail.value > 0) {
-    marginLeftOld = 0;
-  } else if (marginLeftThumbnail.value < -(product.value.images.length - 9) * 95) {
-    marginLeftOld = -(product.value.images.length - 9) * 95;
-  }
-  marginLeftThumbnail.value = marginLeftOld;
-}
+// handle swiper thumb product
+const swiperProductThumbRef = ref(null);
+const activeThumb = ref(0);
 
-function thumbMouseleave() {
-  isStartThumbEvent = false;
-  // Handle margin left
-  if (marginLeftThumbnail.value > 0) {
-    marginLeftOld = 0;
-  } else if (marginLeftThumbnail.value < -(product.value.images.length - 9) * 95) {
-    marginLeftOld = -(product.value.images.length - 9) * 95;
-  }
-  marginLeftThumbnail.value = marginLeftOld;
-}
+// Tính số slide thumbs
+const { width } = useElementSize(swiperProductThumbRef);
+const slidePerView = ref(0);
+watch(width, () => {
+  slidePerView.value = Math.round(width.value / 60);
+});
+
+const onThumbnailClick = (index) => {
+  activeThumb.value = index;
+  swiperProduct.slideTo(index);
+};
+
+const handleArrowThumb = (value) => {
+  activeThumb.value += value;
+  if (activeThumb.value < 0) activeThumb.value = 0;
+  if (activeThumb.value > product.value.images.length - 1)
+    activeThumb.value = product.value.images.length - 1;
+  swiperProduct.slideTo(activeThumb.value);
+};
 
 // Handle price product
 const productPriceSale = ref(0);
@@ -201,7 +251,7 @@ function setPrice() {
 async function addCart() {
   let user = JSON.parse(localStorage.getItem("wdsmart_user"));
   if (!user) {
-    alert("Vui long dang nhap");
+    $toast.default("Vui lòng đăng nhập", { position: "top" });
     return;
   }
 
@@ -259,6 +309,10 @@ async function addCart() {
     });
   }
 }
+
+onMounted(async () => {
+  favoriteItemExist.value = await checkProductInFavorite();
+});
 </script>
 
 <template>
@@ -269,50 +323,60 @@ async function addCart() {
         <div class="row">
           <!-- Left -->
           <div class="col-8">
-            <div class="img-active">
-              <button
-                v-if="activeThumbnail > 0"
-                class="btn-arrow btn-arrow-left"
-                @click.prevent="handleImageActive(1)"
+            <div class="product-swiper">
+              <!-- Swiper active -->
+              <swiper
+                @swiper="onSwiper"
+                @slideChange="onSlideChange"
+                :spaceBetween="10"
+                :slidesPerView="1"
+                class="product-swiper__main"
               >
-                <i class="bi bi-chevron-compact-left"></i>
-              </button>
-              <img
-                draggable="false"
-                :src="product.images[activeThumbnail].image_url"
-                :alt="product.images[activeThumbnail].alt_text"
-              />
-              <button
-                v-if="activeThumbnail < product.images.length - 1"
-                class="btn-arrow btn-arrow-right"
-                @click.prevent="handleImageActive(-1)"
-              >
-                <i class="bi bi-chevron-compact-right"></i>
-              </button>
-            </div>
-            <div class="product-thumb">
-              <div
-                class="list"
-                :style="[
-                  `width: ${widthThumbnail}px`,
-                  `grid-template-columns: repeat(${product.images.length}, 1fr)`,
-                  `margin-left: ${marginLeftThumbnail}px`,
-                ]"
-                @mousemove.prevent="thumbMousemove"
-                @mousedown.prevent="thumbMousedown"
-                @mouseup.prevent="thumbMouseup"
-                @mouseleave.prevent="thumbMouseleave"
-              >
-                <div
-                  v-for="(item, index) in product.images"
-                  :key="index"
-                  class="item"
-                  :class="index === activeThumbnail ? 'active' : ''"
-                  @click.prevent="activeThumbnail = index"
-                >
-                  <img draggable="false" :src="item.image_url" :alt="item.alt_text" />
+                <div class="product-swiper__main--heart" @click="toggleProductFavorite">
+                  <button>
+                    <span
+                      ><i
+                        :class="favoriteItemExist ? 'bi bi-heart-fill' : 'bi bi-heart'"
+                      ></i
+                    ></span>
+                  </button>
                 </div>
-              </div>
+                <!-- prev -->
+                <button
+                  v-show="activeThumb > 0"
+                  class="product-swiper__main--btn prev"
+                  @click.prevent="handleArrowThumb(-1)"
+                >
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <swiper-slide v-for="(image, index) in product.images" :key="index">
+                  <img :src="image.image_url" :alt="image.alt_text" />
+                </swiper-slide>
+                <!-- next -->
+                <button
+                  v-show="activeThumb < product.images.length - 1"
+                  class="product-swiper__main--btn next"
+                  @click.prevent="handleArrowThumb(1)"
+                >
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </swiper>
+              <!-- Swiper Thumbnail -->
+              <swiper
+                ref="swiperProductThumbRef"
+                :spaceBetween="10"
+                :slidesPerView="slidePerView"
+                class="product-swiper__thumb"
+              >
+                <swiper-slide
+                  v-for="(image, index) in product.images"
+                  :key="index"
+                  @click="onThumbnailClick(index)"
+                  :class="{ active: activeThumb === index }"
+                >
+                  <img :src="image.image_url" :alt="image.alt_text" />
+                </swiper-slide>
+              </swiper>
             </div>
           </div>
           <!-- Right -->
@@ -466,42 +530,52 @@ async function addCart() {
               </div>
             </div>
             <!-- Service -->
-            <!-- <div class="bg-color-white">
-              <div class="service-product">
-                <div class="head-title">Cam kết bán hàng</div>
-                <ul>
-                  <li>
-                    <i class="bi bi-tencent-qq"></i>
-                    <span class="content">Hàng chính hãng. Nguồn gốc rõ ràng</span>
-                  </li>
-                  <li>
-                    <i class="bi bi-piggy-bank"></i>
-                    <span class="content">Tặng máy nếu phát hiện máy sửa chữa</span>
-                  </li>
-                  <li>
-                    <i class="bi bi-truck"></i>
-                    <span class="content">Giao hàng ngay (nội thành TPHCM)</span>
-                  </li>
-                  <li>
-                    <i class="bi bi-gear"></i>
-                    <span class="content">Dùng thử 7 ngày miễn phí</span>
-                  </li>
-                </ul>
-              </div>
-            </div> -->
+            <div class="service-product mt-5">
+              <div class="head-title">Cam kết bán hàng</div>
+              <ul>
+                <li>
+                  <i class="bi bi-tencent-qq"></i>
+                  <span class="content">Hàng chính hãng. Nguồn gốc rõ ràng</span>
+                </li>
+                <li>
+                  <i class="bi bi-piggy-bank"></i>
+                  <span class="content">Tặng máy nếu phát hiện máy sửa chữa</span>
+                </li>
+                <li>
+                  <i class="bi bi-truck"></i>
+                  <span class="content">Giao hàng ngay (nội thành TPHCM)</span>
+                </li>
+                <li>
+                  <i class="bi bi-gear"></i>
+                  <span class="content">Dùng thử 7 ngày miễn phí</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- Description -->
-  <div class="row pt-4">
-    <div class="col-9">
-      <ProductDescription :description="product.product_description" />
+  <!-- Content -->
+  <div class="block-content-product">
+    <!-- Left -->
+    <div class="block-content-product__left">
+      <product-description :description="product.product_description" />
+      <Suspense>
+        <template #default>
+          <product-rating
+            :product-id="product._id"
+            :product-name="product.product_name"
+          />
+        </template>
+        <template #fallback>
+          <p>Loading ...</p>
+        </template>
+      </Suspense>
     </div>
-    <!-- Property -->
-    <div class="col-3">
-      <ProductSpecifications :attributes="product.attributes" />
+    <!-- Right -->
+    <div class="block-content-product__right">
+      <product-specifications :attributes="product.attributes" />
     </div>
   </div>
 </template>
