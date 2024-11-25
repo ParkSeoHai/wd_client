@@ -2,6 +2,7 @@ import 'vuetify/styles';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.min.css';
 import '../src/assets/css/main.css';
+import "swiper/css";
 
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -23,6 +24,6 @@ app.use(router);
 
 app.use(vuetify);
 
-app.provide("url_api", "https://wd-server.vercel.app");
+app.provide("url_api", "http://localhost:3000");
 
 app.mount('#app');
