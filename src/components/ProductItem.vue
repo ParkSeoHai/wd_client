@@ -46,7 +46,7 @@ const checkProductInFavorite = async () => {
   }
 };
 
-const toggleSeriveProductFavorite = async (urlApi) => {
+const toggleServiceProductFavorite = async (urlApi) => {
   // call api
   try {
     const response = await axios.post(urlApi, {
@@ -92,13 +92,13 @@ const toggleProductFavorite = async () => {
   }
   if (favoriteItemExist.value) {
     // remove
-    const res = await toggleSeriveProductFavorite(
+    const res = await toggleServiceProductFavorite(
       `${urlApi}/api/v1/customer/favorite/removeItem`
     );
     if (res.status === 200) favoriteItemExist.value = false;
   } else {
     // add
-    const res = await toggleSeriveProductFavorite(
+    const res = await toggleServiceProductFavorite(
       `${urlApi}/api/v1/customer/favorite/addItem`
     );
     if (res.status === 201) favoriteItemExist.value = true;

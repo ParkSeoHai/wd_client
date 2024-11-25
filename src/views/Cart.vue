@@ -10,6 +10,7 @@ const $toast = useToast();
 // inject data from App.vue
 const user = inject("user");
 const urlApi = inject("url_api");
+const setModalBackground = inject("setModalBackground");
 
 const cart = ref({
   cart_items: [],
@@ -93,6 +94,7 @@ const removeItemCart = async (cartId, cartItemId) => {
 };
 
 onMounted(async () => {
+  setModalBackground(false);
   await getCartInfo();
 });
 </script>

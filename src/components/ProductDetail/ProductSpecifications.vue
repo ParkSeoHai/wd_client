@@ -1,7 +1,7 @@
 <template>
   <div class="bg-color-white">
     <div class="product-property-tab">
-      <div class="product-property-tab__title">Thông số kĩ thuật</div>
+      <div class="product-property-tab__title">Thông số kỹ thuật</div>
 
       <div class="product-property-tab__content" :class="showViewAll ? 'show' : ''">
         <table class="table table-striped product-property-tab__table fs-4">
@@ -17,12 +17,9 @@
       </div>
 
       <div class="view-all-tab">
-        <button class="view-all-tab__btn" @click.prevent="showViewAll = !showViewAll">
-          <i
-            class="bi view-all-tab__btn--icon"
-            :class="showViewAll ? 'bi-dash-circle' : 'bi-plus-circle'"
-          ></i>
-          {{ showViewAll ? "Rút gọn" : "Xem thêm" }}
+        <button class="view-all-tab__btn">
+          <i class="bi bi-plus-circle view-all-tab__btn--icon"></i>
+          Xem cấu hình chi tiết
         </button>
       </div>
     </div>
@@ -30,9 +27,5 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
-let showViewAll = ref(false);
-
 const { attributes } = defineProps(["attributes"]);
 </script>

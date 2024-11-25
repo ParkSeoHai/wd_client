@@ -143,7 +143,7 @@
 </template>
 
 <script setup>
-import { inject, ref, watch } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
@@ -151,6 +151,8 @@ import { register } from "@/service/AuthService";
 import axios from "axios";
 
 const url_api = inject("url_api");
+const user = inject("user");
+const setModalBackground = inject("setModalBackground");
 
 // Breacrumbs
 const breadcrumbs = [
@@ -362,4 +364,11 @@ const registerAccount = async () => {
     loading.value = false;
   }
 };
+
+onMounted(() => {
+  setModalBackground(false);
+  if (user) {
+    window.location.href = "/";
+  }
+});
 </script>

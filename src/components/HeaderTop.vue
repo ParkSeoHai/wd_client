@@ -620,7 +620,7 @@ const submitFormLogin = async () => {
     });
     // store localstorage
     localStorage.setItem("wdsmart_user", JSON.stringify(data.metadata?.user));
-    location.reload();
+    window.location.href = "/";
   } catch (error) {
     responseLoginErrors.value.push(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
   }
