@@ -140,8 +140,8 @@ const optionParent = computed(() => {
 
 // Option child active
 const optionChild = computed(() => {
-  return optionParent.value.sub_options.option_values.length > 0
-    ? optionParent.value.sub_options.option_values[activeOptionChild.value]
+  return optionParent.value.sub_options?.option_values.length > 0
+    ? optionParent.value.sub_options?.option_values[activeOptionChild.value]
     : null;
 });
 

@@ -225,7 +225,11 @@
             <!-- List address -->
             <div class="list-address" v-if="userInfo.address.length > 0">
               <!-- Item -->
-              <div class="address-item" v-for="item in userInfo.address" :key="item._id">
+              <div
+                class="customer-address address-item"
+                v-for="item in userInfo.address"
+                :key="item._id"
+              >
                 <!-- Left -->
                 <div class="left">
                   <div class="address-item__header">

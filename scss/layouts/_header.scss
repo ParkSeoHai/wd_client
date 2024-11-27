@@ -1,10 +1,12 @@
 @use "../base";
 
 /* Header */
-.header {
-  //position: sticky;
-  //top: 0;
-  //z-index: 999;
+#header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
 
   // Drop down header
   .header-action_dropdown {
@@ -253,7 +255,7 @@
         right: 80%;
       }
       .search-list {
-        margin-top: 20px;
+        margin-top: 15px;
       }
       .search-item {
         display: flex;
@@ -419,58 +421,6 @@
           overflow-y: auto;
           @include base.breakpoint(md) {
             max-height: 300px;
-          }
-        }
-
-        .item-cart {
-          margin-top: 10px;
-          padding-bottom: 5px;
-          border-bottom: 1px solid #c1c4cb;
-
-          .img-thumb {
-            width: 80px;
-            height: auto;
-          }
-
-          .product-info {
-            padding: 0 10px;
-          }
-
-          .product-name {
-            font-size: 1.5rem;
-            color: #000;
-            font-weight: 600;
-            margin-bottom: 8px;
-          }
-
-          .product-option {
-            font-size: 1.4rem;
-            color: #333;
-          }
-
-          .product-quantity {
-            font-size: 1.6rem;
-            color: #000;
-            padding: 0 6px;
-          }
-
-          .product-price {
-            font-size: 1.5rem;
-            color: #ff0000;
-            margin-left: 10px;
-            font-weight: 600;
-          }
-
-          .product-del {
-            font-size: 1.5rem;
-            color: #333;
-            font-weight: 600;
-            padding: 6px;
-            cursor: pointer;
-            &:hover {
-              color: base.$txt-primary;
-              transition: color linear 0.2s;
-            }
           }
         }
       }

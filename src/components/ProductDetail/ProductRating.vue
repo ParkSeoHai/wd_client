@@ -294,6 +294,15 @@ const addReview = async () => {
             <div class="comment-content">
               <p>{{ comment.review_text }}</p>
             </div>
+            <div class="comment-imgs">
+              <div
+                v-for="(img, index) in comment.imageReviews"
+                :key="index"
+                class="comment-imgs__item"
+              >
+                <img :src="img" />
+              </div>
+            </div>
           </div>
         </div>
         <!-- btn show more -->

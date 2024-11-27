@@ -169,69 +169,6 @@
         }
 
         .block-right__address {
-            .address-item {
-                display: flex;
-                justify-content: space-between;
-                padding-bottom: 10px;
-                margin-top: 10px;
-                border-bottom: 1px solid #eaeaea;
-                &:last-child {
-                    border-bottom: none;
-                }
-                .left {
-                    width: 70%;
-                }
-                .right {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 10px;
-                    width: 25%;
-                    font-size: 1.5rem;
-                    color: base.$color-primary;
-                    p {
-                        cursor: pointer;
-                    }
-                }
-            }
-            & .address-item__header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 5px;
-                .name {
-                    position: relative;
-                    font-size: 1.6rem;
-                    padding-right: 10px;
-                    &::after {
-                        content: '';
-                        position: absolute;
-                        right: 0;
-                        width: 1px;
-                        height: 100%;
-                        background-color: rgba(0,0,0,.54);
-                    }
-                }
-                .phone {
-                    margin-left: 10px;
-                    color: rgba(0,0,0,.54);
-                }
-            }
-            .address-item__body {
-                .address {
-                    font-size: 1.5rem;
-                    margin-bottom: 5px;
-                    line-height: 1.4;
-                    color: rgba(0, 0, 0, 0.7);
-                }
-                .address-default {
-                    padding: 5px 10px;
-                    width: 100px;
-                    text-align: center;
-                    font-size: 1.4rem;
-                    border: 1px solid base.$color-primary;
-                    color: base.$color-primary;
-                }
-            }
-
             .address-empty {
                 font-size: 1.7rem;
             }
@@ -277,7 +214,7 @@
 
 .modal-address {
     position: absolute;
-    top: 50px;
+    top: 150px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 3px;

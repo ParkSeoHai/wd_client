@@ -13,6 +13,8 @@
   <HomeCollectionListProduct category-name="Điện thoại" category-url="dien-thoai" />
   <!-- Section Product group 2 -->
   <HomeCollectionListProduct category-name="Laptop" category-url="laptop" />
+  <!-- Section Product group 2 -->
+  <HomeCollectionListProduct category-name="Phụ kiện" category-url="phu-kien" />
   <!-- Section home blog -->
   <HomeBlogNews />
 </template>

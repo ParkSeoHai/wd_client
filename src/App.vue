@@ -28,6 +28,13 @@ let listDropDownHeader = ref({
   ddownCart: false,
 });
 
+// Variable modal order
+const listModalOrder = ref({
+  modalChangeAddressShipping: false,
+  modalAddAddressShipping: false,
+  modalListVoucher: false,
+});
+
 const showNavHeaderBottom = ref(false);
 
 // modal account user
@@ -55,6 +62,10 @@ function setModalBackground(value) {
     // Hide all modal account
     listModalAccount.value.modalAddAddress = false;
     listModalAccount.value.modalDelAddress = false;
+    // Hide all modal order
+    listModalOrder.value.modalChangeAddressShipping = false;
+    listModalOrder.value.modalAddAddressShipping = false;
+    listModalOrder.value.modalListVoucher = false;
   }
 }
 
@@ -73,4 +84,5 @@ provide("refreshCartStatus", refreshCartStatus);
 provide("setRefreshCart", setRefreshCart);
 provide("listModalAccount", listModalAccount);
 provide("showNavHeaderBottom", showNavHeaderBottom);
+provide("listModalOrder", listModalOrder);
 </script>
