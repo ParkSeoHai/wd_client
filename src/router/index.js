@@ -47,6 +47,12 @@ const router = createRouter({
       component: () => import('@/views/ProductSearch.vue'),
       props: true
     },
+    {
+      path: '/thanh-toan/:userId',
+      name: 'Order',
+      component: () => import('@/views/Order.vue'),
+      props: true
+    },
   ],
   scrollBehavior (to, from, savedPosition) {
     // return desired position

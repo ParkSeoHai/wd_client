@@ -11,14 +11,17 @@ main {
   position: relative;
   background-color: #f5f5f5;
   padding-bottom: 350px;
+  padding-top: 105px;
   @include mixin.breakpoint(lg) {
     padding-bottom: 500px;
   }
   @include mixin.breakpoint(md) {
     padding-bottom: 560px;
+    padding-top: 60px;
   }
   @include mixin.breakpoint(sm) {
     padding-bottom: 900px;
+    padding-top: 55px;
   }
 }
 
@@ -86,6 +89,7 @@ a {
     color: #c5c5c5;
   }
 }
+
 .btn-arrow-left {
   left: 0;
   @include mixin.breakpoint(md) {
@@ -341,5 +345,134 @@ a {
   .sort__btn--icon {
     margin-right: 5px;
     font-size: 1.5rem;
+  }
+}
+
+// product item cart
+.product-cart.item-cart {
+  margin-top: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #c1c4cb;
+
+  .img-thumb {
+    width: 80px;
+    height: auto;
+  }
+
+  .product-info {
+    padding: 0 10px;
+  }
+
+  .product-name {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .product-option {
+    font-size: 1.4rem;
+    color: #333;
+  }
+
+  .product-quantity {
+    font-size: 1.6rem;
+    color: #000;
+    padding: 0 6px;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    color: #ff0000;
+    margin-left: 10px;
+    font-weight: 600;
+  }
+
+  .product-del {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    padding: 6px;
+    cursor: pointer;
+    &:hover {
+      color: variables.$txt-primary;
+      transition: color linear 0.2s;
+    }
+  }
+}
+
+// address item customer
+.customer-address.address-item {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  margin-top: 10px;
+  gap: 10px;
+  border-bottom: 1px solid #eaeaea;
+  &:last-child {
+      border-bottom: none;
+  }
+  .left {
+    width: 70%;
+    @include mixin.breakpoint(sm) {
+      width: 100%;
+    }
+  }
+  .right {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 25%;
+    font-size: 1.5rem;
+    color: variables.$color-primary;
+    @include mixin.breakpoint(sm) {
+      width: 100%;
+      justify-content: start;
+    }
+
+    p {
+        cursor: pointer;
+    }
+  }
+  
+  & .address-item__header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      .name {
+          position: relative;
+          font-size: 1.6rem;
+          padding-right: 10px;
+          &::after {
+              content: '';
+              position: absolute;
+              right: 0;
+              width: 1px;
+              height: 100%;
+              background-color: rgba(0,0,0,.54);
+          }
+      }
+      .phone {
+          margin-left: 10px;
+          color: rgba(0,0,0,.54);
+      }
+  }
+  & .address-item__body {
+      .address {
+          font-size: 1.5rem;
+          margin-bottom: 5px;
+          line-height: 1.4;
+          color: rgba(0, 0, 0, 0.7);
+      }
+      .address-default {
+          padding: 5px 10px;
+          width: 100px;
+          text-align: center;
+          font-size: 1.4rem;
+          border: 1px solid variables.$color-primary;
+          color: variables.$color-primary;
+      }
   }
 }

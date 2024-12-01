@@ -1,7 +1,7 @@
 <template>
   <div class="background"></div>
   <Breadcrumb class="position-absolute z-3" :breadcrumb-active="'Tài khoản'" />
-  <div class="mb-4" style="min-height: 600px">
+  <div class="mb-4" style="min-height: 400px">
     <div class="cloud x1"></div>
     <div class="cloud x2"></div>
     <div class="cloud x3"></div>
@@ -53,7 +53,7 @@
             >
               <button class="block__left--link">
                 <i class="bi bi-box-fill block__left--icon"></i>
-                <span class="ms-3">Đơn hàng của bạn</span>
+                <span class="ms-3">Đơn hàng</span>
               </button>
             </li>
             <li
@@ -70,9 +70,9 @@
         </div>
       </div>
       <!-- Right -->
-      <div class="user-account__block--right bg-color-white">
-        <!-- Tab 0 -->
-        <div v-if="tabActive == 0">
+      <div class="user-account__block--right user-account__order--right">
+        <!-- Tab 0 - infor -->
+        <div class="bg-color-white" v-if="tabActive == 0">
           <h2 class="block-right__header">Thông tin tài khoản</h2>
           <div class="block-right__body">
             <div class="block-right__item">
@@ -147,8 +147,8 @@
             </div>
           </div>
         </div>
-        <!-- Tab 1 -->
-        <div v-else-if="tabActive == 1">
+        <!-- Tab 1 - favourite -->
+        <div class="bg-color-white" v-else-if="tabActive == 1">
           <div v-if="favorite" class="favorite-tab">
             <div class="list-product">
               <product-item
@@ -165,51 +165,127 @@
             </p>
           </div>
         </div>
-        <!-- Tab 1 -->
+        <!-- Tab 2 - order -->
         <div v-else-if="tabActive == 2">
-          <div class="block-right__table">
-            <div class="table-responsive" v-if="userInfo.order">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Mã đơn hàng</th>
-                    <th scope="col">Sản phẩm</th>
-                    <th scope="col">Ngày đặt</th>
-                    <th scope="col">Trạng thái thanh toán</th>
-                    <th scope="col">Vận chuyển</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="order-empty" v-else>
-              <p>
-                Bạn chưa có đơn hàng nào. Mời bạn mua thêm sản phẩm
-                <router-link to="/all">tại đây</router-link>.
-              </p>
+          <div class="order-tab">
+            <div class="order-group">
+              <div class="order-group__header bg-color-white">
+                <div class="order-group__nav--group">
+                  <ul class="order-group__nav">
+                    <li
+                      @click="getOrder(), (tabOrderActive = 0)"
+                      :class="{ active: tabOrderActive === 0 }"
+                      class="order-group__nav--item"
+                    >
+                      Tất cả
+                    </li>
+                    <li
+                      @click="getOrder('Chờ xử lý'), (tabOrderActive = 1)"
+                      :class="{ active: tabOrderActive === 1 }"
+                      class="order-group__nav--item"
+                    >
+                      Chờ xử lý
+                    </li>
+                    <li
+                      @click="getOrder('Đã xác nhận'), (tabOrderActive = 2)"
+                      :class="{ active: tabOrderActive === 2 }"
+                      class="order-group__nav--item"
+                    >
+                      Đã xác nhận
+                    </li>
+                    <li
+                      @click="getOrder('Đang giao hàng'), (tabOrderActive = 3)"
+                      :class="{ active: tabOrderActive === 3 }"
+                      class="order-group__nav--item"
+                    >
+                      Đang giao hàng
+                    </li>
+                    <li
+                      @click="getOrder('Hoàn thành'), (tabOrderActive = 4)"
+                      :class="{ active: tabOrderActive === 4 }"
+                      class="order-group__nav--item"
+                    >
+                      Hoàn thành
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="order-search">
+                  <div class="input-group flex-nowrap">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Bạn có thể tìm kiếm theo tên đơn hàng"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="order-group__body">
+                <div v-if="orders.length > 0">
+                  <div class="order-products">
+                    <div
+                      v-for="order in orders"
+                      :key="order._id"
+                      class="order-products__item bg-color-white"
+                    >
+                      <div class="order-products__item--header">
+                        <span class="status__text">{{ order.status }}</span>
+                      </div>
+                      <div class="order-products__item--body">
+                        <ul class="list-cart">
+                          <!-- Item -->
+                          <li
+                            v-for="item in order.order_items"
+                            :key="item._id"
+                            class="product-cart item-cart d-flex align-items-center justify-content-between"
+                          >
+                            <div class="cart-product w-100 d-flex align-items-center">
+                              <img
+                                :src="item.product_thumb"
+                                :alt="item.product_name"
+                                class="img-thumb"
+                              />
+                              <div class="product-info w-100">
+                                <p class="product-name">{{ item.product_name }}</p>
+                                <p class="product-option">
+                                  {{ item.option.option_value }}
+                                  <span v-if="item.option.sub_option">
+                                    / {{ item.option.sub_option?.option_value }}</span
+                                  >
+                                </p>
+                                <span class="product-quantity"
+                                  >SL: {{ item.quantity }}</span
+                                >
+                              </div>
+                              <div class="box-prices">
+                                <del class="product-price__del">
+                                  {{ formatter(item.product_price) }}
+                                </del>
+                                <p class="product-price">
+                                  {{ formatter(item.product_price_sale) }}
+                                </p>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <div class="order-total__price">
+                          Thành tiền:
+                          <span>{{ formatter(order.total_amount) }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="order-empty bg-color-white" v-else>
+                  <p>Bạn chưa có đơn hàng nào.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <!-- Tab 2 -->
-        <div v-else>
+        <!-- Tab 3 - address -->
+        <div class="bg-color-white" v-else>
           <div class="block-right__address">
             <div class="block-right__address--header">
               <p class="block-right__header">Địa chỉ của tôi</p>
@@ -225,7 +301,11 @@
             <!-- List address -->
             <div class="list-address" v-if="userInfo.address.length > 0">
               <!-- Item -->
-              <div class="address-item" v-for="item in userInfo.address" :key="item._id">
+              <div
+                class="customer-address address-item"
+                v-for="item in userInfo.address"
+                :key="item._id"
+              >
                 <!-- Left -->
                 <div class="left">
                   <div class="address-item__header">
@@ -354,6 +434,7 @@
 <script setup>
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import ProductItem from "@/components/ProductItem.vue";
+import { formatter } from "@/service/Common";
 import axios from "axios";
 import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 import { useToast } from "vue-toast-notification";
@@ -369,6 +450,7 @@ const setModalBackground = inject("setModalBackground");
 
 const userInfo = ref({});
 const favorite = ref(null);
+const orders = ref([]);
 
 const textPicture = computed(() => {
   if (userInfo.value.name) {
@@ -389,12 +471,18 @@ const textPicture = computed(() => {
 
 // Handle tabs
 const tabActive = ref(0);
+const tabOrderActive = ref(0);
 
 // watch change tab
 watch(tabActive, async () => {
   // get favorite
   if (tabActive.value === 1) {
     favorite.value = await getFavorite();
+  }
+  // order
+  if (tabActive.value === 2) {
+    await getOrder();
+    tabOrderActive.value = 0;
   }
 });
 
@@ -611,6 +699,12 @@ const getFavorite = async () => {
     `${urlApi}/api/v1/customer/favorite/${user._id}?p=1&limit=10`
   );
   return res.data.metadata;
+};
+
+// get order
+const getOrder = async (status = "") => {
+  const res = await axios.get(`${urlApi}/api/v1/order/${user._id}?status=${status}`);
+  orders.value = res.data.metadata;
 };
 
 onMounted(async () => {

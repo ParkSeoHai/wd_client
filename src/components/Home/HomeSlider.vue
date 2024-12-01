@@ -15,9 +15,9 @@
           >
             <i class="bi bi-chevron-compact-left"></i>
           </button>
-          <a :href="sliderShow.link" class="slider-link">
+          <router-link :to="sliderShow.link" class="slider-link">
             <img :src="sliderShow.image" alt="" />
-          </a>
+          </router-link>
           <button
             v-if="imageSliders.length > 1"
             @click.prevent="showSlider(1)"
@@ -49,22 +49,22 @@ const imageSliders = [
   {
     image:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/sliding-home-iphone-16-pro-km-moi.jpg",
-    link: "/slider-1",
+    link: "#",
   },
   {
     image:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/samsung-galaxy-s24-ultra-home-15-11.png",
-    link: "/slider-2",
+    link: "#",
   },
   {
     image:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/samsung-galaxy-s24-ultra-home-15-11.png",
-    link: "/slider-3",
+    link: "#",
   },
   {
     image:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/tecno-camon-30s-banner-home.jpg",
-    link: "/slider-4",
+    link: "#",
   },
 ];
 

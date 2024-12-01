@@ -155,12 +155,36 @@
             padding: 15px 0;
             font-size: 1.6rem;
             font-weight: 700;
+            border-bottom: 1px solid #eee;
             &__price {
                 color: #e70303;
                 font-size: 2rem;
                 @include base.breakpoint(md) {
                     font-size: 1.8rem;
                 }
+            }
+        }
+        &__btn--order {
+            background-color: #000;
+            color: #fff;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            margin-top: 20px;
+            width: 100%;
+            padding: 8px;
+        }
+        .link-continue {
+            @include base.d-flex;
+            gap: 6px;
+            margin-top: 15px;
+
+            .link-text {
+                color: inherit;
+            }
+
+            &:hover {
+                color: base.$txt-primary;
+                transition: color linear 0.2s;
             }
         }
     }

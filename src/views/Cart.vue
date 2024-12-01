@@ -126,12 +126,13 @@ onMounted(async () => {
                   </h3>
                   <div class="cart-item__group--option">
                     <p class="item-option">
-                      {{
-                        `${item.option?.option_value} / ${item.option.sub_option?.option_value}`
-                      }}
+                      {{ item.option?.option_value }}
+                      <span v-if="item.option.sub_option">
+                        / {{ item.option.sub_option?.option_value }}</span
+                      >
                     </p>
                     <p class="item-option item-option__price">
-                      {{ formatter(item.price_at_added) }}
+                      {{ formatter(item.product_price_sale) }}
                     </p>
                   </div>
                 </div>
@@ -168,7 +169,7 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div class="cart-item__price">
-                  <span>{{ formatter(item.quantity * item.price_at_added) }}</span>
+                  <span>{{ formatter(item.quantity * item.product_price_sale) }}</span>
                 </div>
               </div>
             </div>
@@ -191,6 +192,18 @@ onMounted(async () => {
             <span>Tổng tiền:</span>
             <span class="cart-total__price">{{ formatter(cart.total_price) }}</span>
           </p>
+          <div>
+            <router-link
+              :to="`/thanh-toan/${user?._id}`"
+              class="btn cart-right__btn--order"
+              :class="{ disabled: cart.cart_items.length === 0 }"
+              >Thanh toán ngay</router-link
+            >
+          </div>
+          <div class="link-continue">
+            <span><i class="bi bi-reply-fill"></i></span>
+            <router-link to="/" class="link-text">Tiếp tục mua hàng</router-link>
+          </div>
         </div>
       </div>
     </div>

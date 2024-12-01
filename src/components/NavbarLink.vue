@@ -48,7 +48,7 @@ const toggleDropdownIcon = (categoryId) => {
       </button>
     </div>
     <!-- Sub nav -->
-    <ul class="nav-dropdown">
+    <ul v-if="category.subcategories.length > 0" class="nav-dropdown">
       <!-- Item -->
       <li
         class="nav-dropdown__item--lv1"

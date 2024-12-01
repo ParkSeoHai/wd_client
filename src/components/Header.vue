@@ -1,6 +1,6 @@
 <template>
   <!-- Header -->
-  <header class="header">
+  <header id="header">
     <!-- Header top -->
     <HeaderTop />
     <!-- Header bottom -->

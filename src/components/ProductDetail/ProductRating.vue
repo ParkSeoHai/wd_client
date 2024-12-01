@@ -76,6 +76,12 @@ const addReview = async () => {
     });
     return;
   }
+  if (commentReview.value.length <= 10) {
+    $toast.default("Vui lòng nhập nội dung đánh giá tối thiểu 10 ký tự", {
+      position: "top",
+    });
+    return;
+  }
   try {
     loadingAddReview.value = true;
     const res = await axios.post(`${urlApi}/api/v1/review/addReview`, {
@@ -294,6 +300,15 @@ const addReview = async () => {
             <div class="comment-content">
               <p>{{ comment.review_text }}</p>
             </div>
+            <div class="comment-imgs">
+              <div
+                v-for="(img, index) in comment.imageReviews"
+                :key="index"
+                class="comment-imgs__item"
+              >
+                <img :src="img" />
+              </div>
+            </div>
           </div>
         </div>
         <!-- btn show more -->
@@ -344,7 +359,7 @@ const addReview = async () => {
                 id="floatingTextarea2"
                 v-model.trim.lazy="commentReview"
               ></textarea>
-              <label for="floatingTextarea2"
+              <label for="floatingTextarea2" class="w-100"
                 >Xin mời chia sẻ một số cảm nhận về sản phẩm</label
               >
             </div>

@@ -45,6 +45,11 @@
                     <p class="py-5 text-center">Vui lòng nhập từ khóa tìm kiếm</p>
                   </template> -->
                   <template v-if="search.products.length > 0">
+                    <router-link
+                      :to="`/search/result/${search.input}`"
+                      class="d-block mt-4 text-end"
+                      >Xem tất cả sản phẩm</router-link
+                    >
                     <div class="search-list">
                       <router-link
                         v-for="product in search.products"
@@ -370,7 +375,7 @@
                       <ul class="list-cart">
                         <!-- Item -->
                         <li
-                          class="item-cart d-flex align-items-center justify-content-between"
+                          class="product-cart item-cart d-flex align-items-center justify-content-between"
                           v-for="item in cart.cart_items"
                           :key="item._id"
                         >
@@ -389,9 +394,10 @@
                                 </router-link>
                               </p>
                               <p class="product-option">
-                                {{
-                                  `${item.option?.option_value} / ${item.option.sub_option?.option_value}`
-                                }}
+                                {{ item.option?.option_value }}
+                                <span v-if="item.option.sub_option">
+                                  / {{ item.option.sub_option?.option_value }}</span
+                                >
                               </p>
                               <div
                                 class="d-flex align-items-center justify-content-between"
@@ -401,7 +407,7 @@
                                     >SL: {{ item.quantity }}</span
                                   >
                                   <p class="product-price">
-                                    {{ formatter(item.price_at_added) }}
+                                    {{ formatter(item.product_price_sale) }}
                                   </p>
                                 </div>
                                 <p
@@ -454,7 +460,10 @@
                       <router-link to="/gio-hang" class="btn btn-primary"
                         >XEM GIỎ HÀNG</router-link
                       >
-                      <router-link to="thanh-toan" class="btn btn-outline-primary"
+                      <router-link
+                        :to="`/thanh-toan/${user?._id}`"
+                        class="btn btn-outline-primary"
+                        :class="{ disabled: cart.cart_items.length === 0 }"
                         >THANH TOÁN</router-link
                       >
                     </div>
