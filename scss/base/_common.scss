@@ -365,6 +365,7 @@ a {
 
   .product-name {
     font-size: 1.5rem;
+    line-height: 2rem;
     color: #000;
     font-weight: 600;
     margin-bottom: 8px;
@@ -405,25 +406,35 @@ a {
 .customer-address.address-item {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding-bottom: 10px;
   margin-top: 10px;
+  gap: 10px;
   border-bottom: 1px solid #eaeaea;
   &:last-child {
       border-bottom: none;
   }
   .left {
-      width: 70%;
+    width: 70%;
+    @include mixin.breakpoint(sm) {
+      width: 100%;
+    }
   }
   .right {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      width: 25%;
-      font-size: 1.5rem;
-      color: variables.$color-primary;
-      p {
-          cursor: pointer;
-      }
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 25%;
+    font-size: 1.5rem;
+    color: variables.$color-primary;
+    @include mixin.breakpoint(sm) {
+      width: 100%;
+      justify-content: start;
+    }
+
+    p {
+        cursor: pointer;
+    }
   }
   
   & .address-item__header {

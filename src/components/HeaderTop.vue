@@ -48,7 +48,7 @@
                     <router-link
                       :to="`/search/result/${search.input}`"
                       class="d-block mt-4 text-end"
-                      >Xem tất cả {{ search.products.length }} sản phẩm</router-link
+                      >Xem tất cả sản phẩm</router-link
                     >
                     <div class="search-list">
                       <router-link
@@ -407,7 +407,7 @@
                                     >SL: {{ item.quantity }}</span
                                   >
                                   <p class="product-price">
-                                    {{ formatter(item.price_at_added) }}
+                                    {{ formatter(item.product_price_sale) }}
                                   </p>
                                 </div>
                                 <p

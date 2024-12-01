@@ -9,6 +9,7 @@ import axios from "axios";
 const $toast = useToast();
 
 const urlApi = inject("url_api");
+const user = inject("user");
 const listModalOrder = inject("listModalOrder");
 const setModalBackground = inject("setModalBackground");
 
@@ -31,11 +32,13 @@ const paymentMethods = ref([
   {
     img: "/src/assets/images/cod.svg",
     text: "Thanh toán khi giao hàng (COD)",
+    value: "Thanh toán khi nhận hàng",
     active: true,
   },
   {
     img: "/src/assets/images/order-method-card.svg",
     text: "Chuyển khoản qua ngân hàng",
+    value: "Chuyển khoản qua ngân hàng",
     active: false,
   },
 ]);
@@ -81,7 +84,7 @@ const addressShipping = computed(() => {
 
 // get cart
 const getCartInfo = async () => {
-  if (userId) {
+  if (userId === user._id) {
     try {
       const foundCart = await getCart(`${urlApi}/api/v1/cart/${userId}`);
       cart.value = foundCart;
@@ -109,6 +112,7 @@ const changeSelectAddress = (addressId) => {
 
 // Show modal add / updte address customer
 const showModalAddAddress = (addressId) => {
+  resetAddressCustomer();
   // find address
   if (addressId) {
     const foundAddress = userInfo.value.address.find((item) => item._id === addressId);
@@ -198,6 +202,62 @@ const submitAddAddress = async () => {
   }
 };
 
+// Submit order
+const addOrder = async () => {
+  if (!addressShipping.value) {
+    $toast.default("Vui lòng chọn địa chỉ giao hàng", {
+      position: "top",
+    });
+    listModalOrder.value.modalChangeAddressShipping = true;
+    setModalBackground(true);
+    return;
+  }
+
+  const paymentMethod = paymentMethods.value.find((item) => item.active === true);
+
+  // get data order
+  const dataPost = {
+    userId,
+    orderItems: cart.value.cart_items,
+    orderNote: orderNote.value,
+    paymentMethod: paymentMethod.value,
+    addressShipping: addressShipping.value,
+    priceShipping: orderPriceShipping.value,
+  };
+  try {
+    loading.value = true;
+    const response = await axios.post(`${urlApi}/api/v1/order`, dataPost);
+    if (response.data.status === 201) {
+      $toast.success(response.data.message, {
+        position: "top",
+      });
+    }
+  } catch (error) {
+    // Kiểm tra lỗi và xử lý phù hợp
+    if (error.response) {
+      // Lỗi từ server
+      $toast.error(error.response.data.message || "Lỗi từ server", {
+        position: "top",
+      });
+      throw new Error(error.response.data.message || "Lỗi từ server");
+    } else if (error.request) {
+      // Không nhận được phản hồi
+      $toast.error("Không có phản hồi từ server. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Không có phản hồi từ server. Vui lòng thử lại.");
+    } else {
+      // Lỗi khác
+      $toast.error("Đã xảy ra lỗi. Vui lòng thử lại.", {
+        position: "top",
+      });
+      throw new Error("Đã xảy ra lỗi. Vui lòng thử lại.");
+    }
+  } finally {
+    loading.value = false;
+  }
+};
+
 onMounted(async () => {
   setModalBackground(false);
   await getCartInfo();
@@ -209,7 +269,7 @@ onMounted(async () => {
   <breadcrumb breadcrumb-active="Thông tin giao hàng" />
   <section id="order-template">
     <div class="row bg-color-white w-100 mx-auto">
-      <div class="col-6 order-left ps-0">
+      <div class="col-lg-6 col-md-12 order-left ps-0">
         <div class="group-address">
           <h2 class="title">
             <span><i class="bi bi-geo-alt icon"></i></span>
@@ -257,7 +317,7 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <div class="shop-voucher">
+        <div class="shop-voucher d-none">
           <h2 class="title">
             <span><i class="bi bi-ticket-perforated icon"></i></span>
             Voucher
@@ -270,7 +330,7 @@ onMounted(async () => {
           </h2>
         </div>
       </div>
-      <div class="col-6 order-right">
+      <div class="col-lg-6 col-md-12 order-right">
         <p class="title">Sản phẩm</p>
         <template v-if="cart.cart_items.length > 0">
           <ul class="list-cart">
@@ -296,7 +356,7 @@ onMounted(async () => {
                   </p>
                   <span class="product-quantity">SL: {{ item.quantity }}</span>
                 </div>
-                <p class="product-price">{{ formatter(item.price_at_added) }}</p>
+                <p class="product-price">{{ formatter(item.product_price_sale) }}</p>
               </div>
             </li>
           </ul>
@@ -335,7 +395,11 @@ onMounted(async () => {
           </div>
           <div class="group-bottom">
             <router-link to="/gio-hang" class="group-bottom__link">Giỏ hàng</router-link>
-            <button class="btn group-bottom__btn" :class="{ disabled: loading }">
+            <button
+              @click.prevent="addOrder"
+              class="btn group-bottom__btn"
+              :class="{ disabled: loading }"
+            >
               <v-progress-circular
                 v-if="loading"
                 :size="25"
@@ -361,7 +425,7 @@ onMounted(async () => {
           class="modal-order__btn primary"
         >
           <i class="bi bi-plus icon"></i>
-          <span>Thêm địa chỉ mới</span>
+          <span class="text">Thêm địa chỉ mới</span>
         </button>
       </div>
       <div class="modal-order__body">

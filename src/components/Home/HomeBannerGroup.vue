@@ -26,22 +26,22 @@ const listBanners = [
   {
     imageUrl:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/dknt-oppo-find-x8-home.jpg",
-    linkUrl: "/banner-1",
+    linkUrl: "#",
   },
   {
     imageUrl:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/udsv-right-laptop.jpg",
-    linkUrl: "/banner-2",
+    linkUrl: "#",
   },
   {
     imageUrl:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/right-banner-14-10.jpg",
-    linkUrl: "/banner-3",
+    linkUrl: "#",
   },
   {
     imageUrl:
       "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/right-banner-14-10.jpg",
-    linkUrl: "/banner-3",
+    linkUrl: "#",
   },
 ];
 </script>

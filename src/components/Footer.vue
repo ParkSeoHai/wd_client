@@ -97,16 +97,6 @@
               <a href="#">0342404775</a>
               <span> (8h30-21h)</span>
             </li>
-            <li>
-              <span>Gọi mua hàng: </span>
-              <a href="#">0342404775</a>
-              <span> (8h30-21h)</span>
-            </li>
-            <li>
-              <span>Gọi mua hàng: </span>
-              <a href="#">0342404775</a>
-              <span> (8h30-21h)</span>
-            </li>
           </ul>
         </div>
       </div>

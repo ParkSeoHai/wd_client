@@ -76,6 +76,12 @@ const addReview = async () => {
     });
     return;
   }
+  if (commentReview.value.length <= 10) {
+    $toast.default("Vui lòng nhập nội dung đánh giá tối thiểu 10 ký tự", {
+      position: "top",
+    });
+    return;
+  }
   try {
     loadingAddReview.value = true;
     const res = await axios.post(`${urlApi}/api/v1/review/addReview`, {
@@ -353,7 +359,7 @@ const addReview = async () => {
                 id="floatingTextarea2"
                 v-model.trim.lazy="commentReview"
               ></textarea>
-              <label for="floatingTextarea2"
+              <label for="floatingTextarea2" class="w-100"
                 >Xin mời chia sẻ một số cảm nhận về sản phẩm</label
               >
             </div>

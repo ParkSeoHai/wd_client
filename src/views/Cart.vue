@@ -132,7 +132,7 @@ onMounted(async () => {
                       >
                     </p>
                     <p class="item-option item-option__price">
-                      {{ formatter(item.price_at_added) }}
+                      {{ formatter(item.product_price_sale) }}
                     </p>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div class="cart-item__price">
-                  <span>{{ formatter(item.quantity * item.price_at_added) }}</span>
+                  <span>{{ formatter(item.quantity * item.product_price_sale) }}</span>
                 </div>
               </div>
             </div>

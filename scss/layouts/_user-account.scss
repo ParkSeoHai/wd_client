@@ -13,6 +13,7 @@
     }
     &--left {
         width: 25%;
+        height: 100%;
         @include base.breakpoint(lg) {
             width: 35%;
         }
@@ -153,14 +154,133 @@
             }
         }
 
-        .block-right__table {
-            th {
-                font-weight: 700;
+        .order-tab {
+            .order-group__nav--group {
+                overflow-x: auto;
+                &::-webkit-scrollbar {
+                    display: none;
+                }
             }
+
+            .order-group__nav {
+                display: flex;
+                align-items: center;
+                @include base.breakpoint(lg) {
+                    gap: 15px;
+                }
+
+                &--item {
+                    padding: 15px 0;
+                    flex: 1;
+                    text-align: center;
+                    text-wrap: nowrap;
+                    cursor: pointer;
+
+                    &.active {
+                        color: base.$color-primary;
+                        border-bottom: 2px solid base.$color-primary;
+                    }
+
+                    &:hover {
+                        color: base.$color-primary;
+                    }
+                }
+            }
+
+            .order-group__header {
+                padding-top: 0;
+
+                .order-search {
+                    font-size: 1.6rem;
+                    margin-top: 10px;
+                    span, input {
+                        font-size: inherit;
+                        padding: 5px;
+                        background-color: #eaeaea;
+                    }
+                }
+            }
+
+            .order-group__body {
+                .order-products__item--header {
+                    display: flex;
+                    justify-content: end;
+                    align-items: center;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #c1c4cb;
+
+                    .status__text {
+                        font-size: 1.4rem;
+                        text-transform: uppercase;
+                        color: base.$color-primary;
+                    }
+                }
+
+                .order-products__item {
+                    margin-top: 10px;
+                }
+
+                .order-products__item--body {
+                    .cart-product {
+                        @include base.breakpoint(sm) {
+                            flex-wrap: wrap;
+                        }
+                    }
+
+                    .product-info {
+                        @include base.breakpoint(sm) {
+                            flex: 1;
+                        }
+                    }
+
+                    .product-quantity {
+                        display: block;
+                        padding: 0;
+                        margin-top: 8px;
+                        font-size: 1.4rem;
+                    }
+
+                    .img-thumb {
+                        border: 1px solid #eaeaea;
+                    }
+
+                    .box-prices {
+                        display: flex;
+                        align-items: center;
+                        @include base.breakpoint(sm) {
+                            width: 100%;
+                            margin-top: 10px;
+                            justify-content: end;
+                        }
+                    }
+
+                    .product-price__del {
+                        color: rgba($color: #000000, $alpha: 0.4);
+                    }
+
+                    .order-total__price {
+                        display: flex;
+                        align-items: center;
+                        justify-content: end;
+                        padding-top: 20px;
+                        padding-bottom: 5px;
+
+                        span {
+                            display: block;
+                            margin-left: 12px;
+                            font-size: 2rem;
+                            color: #ff0000;
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+
             .order-empty {
-                margin-top: 20px;
+                @include base.d-flex;
+                min-height: 200px;
+                margin-top: 10px;
                 font-size: 1.7rem;
-                text-align: center;
                 a {
                     color: #1877f2;
                     font-weight: 700;
@@ -209,6 +329,10 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+    }
+
+    .user-account__order--right {
+        padding-top: 0;
     }
 }
 

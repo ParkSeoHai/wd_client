@@ -255,15 +255,6 @@ async function addCart() {
     return;
   }
 
-  // get image thumb
-  let productThumb = "";
-  for (let image of product.value.images) {
-    if (image.type === "thumbnail") {
-      productThumb = image.image_url;
-      break;
-    }
-  }
-
   // get option
   let option = {};
   if (optionParent.value) {
@@ -280,11 +271,6 @@ async function addCart() {
 
   const cartItem = {
     product_id: product.value._id,
-    product_name: product.value.product_name,
-    product_thumb: productThumb,
-    product_url: product.value.product_url,
-    price_at_added: productPriceSale.value,
-    discount_at_added: product.value.product_discount,
     option,
     quantity: count.value,
   };
@@ -322,7 +308,20 @@ onMounted(async () => {
       <div class="bg-color-white">
         <div class="row">
           <!-- Left -->
-          <div class="col-8">
+          <div class="col-md-8">
+            <!-- Title -->
+            <div class="title title-left">
+              <h1>
+                <span class="text">{{ product.product_name }} </span>
+                <span
+                  class="subtext"
+                  :class="[product.product_quantity > 0 ? 'green' : 'red']"
+                >
+                  {{ product.product_quantity > 0 ? "Còn hàng" : "Hết hàng" }}
+                </span>
+              </h1>
+            </div>
+
             <div class="product-swiper">
               <!-- Swiper active -->
               <swiper
@@ -380,10 +379,10 @@ onMounted(async () => {
             </div>
           </div>
           <!-- Right -->
-          <div class="col-4">
+          <div class="col-md-4">
             <div class="product-content-info">
               <!-- Title -->
-              <div class="title">
+              <div class="title title-right">
                 <h1>
                   <span class="text">{{ product.product_name }} </span>
                   <span
@@ -399,14 +398,14 @@ onMounted(async () => {
                 <div class="pro-brand">
                   <span>
                     Thương hiệu:
-                    <a :href="product.brand_name">{{ product.brand_name }}</a>
+                    <router-link to="#">{{ product.brand_name }}</router-link>
                   </span>
                 </div>
                 <span class="line-info"></span>
                 <div class="pro-type">
                   <span>
                     Loại:
-                    <a :href="product.brand_name">{{ product.brand_name }}</a>
+                    <router-link to="#">{{ product.brand_name }}</router-link>
                   </span>
                 </div>
               </div>
@@ -498,7 +497,10 @@ onMounted(async () => {
                 </button>
               </div>
               <!-- Product shop -->
-              <div v-if="shops_available" class="location-store">
+              <div
+                v-if="shops_available && shops_available.length > 0"
+                class="location-store"
+              >
                 <div class="location-store__main">
                   <img
                     class="location-store__img"
@@ -530,7 +532,7 @@ onMounted(async () => {
               </div>
             </div>
             <!-- Service -->
-            <div class="service-product mt-5">
+            <div class="service-product mt-3">
               <div class="head-title">Cam kết bán hàng</div>
               <ul>
                 <li>
@@ -575,7 +577,10 @@ onMounted(async () => {
     </div>
     <!-- Right -->
     <div class="block-content-product__right">
-      <product-specifications :attributes="product.attributes" />
+      <product-specifications
+        v-if="product.attributes && product.attributes.length > 0"
+        :attributes="product.attributes"
+      />
     </div>
   </div>
 </template>
