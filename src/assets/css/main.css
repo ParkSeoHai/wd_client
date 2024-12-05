@@ -3827,6 +3827,19 @@ body {
   font-size: 1.6rem;
 }
 
+#template-news-item .group-news-item {
+  position: relative;
+  width: 100%;
+}
+#template-news-item .img-top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 415px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
 #footer {
   position: absolute;
   bottom: 0;
