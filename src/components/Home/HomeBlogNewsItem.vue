@@ -1,13 +1,15 @@
 <template>
   <div class="item row d-flex align-items-center">
     <div class="col-5">
-      <img :src="newsObj.image" :alt="newsObj.title" />
+      <router-link :to="newsObj.linkUrl">
+        <img :src="newsObj.image" :alt="newsObj.title" />
+      </router-link>
     </div>
     <div class="col-7 ps-2">
       <h3 class="title mt-0">
-        <a :href="newsObj.linkUrl">
+        <router-link :to="newsObj.linkUrl">
           {{ newsObj.title }}
-        </a>
+        </router-link>
       </h3>
       <div class="time d-flex align-items-center">
         <i class="bi bi-calendar3 icon"></i>

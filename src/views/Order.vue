@@ -231,6 +231,7 @@ const addOrder = async () => {
       $toast.success(response.data.message, {
         position: "top",
       });
+      window.location = "/";
     }
   } catch (error) {
     // Kiểm tra lỗi và xử lý phù hợp

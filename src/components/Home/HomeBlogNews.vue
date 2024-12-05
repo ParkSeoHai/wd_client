@@ -17,15 +17,18 @@
               <!-- Left  -->
               <div class="col-12 col-sm-6">
                 <div class="content">
-                  <img
-                    src="https://cdn-media.sforum.vn/storage/app/media/trannghia/iPhone-XS-Max-san-pham-cu.jpg"
-                    alt=""
-                  />
+                  <router-link to="/tin-tuc/news-1">
+                    <img
+                      src="https://cdn-media.sforum.vn/storage/app/media/trannghia/iPhone-XS-Max-san-pham-cu.jpg"
+                      alt=""
+                    />
+                  </router-link>
+
                   <h3 class="title">
-                    <a href="#">
+                    <router-link to="/tin-tuc/news-1">
                       So sánh Apple Watch Ultra vs Watch Series 8: Đâu là lựa chọn tốt
                       nhất?
-                    </a>
+                    </router-link>
                   </h3>
                   <p class="desc">
                     Apple Watch Ultra vs Watch Series 8 có gì khác biệtApple Watch Ultra
@@ -89,7 +92,7 @@ const listNews1 = [
     title: "Realme GT Neo 5 ra mắt với chip Snapdragon đầu 8, sạc nhanh 240W",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/trannghia/Oppo-Reno-13-Series-anh-thuc-te-cover.jpg",
-    linkUrl: "/1",
+    linkUrl: "/tin-tuc/news-2",
     time: "02/08/2003",
   },
   {
@@ -97,7 +100,7 @@ const listNews1 = [
     title: "Rò rỉ ảnh chụp thực tế của camera Samsung Galaxy S23 Ultra",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/ctvseo_12/cach-tang-dung-luong-iphone-16gb-len-32gb.jpg",
-    linkUrl: "/2",
+    linkUrl: "/tin-tuc/news-3",
     time: "26/12/2023",
   },
   {
@@ -105,7 +108,7 @@ const listNews1 = [
     title: "MacBook Air 2023 sẽ mang đến những tính năng mới nào khi ra mắt?",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/ctvseo_12/cach-cai-nhac-chuong-cho-iphone-bang-garageband.jpg",
-    linkUrl: "/3",
+    linkUrl: "/tin-tuc/news-4",
     time: "11/05/2023",
   },
   {
@@ -113,7 +116,7 @@ const listNews1 = [
     title: "Redmi Note 12 Turbo thiết bị bán chạy nhất trong tháng đầu tiên bán ra!",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/trannghia/OnePlus-Magnetic-Power-Bank-1.jpg",
-    linkUrl: "/4",
+    linkUrl: "/tin-tuc/news-5",
     time: "20/08/2023",
   },
 ];
@@ -124,7 +127,7 @@ const listNews2 = [
     title: "Realme GT Neo 5 ra mắt với chip Snapdragon đầu 8, sạc nhanh 240W",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/doanphuong/tinh-nang-giam-gian-doan-tren-iphone-la-gi-va-cach-dung-hieu-qua/tinh-nang-giam-gian-doan-tren-iphone-la-gi-va-cach-dung-hieu-qua-bg.jpg",
-    linkUrl: "/1",
+    linkUrl: "/tin-tuc/news-6",
     time: "02/08/2003",
   },
   {
@@ -132,14 +135,14 @@ const listNews2 = [
     title: "Rò rỉ ảnh chụp thực tế của camera Samsung Galaxy S23 Ultra",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/trannghia/Apple-iPhone-15-doanh-so-1.jpg",
-    linkUrl: "/2",
+    linkUrl: "/tin-tuc/news-7",
     time: "26/12/2023",
   },
   {
     id: 3,
     title: "MacBook Air 2023 sẽ mang đến những tính năng mới nào khi ra mắt?",
     image: "https://cdn-media.sforum.vn/storage/app/media/ctvseo_12/so-sanh-iphone.jpg",
-    linkUrl: "/3",
+    linkUrl: "/tin-tuc/news-8",
     time: "11/05/2023",
   },
   {
@@ -147,7 +150,7 @@ const listNews2 = [
     title: "Redmi Note 12 Turbo thiết bị bán chạy nhất trong tháng đầu tiên bán ra!",
     image:
       "https://cdn-media.sforum.vn/storage/app/media/ctvseo_12/man-hinh-iphone-bi-cham-xanh.jpg",
-    linkUrl: "/4",
+    linkUrl: "/tin-tuc/news-9",
     time: "20/08/2023",
   },
 ];
