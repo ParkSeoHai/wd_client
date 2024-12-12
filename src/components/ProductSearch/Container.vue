@@ -75,7 +75,7 @@ products.value = await getDataProduct();
             Bài viết liên quan
           </h3>
           <div class="new-block__list">
-            <a href="#" class="new-block__item">
+            <router-link to="/tin-tuc/news-2" class="new-block__item">
               <img
                 src="https://cdn-media.sforum.vn/storage/app/media/phuonganh/pubg-mobile-3-5.jpg"
                 class="new-block__item--img"
@@ -83,8 +83,8 @@ products.value = await getDataProduct();
               <h2 class="new-block__item--title">
                 PUBG Mobile ra mắt phiên bản 3.5, đưa game thủ đến với sa
               </h2>
-            </a>
-            <a href="#" class="new-block__item">
+            </router-link>
+            <router-link to="/tin-tuc/news-3" class="new-block__item">
               <img
                 src="https://cdn-media.sforum.vn/storage/app/media/trannghia/Apple-Final-Cut-11cap-nhat.jpg"
                 class="new-block__item--img"
@@ -93,7 +93,7 @@ products.value = await getDataProduct();
                 Apple phát hành Final Cut Pro 11 cho Mac với nhiều tính năng mới với nhiều
                 tính năng mới
               </h2>
-            </a>
+            </router-link>
           </div>
           <div class="new-block__bottom">
             <button class="new-block__btn--more">Xem tất cả</button>
@@ -102,5 +102,5 @@ products.value = await getDataProduct();
       </div>
     </div>
   </template>
-  <template v-else>KHONG CO SAN PHAM</template>
+  <template v-else>KHÔNG TÌM THẤY SẢN PHẨM NÀO PHÙ HỢP</template>
 </template>

@@ -37,7 +37,7 @@ const toggleNavDropdown = () => {
           </div>
           <div class="col-9">
             <ul class="list d-flex align-items-center">
-              <li class="item">
+              <li class="item disabled">
                 <a href="#">
                   <span class="icon">
                     <i class="bi bi-tencent-qq"></i>
@@ -45,7 +45,7 @@ const toggleNavDropdown = () => {
                   <span class="title">Chính sách bảo hành</span>
                 </a>
               </li>
-              <li class="item">
+              <li class="item disabled">
                 <a href="#">
                   <span class="icon">
                     <i class="bi bi-piggy-bank"></i>
@@ -53,7 +53,7 @@ const toggleNavDropdown = () => {
                   <span class="title">Tra cứu bảo hành</span>
                 </a>
               </li>
-              <li class="item">
+              <li class="item disabled">
                 <a href="#">
                   <span class="icon">
                     <i class="bi bi-truck"></i>

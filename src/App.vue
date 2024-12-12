@@ -66,6 +66,7 @@ function setModalBackground(value) {
     listModalOrder.value.modalChangeAddressShipping = false;
     listModalOrder.value.modalAddAddressShipping = false;
     listModalOrder.value.modalListVoucher = false;
+    // hide navbar
   }
 }
 

@@ -53,6 +53,12 @@ const router = createRouter({
       component: () => import('@/views/Order.vue'),
       props: true
     },
+    {
+      path: '/tin-tuc/:newsUrl?',
+      name: 'News',
+      component: () => import('@/views/News.vue'),
+      props: true
+    },
   ],
   scrollBehavior (to, from, savedPosition) {
     // return desired position

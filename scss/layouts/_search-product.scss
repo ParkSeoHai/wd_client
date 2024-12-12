@@ -3,20 +3,15 @@
 
 .product-search-block {
   .product--search__list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     @include base.breakpoint(md) {
+      grid-template-columns: repeat(3, 1fr);
       gap: 6px
     }
-    .item {
-      width: 23%;
-      @include base.breakpoint(xl) {
-        width: 32%;
-      }
-      @include base.breakpoint(md) {
-        width: 49%;
-      }
+    @include base.breakpoint(sm) {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   .new-block {
