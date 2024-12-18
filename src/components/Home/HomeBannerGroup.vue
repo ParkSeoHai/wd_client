@@ -24,23 +24,22 @@ import HomeBannerGroupItem from "./HomeBannerGroupItem.vue";
 
 const listBanners = [
   {
-    imageUrl:
-      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/dknt-oppo-find-x8-home.jpg",
+    imageUrl: "https://hbmedia.com.vn/wp-content/uploads/2019/09/Banner_2.jpg",
     linkUrl: "#",
   },
   {
     imageUrl:
-      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/udsv-right-laptop.jpg",
+      "https://bizweb.dktcdn.net/100/460/635/themes/869995/assets/share_fb_home.jpg?1730777390214",
     linkUrl: "#",
   },
   {
     imageUrl:
-      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/right-banner-14-10.jpg",
+      "https://bh19.bantheme.com/wp-content/uploads/2019/11/slide-iPhone-XS-max-VNA.jpg",
     linkUrl: "#",
   },
   {
     imageUrl:
-      "https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:10/plain/https://dashboard.cellphones.com.vn/storage/right-banner-14-10.jpg",
+      "https://stcv4.hnammobile.com/uploads/news/large/iphone-14-series-luon-co-san-hang-giao-ngay-khong-can-doi-social.jpg?v=1668565357",
     linkUrl: "#",
   },
 ];
