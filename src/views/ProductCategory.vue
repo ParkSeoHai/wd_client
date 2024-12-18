@@ -14,7 +14,9 @@
 // Component
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import ListProduct from "@/components/ProductCategory/ListProduct.vue";
-import { ref } from "vue";
+import { inject, onMounted, ref } from "vue";
+
+const setModalBackground = inject("setModalBackground");
 
 // Props category url from params route
 const { categoryUrl } = defineProps(["categoryUrl"]);
@@ -27,4 +29,8 @@ const setBreadcrumb = (data) => {
   breadcrumbs.value = data.breadCrumbs;
   breadcrumbActive.value = data.breadcrumbActive;
 };
+
+onMounted(() => {
+  setModalBackground(false);
+});
 </script>

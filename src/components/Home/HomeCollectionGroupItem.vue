@@ -10,7 +10,7 @@
 
     <div class="top-head d-flex justify-content-between">
       <h2>{{ title }}</h2>
-      <a :href="linkHref">
+      <a :href="linkHref" class="d-none">
         <span>Xem tất cả</span>
         <i class="bi bi-chevron-double-right"></i>
       </a>

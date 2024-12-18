@@ -12,7 +12,7 @@
         </template>
       </Suspense>
       <!-- Bottom -->
-      <div class="flash-sale-bottom">
+      <div class="flash-sale-bottom d-none">
         <div class="link">
           <router-link to="/danh-muc/khuyen-mai" class="btn">
             <span>Xem tất cả</span>
